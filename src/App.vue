@@ -1,30 +1,30 @@
 <template>
-    <v-app dark>
+  <v-app dark>
 
-      <Navigate/>
+    <Navigate/>
 
-      <v-toolbar app>
-        <v-toolbar-title class="headline text-uppercase">
-          <span class="font-weight-light"> platf</span>
-        </v-toolbar-title>
-        <v-spacer></v-spacer>
-        <v-btn
-          flat
-          href="https://github.com/vuetifyjs/vuetify/releases/latest"
-          target="_blank"
-        >
-          <span class="mr-2">Logo Here</span>
-        </v-btn>
-      </v-toolbar>
+    <v-toolbar app>
+      <v-toolbar-title class="headline text-uppercase">
+        <span class="font-weight-light"> platf</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn
+        flat
+        href="https://github.com/vuetifyjs/vuetify/releases/latest"
+        target="_blank"
+      >
+        <span class="mr-2">Logo Here</span>
+      </v-btn>
+    </v-toolbar>
 
     <v-content>
       <router-view/>
     </v-content>
 
 
-      <v-footer :fixed="fixed" app>
-        <span> &copy; 2018 Propulsion Analytics</span>
-      </v-footer>
+    <v-footer :fixed="fixed" app>
+      <span> &copy; 2018 Propulsion Analytics</span>
+    </v-footer>
   </v-app>
 </template>
 
@@ -32,12 +32,12 @@
 import HelloWorld  from './components/HelloWorld'
 import Dashboard   from './components/Dashboard'
 import Navigate    from './components/Navigate'
-import planetChartData from './chart-data.js'
-import Chart       from 'chart.js'
 import CommitChart from './components/CommitChart'
 
 export default {
   components: {
+
+
     HelloWorld,
     Dashboard,
     Navigate,
@@ -45,6 +45,7 @@ export default {
   },
   data () {
     return {
+      speedValue: 80,
       clipped: false,
       drawer: true,
       fixed: false,
@@ -61,3 +62,7 @@ export default {
   name: 'App'
 }
 </script>
+<style scoped>
+
+
+</style>
