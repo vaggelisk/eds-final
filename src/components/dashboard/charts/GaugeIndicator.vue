@@ -4,7 +4,7 @@
       :width="90"
       :height="90"
     />
-    <dx-value-indicator color="#f05b41"/>
+    <dx-value-indicator/>
     <dx-geometry
       :start-angle="startAngle"
       :end-angle="endAngle"

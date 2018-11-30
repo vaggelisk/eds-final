@@ -7,7 +7,7 @@
             <v-divider class="mx-3" vertical></v-divider>
             <div>
                 <div class="headline">{{compressionPressureDataC.Value.toFixed(2)}}</div>
-                <span class="grey--text">Measured [{{compressionPressureData.Unit}}] </span>
+                <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
             </div>
         </v-card-title>
 
@@ -104,7 +104,6 @@
         },
         mounted() {
           this.loading = false;
-          console.log(compressionDotsData.labels);
           this.createChart2('dot-chart', this.dotsChartData);
 
         }

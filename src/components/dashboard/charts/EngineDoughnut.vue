@@ -7,17 +7,19 @@
       <v-layout>
         <v-flex xs6>
 
-          <!--<div class="speed-value">-->
-            <!--<span><h4>{{ speedValue }}% </h4></span>-->
-          <!--</div>-->
+          <div class="speed-value">
+            <span><h4>{{ speedValue }}% </h4></span>
+          </div>
           <dx-circular-gauge :value="speedValue">
             <dx-size :width="220"/>
-            <dx-title :text="textTitle"
-                      verticalAlignment="bottom"
-                      ></dx-title>
+            <!--<dx-title :text="textTitle"-->
+                      <!--verticalAlignment="bottom"-->
+                      <!--&gt;</dx-title>-->
 
             <dx-value-indicator
-              type="rangeBar"
+              spindleGapSize=0
+              type="disable"
+              color="transparent"
             />
             <dx-geometry
               :start-angle="250"
@@ -107,8 +109,7 @@ export default {
     mounted () {
       this.textTitle = this.speedValue.toString() + "%";
       this.loading = false;
-      console.log("dfkgjjjkdjkghdjkghj");
-      console.log(this.engineKpiDataC.Value);
+
       this.doughnutChartData = {
         type: 'doughnut',
         data: {
@@ -122,7 +123,7 @@ export default {
           ]
         }
       };
-      this.createChart2('engine-dashboard-chart', this.doughnutChartData);
+      // this.createChart2('engine-dashboard-chart', this.doughnutChartData);
 
     }
 

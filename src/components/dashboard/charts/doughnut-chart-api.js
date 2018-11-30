@@ -6,8 +6,6 @@ const doughnutChartApiData = {
             try {
                 axios.get('http://localhost:8092/GetEDSWebData/20')
                     .then(function (response) {
-                        console.log(response.data);
-                        console.log(response.data.Card.Value);
                         // console.log(response.data.EngineKPI);
                         // dataValuesArray.values(response.data.Card.Value);
                          helper = [];
