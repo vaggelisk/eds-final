@@ -1,5 +1,8 @@
 <template>
   <v-container fluid grid-list-md>
+
+
+
     <v-layout row wrap>
       <v-flex d-flex xs12 sm6 md4>
         <v-card dark>
@@ -8,23 +11,25 @@
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
-        <v-layout row wrap>
+        <v-layout row wrap >
           <v-flex d-flex>
-            <v-card dark>
+            <v-card  dark >
               <v-card-title primary class="title">
                 Performance Parameters
               </v-card-title>
-              <v-responsive v-if="childPerformanceDataLoaded" contain>
-                <PerformanceBar v-bind:performanceData="performanceData" />
+              <v-responsive v-if="childPerformanceParamDataLoaded" contain>
+                <PerformanceBar v-bind:performanceParamData="performanceParamData"
+                                v-bind:counter="counter"/>
               </v-responsive>
             </v-card>
           </v-flex>
         </v-layout>
       </v-flex>
       <v-flex d-flex xs12 sm6 md2 child-flex>
-        <v-card dark>
+        <v-card   height="280px" dark>
           <v-responsive v-if="childEngineDataLoaded" contain>
-            <EngineDoughnut v-bind:engineKpiData="engineKpiData" />
+            <EngineDoughnut v-bind:engineKpiData="engineKpiData"
+                            v-bind:counter="counter" />
           </v-responsive>
         </v-card>
       </v-flex>
@@ -35,6 +40,7 @@
           <v-responsive v-if="childCompressionDataLoaded" contain>
             <CompressionDots
               v-bind:compressionPressureData="compressionPressureData"
+              v-bind:counter="counter"
             />
           </v-responsive>
         </v-card>
@@ -52,7 +58,7 @@
       </v-flex>
 
       <v-flex d-flex xs12 sm6 md6 child-flex>
-        <v-card dark>
+        <v-card height="400px" dark>
           <v-responsive contain>
             <EngineState />
           </v-responsive>
@@ -61,7 +67,8 @@
 
       <v-flex d-flex xs12 sm6 md2>
         <v-card v-if="childFiringPressureDataLoaded" contain dark>
-          <FiringPressure v-bind:firingPressureData="firingPressureData" />
+          <FiringPressure v-bind:firingPressureData="firingPressureData"
+                          v-bind:counter="counter" />
         </v-card>
       </v-flex>
     </v-layout>
@@ -109,15 +116,29 @@
 
        <v-flex d-flex xs12 sm6 md2>
         <v-card v-if="childBsfcDataLoaded" contain dark>
-          <Bsfc
-            v-bind:bsfcData="bsfcData"
-          />
+          <div >
+            {{ opts }}
+            <v-btn primary v-on:click="changeData()">Change data</v-btn>
+            <line-chart
+              v-bind:data="dataChart"
+              v-bind:opts="opts"
+              v-bind:counter="counter" >
+
+            </line-chart>
+          </div>
+          <!--<Bsfc-->
+            <!--v-bind:bsfcData="bsfcData"-->
+            <!--v-bind:counter="counter"-->
+          <!--/>-->
         </v-card>
       </v-flex>
 
 
 
     </v-layout>
+
+
+
   </v-container>
 </template>
 
@@ -138,6 +159,7 @@ import ScavengeReceiverPressure from "./dashboard/charts/ScavengeReceiverPressur
 import LinerWallTemperature from "./dashboard/charts/LinerWallTemperature";
 import Bsfc from "./dashboard/charts/Bsfc";
 import SubsystemsState from "./dashboard/charts/SubsystemsState";
+import LineChart from "./dashboard/charts/LineChart";
 
 export default {
   name: "Dashboard",
@@ -157,14 +179,15 @@ export default {
     LinerWallTemperature,
     Bsfc,
     SubsystemsState,
+    LineChart,
   },
   data: function() {
     return {
       childCompressionDataLoaded: false,
       compressionPressureData: {},
 
-      childPerformanceDataLoaded: false,
-      performanceData: {},
+      childPerformanceParamDataLoaded: false,
+      performanceParamData: {},
 
       childEngineDataLoaded: false,
       engineKpiData: {},
@@ -190,122 +213,301 @@ export default {
       childBsfcDataLoaded: false,
       bsfcData: {},
 
-      lorem: `Lorem ipsum dolor l at clita quando. Te sit `
+      lorem: `There is no Notification at the moment`,
+      counter: 31,
+      timer: '',
+      myText: 0,
+      avg: null,
+      interval: null,
     };
   },
+  computed: {
+    opts: function() {
+      return {responsive: true, maintainAspectRatio: false}
+    },
+    dataChart: function() {
+      return {
+        labels: ['January', 'February', 'March', 'April',],
+        datasets: [
+          {
+            label: 'GitHub Commits',
+            backgroundColor: '#f87979',
+            data: [40, 20, 12, 39,]
+          }
+        ]
+      }
+    }
+  },
   mounted() {
+    this.fetchEventsList();
+    this.startInterval();
+  },
+  watch: {
+    opts: {
+      handler(newVal, oldVal) {
+        // triggered when anything is changed within the Object
+        // console.log(newVal);
+        // console.log(oldVal);
+      },
+      deep: true
+    }
+  },
+  methods: {
+    changeData: function() {
+      this.dataChart = [6, 6, 3, 5]
+    },
 
-    axios.get("http://localhost:8092/EDSTimelineData/10").then(response => {
-      let len = Object.keys(response.data).length;
-      console.log(len);
-      let helper = response.data[Object.keys(response.data)[len - 1]];
-      // console.log(response.data[Object.keys(response.data)[len - 1]]);
-      let pmaxArray = helper.Pmax;
-      let pmaxValuesArray = pmaxArray[0];
-      let pmaxReferencesArray = pmaxArray[1];
-      // console.log(pmaxValuesArray);
-      let sum = 0;
-      for( let i = 0; i < pmaxValuesArray.length; i++ ){
-        sum +=  pmaxValuesArray[i];
-      }
-      let avg = (pmaxValuesArray.length > 0) ?  sum/pmaxValuesArray.length : 0;
-      console.log(avg);
+    startInterval: function () {
+      this.interval = setInterval(() => {
+        if (this.counter < 40) {
+          this.fetchEventsList();
+          this.counter = this.counter + 1;
+        } else {
+          clearInterval(this.interval);
+        }
+      }, 5000)
+    },
+    fetchEventsList: function() {
 
-      let sumRef = 0;
-      for( let i = 0; i < pmaxReferencesArray.length; i++ ){
-        sumRef +=  pmaxReferencesArray[i];
-      }
-      let ref = (pmaxReferencesArray.length > 0) ?  sumRef/pmaxReferencesArray.length : 0;
+      let url  = "http://localhost:8092/EDSTimelineData/" + this.counter;
 
-      let min = pmaxArray[2];
-      let max = pmaxArray[3];
-
-      // console.log(pmaxValuesArray);
-      this.firingPressureData.Value = avg;
-      this.firingPressureData.Ref = ref;
-
-      let data = {"val": [], "valMin": [], "valMax": [], "labels": []};
-      for (let j = 0; j < len; j++){
-      // for (let j = 0; j < len; j++){
-
-        helper = response.data[Object.keys(response.data)[j]];
-        pmaxArray = helper.Pmax;
-        // pmaxValuesArray = pmaxArray[0];
-        pmaxReferencesArray = pmaxArray[1];
-
-        sum = 0;
+      axios.get(url).then(response => {
+        let len = Object.keys(response.data).length;
+        // console.log(len);
+        let helperMatrix = response.data[Object.keys(response.data)[len - 1]];
+        // console.log(response.data[Object.keys(response.data)[len - 1]]);
+        let pmaxArray = helperMatrix.Pmax;
+        let pmaxValuesArray = pmaxArray[0];
+        let pmaxReferencesArray = pmaxArray[1];
+        // console.log(pmaxValuesArray);
+        let sum = 0;
         for( let i = 0; i < pmaxValuesArray.length; i++ ){
           sum +=  pmaxValuesArray[i];
         }
-        avg = (pmaxValuesArray.length > 0) ?  sum/pmaxValuesArray.length : 0;
+        let avg = (pmaxValuesArray.length > 0) ?  sum/pmaxValuesArray.length : 0;
+        // console.log(avg);
 
-        sumRef = 0;
+        let sumRef = 0;
         for( let i = 0; i < pmaxReferencesArray.length; i++ ){
           sumRef +=  pmaxReferencesArray[i];
         }
-        ref = (pmaxReferencesArray.length > 0) ?  sumRef/pmaxReferencesArray.length : 0;
-        min = pmaxArray[2];
-        max = pmaxArray[3];
+        let ref = (pmaxReferencesArray.length > 0) ?  sumRef/pmaxReferencesArray.length : 0;
 
-        let valMin = ref/(1 - min/100);
-        let valMax = ref/(1 - max/100);
+        let min = pmaxArray[2];
+        let max = pmaxArray[3];
 
-        data.val.push(avg);
-        data.valMin.push(valMin);
-        data.valMax.push(valMax);
-        data.labels.push(j.toString());
+        this.firingPressureData.Value = avg;
+        this.firingPressureData.Ref = ref;
+
+        let data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++){
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          pmaxArray = helper.Pmax;
+          pmaxReferencesArray = pmaxArray[1];
+
+          sum = 0;
+          for( let i = 0; i < pmaxValuesArray.length; i++ ){
+            sum +=  pmaxValuesArray[i];
+          }
+          avg = (pmaxValuesArray.length > 0) ?  sum/pmaxValuesArray.length : 0;
+
+          sumRef = 0;
+          for( let i = 0; i < pmaxReferencesArray.length; i++ ){
+            sumRef +=  pmaxReferencesArray[i];
+          }
+          ref = (pmaxReferencesArray.length > 0) ?  sumRef/pmaxReferencesArray.length : 0;
+          min = pmaxArray[2];
+          max = pmaxArray[3];
+
+          let valMin = ref/(1 - min/100);
+          let valMax = ref/(1 - max/100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          let lab = 10.00;
+          // if (j<10){ data.labels.push( '10.0'+j ); } else { data.labels.push('10.'+j); }
+          data.labels.push( (lab + j/100).toFixed(2) );
+
+        }
+
+        this.$set(this.firingPressureData, 'dataPoints',  data);
+        this.childFiringPressureDataLoaded = true;
 
 
-      }
-
-      this.firingPressureData.dataPoints = data;
-
-      // console.log(data);
-
-      this.childFiringPressureDataLoaded = true;
-
-    });
-
-    axios.get("http://localhost:8092/EDSMapping").then(resp => {
-      this.firingPressureData.Title = resp.data.EDS_Parameter_Names.pmax.longName;
-      this.firingPressureData.Unit  = resp.data.EDS_Parameter_Names.pmax.unit;
-      // this.childFiringPressureDataLoaded = true;
-
-      // console.log(this.firingPressureData.Title);
-    });
 
 
-    axios.get("http://localhost:8092/GetEDSWebData/20").then(response => {
-      // this.childdata.push(response.data.Card.Value);
-      this.compressionPressureData = response.data.Card;
-      this.childCompressionDataLoaded = true;
 
-      this.performanceData = response.data.BarChart;
-      this.childPerformanceDataLoaded = true;
+        let pcompArray =  helperMatrix.Pcomp;
+        let pcompValuesArray = pcompArray[0];
+        let pcompReferencesArray = pcompArray[1];
+        sum = 0;
+        for( let i = 0; i < pcompValuesArray.length; i++ ){
+          sum +=  pcompValuesArray[i];
+        }
+        avg = (pcompValuesArray.length > 0) ?  sum/pcompValuesArray.length : 0;
+        sumRef = 0;
+        for( let i = 0; i < pcompReferencesArray.length; i++ ){
+          sumRef +=  pcompReferencesArray[i];
+        }
+        ref = (pcompReferencesArray.length > 0) ?  sumRef/pcompReferencesArray.length : 0;
 
-      this.engineKpiData = response.data.EngineKPI;
-      this.childEngineDataLoaded = true;
+        min = pcompArray[2];
+        max = pcompArray[3];
 
-      this.ServoOilRailPressureData = response.data.Card;
-      this.childServoOilRailPressureDataLoaded = true;
+        this.compressionPressureData.Value = avg;
+        this.compressionPressureData.Ref = ref;
 
-      this.FuelRailPressureData = response.data.Card;
-      this.childFuelRailPressureDataLoaded = true;
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++){
 
-      this.turbineInletTempData = response.data.Card;
-      this.childTurbineInletTempDataLoaded = true;
+          let helper = response.data[Object.keys(response.data)[j]];
+          pcompArray = helper.Pcomp;
+          // pmaxValuesArray = pmaxArray[0];
+          pcompReferencesArray = pcompArray[1];
 
-      this.scavengeReceiverPressureData = response.data.Card;
-      this.childScavengeReceiverPressureDataLoaded = true;
+          sum = 0;
+          for( let i = 0; i < pcompValuesArray.length; i++ ){
+            sum +=  pcompValuesArray[i];
+          }
+          avg = (pcompValuesArray.length > 0) ?  sum/pcompValuesArray.length : 0;
 
-      this.linerWallTemperatureData = response.data.Card;
-      this.childLinerWallTemperatureDataLoaded = true;
+          sumRef = 0;
+          for( let i = 0; i < pcompReferencesArray.length; i++ ){
+            sumRef +=  pcompReferencesArray[i];
+          }
+          ref = (pcompReferencesArray.length > 0) ?  sumRef/pcompReferencesArray.length : 0;
+          min = pcompArray[2];
+          max = pcompArray[3];
 
-      this.bsfcData = response.data.Card;
-      this.childBsfcDataLoaded = true;
+          let valMin = ref/(1 - min/100);
+          let valMax = ref/(1 - max/100);
 
-      // console.log(response.data);
-    });
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j<10){ data.labels.push( '10.0'+j ); } else { data.labels.push('10.'+j); }
+
+        }
+
+        this.$set(this.compressionPressureData, 'dataPoints',  data);
+        this.childCompressionDataLoaded = true;
+
+
+
+        let data2 = { "val": [], "labels": [] };
+        let performanceTcspeedArray = helperMatrix.TCspeed;
+        let performanceTturbinArray = helperMatrix.Tturbin;
+        let performanceIndipArray = helperMatrix.indiP;
+        let performanceIndipValuesArray = performanceIndipArray[0];
+        let performanceIndipReferencesArray = performanceIndipArray[1];
+
+
+        data2.val.push( (this.compressionPressureData.Value - this.compressionPressureData.Ref)*100/this.compressionPressureData.Value);
+        data2.labels.push('Pcomp');
+
+        data2.val.push( (this.firingPressureData.Value - this.firingPressureData.Ref)*100/this.firingPressureData.Value);
+        data2.labels.push('Pmax');
+
+        data2.val.push( (performanceTcspeedArray[0] - performanceTcspeedArray[1])*100/performanceTcspeedArray[1]);
+        data2.labels.push('T/C Speed');
+
+        data2.val.push( (performanceTturbinArray[0] - performanceTturbinArray[1])*100/performanceTturbinArray[1]);
+        data2.labels.push('T turb In');
+
+        sum = 0;
+        for( let i = 0; i < performanceIndipValuesArray.length; i++ ){
+          sum +=  performanceIndipValuesArray[i];
+        }
+        avg = (performanceIndipValuesArray.length > 0) ?  sum/performanceIndipValuesArray.length : 0;
+        sumRef = 0;
+        for( let i = 0; i < performanceIndipReferencesArray.length; i++ ){
+          sumRef +=  performanceIndipReferencesArray[i];
+        }
+        ref = (performanceIndipReferencesArray.length > 0) ?  sumRef/performanceIndipReferencesArray.length : 0;
+
+
+        //ginetai mia mlkia me ta data kai prepei na diaireseis to ref dia 6
+        data2.val.push( (ref !== 0) ? (avg - (ref/6))*100/(ref/6)  : 0 );
+        data2.labels.push('Ind. Power');
+
+        data2.val = data2.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.performanceParamData, 'dataPoints',  data2);
+        this.childPerformanceParamDataLoaded = true;
+
+
+
+
+        let kpiArray =  helperMatrix.KpiPign;
+        let kpiValuesArray = kpiArray[0];
+        sum = 0;
+        for( let i = 0; i < kpiValuesArray.length; i++ ){
+          sum +=  kpiValuesArray[i];
+        }
+        avg = (kpiValuesArray.length > 0) ?  sum/kpiValuesArray.length : 0;
+
+
+        this.engineKpiData.Value = avg;
+        this.childEngineDataLoaded = true;
+
+
+        // this.compressionPressureData.Value = avg;
+        // this.compressionPressureData.Ref = ref;
+        // this.childCompressionDataLoaded = true;
+
+
+      });
+
+      axios.get("http://localhost:8092/EDSMapping").then(resp => {
+        this.firingPressureData.Title = resp.data.EDS_Parameter_Names.pmax.longName;
+        this.firingPressureData.Unit  = resp.data.EDS_Parameter_Names.pmax.unit;
+
+        this.compressionPressureData.Title = resp.data.EDS_Parameter_Names.pcomp.longName;
+        this.compressionPressureData.Unit = resp.data.EDS_Parameter_Names.pcomp.unit;
+
+
+      });
+
+
+      axios.get("http://localhost:8092/GetEDSWebData/20").then(response => {
+        // this.childdata.push(response.data.Card.Value);
+        // this.compressionPressureData = response.data.Card;
+
+        // this.engineKpiData = response.data.EngineKPI;
+
+
+
+
+
+
+        this.ServoOilRailPressureData = response.data.Card;
+        this.childServoOilRailPressureDataLoaded = true;
+
+        this.FuelRailPressureData = response.data.Card;
+        this.childFuelRailPressureDataLoaded = true;
+
+        this.turbineInletTempData = response.data.Card;
+        this.childTurbineInletTempDataLoaded = true;
+
+        this.scavengeReceiverPressureData = response.data.Card;
+        this.childScavengeReceiverPressureDataLoaded = true;
+
+        this.linerWallTemperatureData = response.data.Card;
+        this.childLinerWallTemperatureDataLoaded = true;
+
+        this.bsfcData = response.data.Card;
+        this.childBsfcDataLoaded = true;
+
+        // console.log(response.data);
+      });
+    }
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   }
 };
 </script>
@@ -382,9 +584,13 @@ export default {
 <!-- όλοι μαζι και πάμε Όσο προσέχουμε τους στίχους μας γύρνα θα το θυμάμαι -->
 <!-- θα ναι εκεί και αυτοί μαζι μας θα πεινάνε -->
 <!--
-  καλλιτέχνες δεν υπάρχουν μέσα σε ένα κόσμο που την τέχνη καθε μέρα θα την ξεπουλάμε πολεμιστές για όσα και για όσους αγαπάμε.
+  καλλιτέχνες δεν υπάρχουν μέσα σε ένα κόσμο που την τέχνη καθε μέρα θα την ξεπουλάμε
+   πολεμιστές για όσα και για όσους αγαπάμε.
 -->
 
 <!--
-  fer de Lance μαζί σου όταν πετάς, fer de Lance μαζί σου όταν πονάς, fer de Lance βαθιά αληθινά συναισθήματα με χρηματα και πλούτη δε μας ακουμπάς
+  fer de Lance μαζί σου όταν πετάς,
+   fer de Lance μαζί σου όταν πονάς,
+    fer de Lance βαθιά αληθινά συναισθήματα
+     με χρηματα και πλούτη δε μας ακουμπάς
 -->

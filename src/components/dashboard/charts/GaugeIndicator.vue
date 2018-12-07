@@ -1,7 +1,7 @@
 <template>
   <dx-circular-gauge :value="value">
     <dx-size
-      :width="90"
+      :width="60"
       :height="90"
     />
     <dx-value-indicator/>

@@ -51,12 +51,12 @@
                         .then(
                             function (response) {
                                 // eslint-disable-next-line
-                                console.log(response.data.Card.Value);
+                                // console.log(response.data.Card.Value);
 
                                 let helper = [];
                                 helper.push(response.data.EngineKPI.Value);
                                 // eslint-disable-next-line
-                                console.log(helper);
+                                // console.log(helper);
 
                         });
                 } catch (error) {

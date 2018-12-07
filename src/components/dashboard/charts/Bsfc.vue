@@ -2,7 +2,7 @@
     <v-responsive>
         <div v-if='loading'>Loading...</div>
         <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
-        <v-card-title primary class="title"> BSFC </v-card-title>
+          <v-card-title primary class="title"> BSFC </v-card-title>
 
         <v-card-title v-show="isShowing" primary-title>
             <v-divider class="mx-3" vertical></v-divider>
@@ -43,7 +43,11 @@
     export default {
         name: "Bsfc",
         components: {DxButton,},
-        props: ['childBsfcDataLoaded', 'bsfcData'],
+        props:{
+          childBsfcDataLoaded: Boolean,
+          bsfcData: Object,
+          counter: Number,
+        },
         data: function () {
             return {
                 isShowing: true,
@@ -54,7 +58,7 @@
                   {
                     type: 'line',
                     data: {
-                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                      labels: [ '10:00', '10:10', '10:20', '10:30', '10:40'],
                       datasets: [{
                         label: 'pressure',
                         data: [3, 4, 1, 5, 6],
@@ -65,7 +69,7 @@
                       },{
                         // label: 'pressure',
                         data: [5, 6, 1, 7, 8],
-                        pointBackgroundColor: 'black',
+                        pointBackgroundColor: 'white',
                         pointRadius: 1,
                         fill: false,
                         showLine: true

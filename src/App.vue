@@ -5,16 +5,14 @@
 
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light"> platf</span>
+        <span class="font-weight-light"> Platform </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
-      <v-btn
-        flat
-        href="https://github.com/vuetifyjs/vuetify/releases/latest"
-        target="_blank"
-      >
-        <span class="mr-2">Logo Here</span>
-      </v-btn>
+
+        <span class="mr-1">
+          <img height="50" src="./assets/logo3.png" alt="" >
+        </span>
+
     </v-toolbar>
 
     <v-content>

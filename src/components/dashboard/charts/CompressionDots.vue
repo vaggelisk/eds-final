@@ -6,27 +6,25 @@
         <v-card-title v-show="isShowing" primary-title>
             <v-divider class="mx-3" vertical></v-divider>
             <div>
-                <div class="headline">{{compressionPressureDataC.Value.toFixed(2)}}</div>
+              <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
                 <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
             </div>
         </v-card-title>
 
         <v-card-actions>
-          <v-container >
-            <v-layout row wrap>
+          <v-container style="margin-left: -21px;">
+            <v-layout row wrap style="margin-right: -30px;" >
              <v-flex v-show="isShowing" xs4>
 
                 <div class="headline" >{{compressionPressureDataC.Ref.toFixed(2)}}</div>
                 <span class="grey--text"> Reference  </span>
              </v-flex>
 
-              <v-flex v-if="isShowing" xs8>
-                <!--<dx-button id="myButton"  @click="isShowing ^= true" :text="text"/>-->
-                <canvas id="dot-chart" @click="isShowing ^= true"></canvas>
+              <v-flex v-if="isShowing" xs8 >
+                <canvas id="dot-chart" @click="isShowing ^= true" ></canvas>
               </v-flex>
-              <v-flex v-else xs12>
-                <!--<dx-button id="myButton"  @click="isShowing ^= true" :text="text"/>-->
-                <canvas id="dot-chart" @click="isShowing ^= true" height="180" ></canvas>
+              <v-flex v-else xs12  >
+                <canvas id="dot-chart" @click="isShowing ^= true" height="180"  ></canvas>
               </v-flex>
 
             </v-layout>
@@ -44,7 +42,11 @@
     export default {
         name: "CompressionDots",
         components: {DxButton,},
-        props: ['childCompressionDataLoaded', 'compressionPressureData'],
+        props: {
+          childCompressionDataLoaded: Boolean,
+          compressionPressureData: Object,
+          counter: Number,
+        },
         data: function () {
             return {
                 isShowing: true,
@@ -56,24 +58,24 @@
                   {
                     type: 'line',
                   data: {
-                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                    labels: this.compressionPressureData.dataPoints.labels,
                     datasets: [{
                       label: 'pressure',
-                      data: [3, 4, 1, 5, 6],
+                      data: this.compressionPressureData.dataPoints.valMin,
                       pointBackgroundColor: 'black',
                       pointRadius: 1,
                       fill: '+2',
                       showLine: true
                     },{
                       // label: 'pressure',
-                      data: [5, 6, 1, 7, 8],
-                      pointBackgroundColor: 'black',
+                      data: this.compressionPressureData.dataPoints.val,
+                      pointBackgroundColor: 'white',
                       pointRadius: 1,
                       fill: false,
                       showLine: true
                     },{
                       // label: 'pressure',
-                      data: [7, 8, 1, 9, 10],
+                      data: this.compressionPressureData.dataPoints.valMax,
                       pointBackgroundColor: 'black',
                       pointRadius: 1,
                       fill: false,
@@ -81,6 +83,39 @@
                     }],
                   },
                   options: {
+                    responsive: true,
+                    layout: {
+                      padding: {
+                        left: 0,
+                        right: 0,
+                        top: 0,
+                        bottom: 0
+                      },
+                    },
+                    scales: {
+                      xAxes: [
+                        {
+                          display: false,
+                          ticks: {
+                            stepSize: 10
+
+                          }
+                        }
+                      ],
+                      yAxes: [
+                        {
+                          display: false,
+                          ticks: {
+                            // stepSize: 10
+                          },
+                          scaleLabel: {
+                            display: true,
+                            labelString: '[bar]',
+                            padding: -2,
+                          }
+                        }
+                      ],
+                    },
                     legend: {
                       display:  false ,
                     },
@@ -88,22 +123,30 @@
                 }
             }
         },
-        // computed: {
-           // this.dotsChartData = Object.create(compressionDotsData),
-           // this.dotsChartData.type = compressionDotsData.type;
-           // this.dotsChartData.labels = compressionDotsData.labels;
-           // this.dotsChartData.datasets = compressionDotsData.datasets;
-           // this.dotsChartData.datasets[1] = compressionDotsData.datasets[1];
-           // this.dotsChartData.datasets[2] = compressionDotsData.datasets[2];
-        // },
         methods: {
+          updateScaleChart(v) {
+            if (v==1){
+              this.myChart2.options.scales.yAxes[0].display = false;
+              this.myChart2.options.scales.xAxes[0].display = false;
+            }
+            else {
+              this.myChart2.options.scales.yAxes[0].display = true;
+              this.myChart2.options.scales.xAxes[0].display = true;
+              this.myChart2.options.scales.xAxes[0].ticks.beginAtZero = true;
+              this.myChart2.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+            }
+          },
           createChart2(chartId, data) {
             const ctx = document.getElementById(chartId);
-            const myChart2 = new Chart(ctx, data);
+            this.myChart2 = new Chart(ctx, data);
           }
         },
         mounted() {
           this.loading = false;
+          this.isShowing = true;
+          this.$watch('isShowing', function (newVal, ) {
+            this.updateScaleChart(newVal);
+          });
           this.createChart2('dot-chart', this.dotsChartData);
 
         }

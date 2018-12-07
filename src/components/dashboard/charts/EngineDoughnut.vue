@@ -2,19 +2,16 @@
   <div>
     <div v-if='loading'>Loading...</div>
     <v-card-title primary class="title"> Engine KPI </v-card-title>
-
+    <span style="color:transparent">{{counter}}</span>
     <v-card-actions >
       <v-layout>
-        <v-flex xs6>
+        <v-flex xs6   style="margin-left:10%;" >
 
-          <div class="speed-value">
-            <span><h4>{{ speedValue }}% </h4></span>
+          <div class="speed-value" >
+            <span><h5>{{ engineKpiData.Value.toFixed(1) }}% </h5></span>
           </div>
-          <dx-circular-gauge :value="speedValue">
-            <dx-size :width="220"/>
-            <!--<dx-title :text="textTitle"-->
-                      <!--verticalAlignment="bottom"-->
-                      <!--&gt;</dx-title>-->
+          <dx-circular-gauge style="position: relative; top: -25%" :value="engineKpiData.Value">
+            <dx-size style="margin-left:10%;" :width="180"/>
 
             <dx-value-indicator
               spindleGapSize=0
@@ -22,18 +19,17 @@
               color="transparent"
             />
             <dx-geometry
-              :start-angle="250"
-              :end-angle="290"
+              :start-angle="270"
+              :end-angle="271"
             />
             <dx-scale
               :start-value="0"
               :end-value="100"
-              :tick-interval="100"
-            />
+              :tick-interval="100" >
+              <dx-label :visible=false> </dx-label>
+            </dx-scale>
             <dx-range-container >
-              <dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>
-              <!--<dx-range :start-value="speedValue" :end-value="100" color="white"></dx-range>-->
-
+              <dx-range :start-value="0"  :end-value="engineKpiData.Value" color="green"></dx-range>
             </dx-range-container>
           </dx-circular-gauge>
         </v-flex>
@@ -52,7 +48,8 @@ import DxCircularGauge, {
  DxScale,
  DxRangeContainer,
  DxRange,
- DxTitle
+ DxTitle,
+ DxLabel,
 } from "devextreme-vue/circular-gauge"
 
 import GaugeIndicator from "./GaugeIndicator"
@@ -60,7 +57,11 @@ import GaugeIndicator from "./GaugeIndicator"
 
 export default {
     name: "EngineDoughnut",
-    props: ['childEngineDataLoaded', 'engineKpiData'],
+    props: {
+      childEngineDataLoaded: Boolean,
+      engineKpiData: Object,
+      counter: Number,
+    },
     components: {
       DxCircularGauge,
 
@@ -71,6 +72,7 @@ export default {
       DxRangeContainer,
       DxRange,
       DxTitle,
+      DxLabel,
 
       GaugeIndicator,
     },
@@ -93,7 +95,11 @@ export default {
                             data: [40, ],
                         }
                     ]
+                },
+                options: {
+                  maintainAspectRatio: false,
                 }
+
             }
         }
     },
@@ -121,7 +127,11 @@ export default {
               data: [this.engineKpiDataC.Value , 100 - this.engineKpiDataC.Value],
             }
           ]
+        },
+        options: {
+          maintainAspectRatio: false,
         }
+
       };
       // this.createChart2('engine-dashboard-chart', this.doughnutChartData);
 
@@ -139,7 +149,7 @@ export default {
     /*width: 220px;*/
     height: 110px;
     left: 28%;
-    top: 45%;
+    top: 25%;
     line-height: 100px;
   }
 

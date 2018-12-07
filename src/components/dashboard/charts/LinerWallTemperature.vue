@@ -55,7 +55,7 @@
                   {
                     type: 'line',
                     data: {
-                      labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+                      labels: [ '10:00', '10:10', '10:20', '10:30', '10:40'],
                       datasets: [{
                         label: 'pressure',
                         data: [3, 4, 1, 5, 6],
@@ -66,7 +66,7 @@
                       },{
                         // label: 'pressure',
                         data: [5, 6, 1, 7, 8],
-                        pointBackgroundColor: 'black',
+                        pointBackgroundColor: 'white',
                         pointRadius: 1,
                         fill: false,
                         showLine: true

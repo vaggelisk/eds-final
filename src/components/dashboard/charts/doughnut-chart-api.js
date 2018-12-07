@@ -10,7 +10,7 @@ const doughnutChartApiData = {
                         // dataValuesArray.values(response.data.Card.Value);
                          helper = [];
                         helper.push(response.data.EngineKPI.Value);
-                        console.log(helper);
+                        // console.log(helper);
                         // console.log(response.status);
                         // console.log(response.headers);
                         // console.log(response.config);

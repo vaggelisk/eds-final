@@ -1,6 +1,6 @@
 export const compressionDotsData = Object.freeze({
   type: 'line',
-  labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May'],
+  labels: [ '10:00', '10:10', '10:20', '10:30', '10:40'],
   datasets: [{
     label: 'pressure',
     data: [3, 4, 1, 5, 6],
