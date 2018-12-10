@@ -57,24 +57,24 @@
                 dotsChartData: {
                     type: 'line',
                     data: {
-                      labels: this.firingPressureData.dataPoints.labels,
+                      labels: this.firingPressureData.datapoints.labels,
                       datasets: [{
                         label: 'pressure',
-                        data: this.firingPressureData.dataPoints.valMin,
+                        data: this.firingPressureData.datapoints.valMin,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: '+2',
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data:  this.firingPressureData.dataPoints.val,
+                        data:  this.firingPressureData.datapoints.val,
                         pointBackgroundColor: 'white',
                         pointRadius: 1,
                         fill: false,
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data:  this.firingPressureData.dataPoints.valMax,
+                        data:  this.firingPressureData.datapoints.valMax,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: false,
@@ -97,12 +97,8 @@
                               callback: function(value, index, values) {
                                 return parseFloat(value).toFixed(2);
                               },
-                              // autoSkip: true,
-                              // stepValue: .1,
-                              // beginAtZero:true,
-                              // min: 10.060,
+
                               maxTicksLimit: 3,
-                              // scaleStepWidth:10
                             },
                           }
                         ],
@@ -133,10 +129,7 @@
             else {
               this.myChart2.options.scales.yAxes[0].display = true;
               this.myChart2.options.scales.xAxes[0].display = true;
-              // this.myChart2.options.scales.xAxes[0].ticks.stepSize = .05;
               this.myChart2.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
-
-
             }
           },
           createChart2(chartId, data) {
@@ -146,7 +139,6 @@
         },
         mounted() {
           this.loading = false;
-          // this.$set
           this.isShowing = true;
           this.$watch('isShowing', function (newVal, ) {
             this.updateScaleChart(newVal);

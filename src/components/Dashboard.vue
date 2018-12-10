@@ -77,7 +77,7 @@
       <v-flex d-flex xs12 sm6 md2>
         <v-card v-if="childServoOilRailPressureDataLoaded" contain dark>
           <ServoOilRailPressure
-            v-bind:ServoOilRailPressureData="ServoOilRailPressureData"
+            v-bind:servoOilRailPressureData="servoOilRailPressureData"
           />
         </v-card>
       </v-flex>
@@ -85,7 +85,7 @@
       <v-flex d-flex xs12 sm6 md2>
         <v-card v-if="childFuelRailPressureDataLoaded" contain dark>
           <FuelRailPressure
-            v-bind:FuelRailPressureData="FuelRailPressureData"
+            v-bind:fuelRailPressureData="fuelRailPressureData"
           />
         </v-card>
       </v-flex>
@@ -116,20 +116,11 @@
 
        <v-flex d-flex xs12 sm6 md2>
         <v-card v-if="childBsfcDataLoaded" contain dark>
-          <div >
-            {{ opts }}
-            <v-btn primary v-on:click="changeData()">Change data</v-btn>
-            <line-chart
-              v-bind:data="dataChart"
-              v-bind:opts="opts"
-              v-bind:counter="counter" >
 
-            </line-chart>
-          </div>
-          <!--<Bsfc-->
-            <!--v-bind:bsfcData="bsfcData"-->
-            <!--v-bind:counter="counter"-->
-          <!--/>-->
+          <Bsfc
+            v-bind:bsfcData="bsfcData"
+            v-bind:counter="counter"
+          />
         </v-card>
       </v-flex>
 
@@ -196,10 +187,10 @@ export default {
       firingPressureData: {},
 
       childServoOilRailPressureDataLoaded: false,
-      ServoOilRailPressureData: {},
+      servoOilRailPressureData: {},
 
       childFuelRailPressureDataLoaded: false,
-      FuelRailPressureData: {},
+      fuelRailPressureData: {},
 
       childTurbineInletTempDataLoaded: false,
       turbineInletTempData: {},
@@ -279,13 +270,11 @@ export default {
         let pmaxArray = helperMatrix.Pmax;
         let pmaxValuesArray = pmaxArray[0];
         let pmaxReferencesArray = pmaxArray[1];
-        // console.log(pmaxValuesArray);
         let sum = 0;
         for( let i = 0; i < pmaxValuesArray.length; i++ ){
           sum +=  pmaxValuesArray[i];
         }
         let avg = (pmaxValuesArray.length > 0) ?  sum/pmaxValuesArray.length : 0;
-        // console.log(avg);
 
         let sumRef = 0;
         for( let i = 0; i < pmaxReferencesArray.length; i++ ){
@@ -327,17 +316,241 @@ export default {
           data.valMin.push(valMin);
           data.valMax.push(valMax);
           let lab = 10.00;
-          // if (j<10){ data.labels.push( '10.0'+j ); } else { data.labels.push('10.'+j); }
           data.labels.push( (lab + j/100).toFixed(2) );
 
         }
 
-        this.$set(this.firingPressureData, 'dataPoints',  data);
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.firingPressureData, 'datapoints',  data);
         this.childFiringPressureDataLoaded = true;
 
+        //Tliner getData
+
+        let tLinerArray = helperMatrix.Tliner;
+        let tLinerValuesArray = tLinerArray[0];
+        let tLinerReferencesArray = tLinerArray[1];
+        sum = 0;
+        for( let i = 0; i < pmaxValuesArray.length; i++ ){
+          sum +=  tLinerValuesArray[i];
+        }
+        avg = (tLinerValuesArray.length > 0) ?  sum/tLinerValuesArray.length : 0;
+
+        sumRef = 0;
+        for( let i = 0; i < tLinerReferencesArray.length; i++ ){
+          sumRef +=  tLinerReferencesArray[i];
+        }
+        ref = (tLinerReferencesArray.length > 0) ?  sumRef/tLinerReferencesArray.length : 0;
+
+        min = tLinerArray[2];
+        max = tLinerArray[3];
+
+        this.$set(this.linerWallTemperatureData, 'Value', avg);
+        this.$set(this.linerWallTemperatureData, 'Ref', ref);
+
+        this.childLinerWallTemperatureDataLoaded = true;
+
+
+        //fuel Rail Pressure getData
+
+        let fuelRailPressArray = helperMatrix.FuelPress;
+
+        avg = (fuelRailPressArray[0][0]) ? fuelRailPressArray[0][0] : 0 ;
+        ref = (fuelRailPressArray[1][0]) ? fuelRailPressArray[1][0] : 0 ;
+        min = fuelRailPressArray[2];
+        max = fuelRailPressArray[3];
+        this.$set(this.fuelRailPressureData, 'Value', avg);
+        this.$set(this.fuelRailPressureData, 'Ref', ref);
+
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++) {
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          fuelRailPressArray = helper.FuelPress;
+          avg = (fuelRailPressArray[0][0]) ? fuelRailPressArray[0][0]  : 0;
+          ref = (fuelRailPressArray[1][0]) ? fuelRailPressArray[1][0]  : 0;
+
+          min = fuelRailPressArray[2];
+          max = fuelRailPressArray[3];
+          let valMin = ref / (1 - min / 100);
+          let valMax = ref / (1 - max / 100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j < 10) {
+            data.labels.push('10.0' + j);
+          } else {
+            data.labels.push('10.' + j);
+          }
+        }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.fuelRailPressureData, 'datapoints',  data);
+        this.childFuelRailPressureDataLoaded = true;
 
 
 
+        //pscav getData
+
+        let pScavArray = helperMatrix.pscav;
+        avg = (pScavArray[0][0]) ? pScavArray[0][0] : 0 ;
+        ref = (pScavArray[1][0]) ? pScavArray[1][0] : 0 ;
+        min = pScavArray[2];
+        max = pScavArray[3];
+        this.$set(this.scavengeReceiverPressureData, 'Value', avg);
+        this.$set(this.scavengeReceiverPressureData, 'Ref', ref);
+
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++) {
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          pScavArray = helper.pscav;
+          avg = (pScavArray[0][0]) ? pScavArray[0][0] : 0;
+          ref = (pScavArray[1][0]) ? pScavArray[1][0] : 0;
+
+          min = pScavArray[2];
+          max = pScavArray[3];
+          let valMin = ref / (1 - min / 100);
+          let valMax = ref / (1 - max / 100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j < 10) {
+            data.labels.push('10.0' + j);
+          } else {
+            data.labels.push('10.' + j);
+          }
+
+        }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.scavengeReceiverPressureData, 'datapoints',  data);
+        this.childScavengeReceiverPressureDataLoaded = true;
+
+
+
+        //turbineInletTemperature getData
+
+        let tTurbineArray = helperMatrix.Tturbin;
+        avg = (tTurbineArray[0][0]) ? tTurbineArray[0][0] : 0 ;
+        ref = (tTurbineArray[1][0]) ? tTurbineArray[1][0] : 0 ;
+        min = tTurbineArray[2];
+        max = tTurbineArray[3];
+        this.$set(this.turbineInletTempData, 'Value', avg);
+        this.$set(this.turbineInletTempData, 'Ref', ref);
+
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++) {
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          tTurbineArray = helper.Tturbin;
+          avg = (tTurbineArray[0][0]) ? tTurbineArray[0][0] : 0;
+          ref = (tTurbineArray[1][0]) ? tTurbineArray[1][0] : 0;
+
+          min = tTurbineArray[2];
+          max = tTurbineArray[3];
+          let valMin = ref / (1 - min / 100);
+          let valMax = ref / (1 - max / 100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j < 10) {
+            data.labels.push('10.0' + j);
+          } else {
+            data.labels.push('10.' + j);
+          }
+
+        }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.turbineInletTempData, 'datapoints',  data);
+        this.childTurbineInletTempDataLoaded = true;
+
+
+        //servoPress getData
+
+        let servoPressArray = helperMatrix.ServoPress;
+        avg = (servoPressArray[0][0]) ? servoPressArray[0][0] : 0 ;
+        ref = (servoPressArray[1][0]) ? servoPressArray[1][0] : 0 ;
+        min = servoPressArray[2];
+        max = servoPressArray[3];
+        this.$set(this.servoOilRailPressureData, 'Value', avg);
+        this.$set(this.servoOilRailPressureData, 'Ref', ref);
+
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++) {
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          servoPressArray = helper.ServoPress;
+          avg = (servoPressArray[0][0]) ? servoPressArray[0][0] : 0;
+          ref = (servoPressArray[1][0]) ? servoPressArray[1][0] : 0;
+
+          min = servoPressArray[2];
+          max = servoPressArray[3];
+          let valMin = ref / (1 - min / 100);
+          let valMax = ref / (1 - max / 100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j < 10) {
+            data.labels.push('10.0' + j);
+          } else {
+            data.labels.push('10.' + j);
+          }
+
+        }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.servoOilRailPressureData, 'datapoints',  data);
+        this.childServoOilRailPressureDataLoaded = true;
+
+
+
+        //pComp getData
 
         let pcompArray =  helperMatrix.Pcomp;
         let pcompValuesArray = pcompArray[0];
@@ -390,9 +603,20 @@ export default {
           if (j<10){ data.labels.push( '10.0'+j ); } else { data.labels.push('10.'+j); }
 
         }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
 
-        this.$set(this.compressionPressureData, 'dataPoints',  data);
+
+        this.$set(this.compressionPressureData, 'datapoints',  data);
         this.childCompressionDataLoaded = true;
+
 
 
 
@@ -436,7 +660,7 @@ export default {
           return Number(each_element.toFixed(2));
         });
 
-        this.$set(this.performanceParamData, 'dataPoints',  data2);
+        this.$set(this.performanceParamData, 'datapoints',  data2);
         this.childPerformanceParamDataLoaded = true;
 
 
@@ -469,6 +693,22 @@ export default {
         this.compressionPressureData.Title = resp.data.EDS_Parameter_Names.pcomp.longName;
         this.compressionPressureData.Unit = resp.data.EDS_Parameter_Names.pcomp.unit;
 
+        this.servoOilRailPressureData.Title = resp.data.EDS_Parameter_Names.soPresDispl.shortName;
+        this.servoOilRailPressureData.Unit = resp.data.EDS_Parameter_Names.soPresDispl.unit;
+
+        this.fuelRailPressureData.Title = resp.data.EDS_Parameter_Names.fRailPres.longName;
+        this.fuelRailPressureData.Unit = resp.data.EDS_Parameter_Names.fRailPres.unit;
+
+        this.turbineInletTempData.Title = resp.data.EDS_Parameter_Names.tTurbIn.longName;
+        this.turbineInletTempData.Unit = resp.data.EDS_Parameter_Names.tTurbIn.unit;
+
+
+        this.scavengeReceiverPressureData.Title = resp.data.EDS_Parameter_Names.pscav.longName;
+        this.scavengeReceiverPressureData.Unit = resp.data.EDS_Parameter_Names.pscav.unit;
+
+        this.linerWallTemperatureData.Title = resp.data.EDS_Parameter_Names.tlinerfore.longName;
+        this.linerWallTemperatureData.Unit = resp.data.EDS_Parameter_Names.tlinerfore.unit;
+
 
       });
 
@@ -480,24 +720,19 @@ export default {
         // this.engineKpiData = response.data.EngineKPI;
 
 
+        // this.ServoOilRailPressureData = response.data.Card;
 
+        // this.fuelRailPressureData = response.data.Card;
+        // this.childFuelRailPressureDataLoaded = true;
 
+        // this.turbineInletTempData = response.data.Card;
+        // this.childTurbineInletTempDataLoaded = true;
 
+        // this.scavengeReceiverPressureData = response.data.Card;
+        // this.childScavengeReceiverPressureDataLoaded = true;
 
-        this.ServoOilRailPressureData = response.data.Card;
-        this.childServoOilRailPressureDataLoaded = true;
-
-        this.FuelRailPressureData = response.data.Card;
-        this.childFuelRailPressureDataLoaded = true;
-
-        this.turbineInletTempData = response.data.Card;
-        this.childTurbineInletTempDataLoaded = true;
-
-        this.scavengeReceiverPressureData = response.data.Card;
-        this.childScavengeReceiverPressureDataLoaded = true;
-
-        this.linerWallTemperatureData = response.data.Card;
-        this.childLinerWallTemperatureDataLoaded = true;
+        // this.linerWallTemperatureData = response.data.Card;
+        // this.childLinerWallTemperatureDataLoaded = true;
 
         this.bsfcData = response.data.Card;
         this.childBsfcDataLoaded = true;

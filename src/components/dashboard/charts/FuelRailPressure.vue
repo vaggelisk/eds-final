@@ -2,19 +2,19 @@
     <v-responsive>
         <div v-if='loading'>Loading...</div>
         <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
-        <v-card-title primary class="title"> Fuel Rail Pressure</v-card-title>
+        <v-card-title primary class="title"> {{ fuelRailPressureData.Title}}</v-card-title>
 
         <v-card-title v-show="isShowing" primary-title>
             <v-divider class="mx-3" vertical></v-divider>
             <div>
-                <div class="headline">{{compressionPressureDataC.Value.toFixed(2)}}</div>
+              <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
                 <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
             </div>
         </v-card-title>
 
         <v-card-actions>
-          <v-container >
-            <v-layout row wrap>
+          <v-container style="margin-left: -21px;" >
+            <v-layout row wrap style="margin-right: -30px;" >
              <v-flex v-show="isShowing" xs4>
 
                 <div class="headline" >{{compressionPressureDataC.Ref.toFixed(2)}}</div>
@@ -22,10 +22,10 @@
              </v-flex>
 
               <v-flex v-if="isShowing" xs8>
-                  <canvas id="dot-chart-fuel-1" @click="isShowing ^= true"></canvas>
+                  <canvas id="dot-chart-fuel-5" @click="isShowing ^= true"></canvas>
               </v-flex>
               <v-flex v-else xs12>
-                   <canvas id="dot-chart-fuel-1" @click="isShowing ^= true"  ></canvas>
+                   <canvas id="dot-chart-fuel-5" @click="isShowing ^= true"  ></canvas>
               </v-flex>
 
             </v-layout>
@@ -43,35 +43,38 @@
     export default {
         name: "FuelRailPressure",
         components: {DxButton,},
-        props: ['childFuelRailPressureDataLoaded', 'FuelRailPressureData'],
+        props: {
+          childFuelRailPressureDataLoaded: Boolean,
+          fuelRailPressureData: Object,
+        },
         data: function () {
             return {
                 isShowing: true,
                 text: "Enlarge",
                 loading: false,
-                compressionPressureDataC: this.FuelRailPressureData,
+                compressionPressureDataC: this.fuelRailPressureData,
                 dotsChartData:
                   {
                     type: 'line',
                     data: {
-                      labels: [ '10:00', '10:10', '10:20', '10:30', '10:40'],
+                      labels: this.fuelRailPressureData.datapoints.labels,
                       datasets: [{
                         label: 'pressure',
-                        data: [3, 4, 1, 5, 6],
+                        data: this.fuelRailPressureData.datapoints.valMin,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: '+2',
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data: [5, 6, 1, 7, 8],
+                        data: this.fuelRailPressureData.datapoints.val,
                         pointBackgroundColor: 'white',
                         pointRadius: 1,
                         fill: false,
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data: [7, 8, 1, 9, 10],
+                        data: this.fuelRailPressureData.datapoints.valMax,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: false,
@@ -79,6 +82,36 @@
                       }],
                     },
                   options: {
+                    layout: {
+                      padding: {
+                        left: 0,
+                        right: 0,
+                      },
+
+                    },
+                    scales: {
+                      xAxes: [
+                        {
+                          display: false,
+                          ticks: {
+                            callback: function(value, index, values) {
+                              return parseFloat(value).toFixed(2);
+                            },
+
+                            maxTicksLimit: 3,
+                          },
+                        }
+                      ],
+                      yAxes: [{
+                        display: false,
+                        scaleLabel: {
+                          display: true,
+                          labelString: '[bar]',
+                          padding: -2,
+                        }
+                      }
+                      ],
+                    },
                     legend: {
                       display:  false ,
                     },
@@ -88,14 +121,29 @@
         },
 
         methods: {
-          createChart2(chartId, data) {
+          updateScaleChart(v) {
+            if (v==1){
+              this.myChart5.options.scales.yAxes[0].display = false;
+              this.myChart5.options.scales.xAxes[0].display = false;
+            }
+            else {
+              this.myChart5.options.scales.yAxes[0].display = true;
+              this.myChart5.options.scales.xAxes[0].display = true;
+              this.myChart5.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+            }
+          },
+          createChart5(chartId, data) {
             const ctx = document.getElementById(chartId);
-            const myChart2 = new Chart(ctx, data);
+            this.myChart5 = new Chart(ctx, data);
           }
         },
         mounted() {
           this.loading = false;
-          this.createChart2('dot-chart-fuel-1', this.dotsChartData);
+          this.isShowing = true;
+          this.$watch('isShowing', function (newVal, ) {
+            this.updateScaleChart(newVal);
+          });
+          this.createChart5('dot-chart-fuel-5', this.dotsChartData);
 
         }
     }

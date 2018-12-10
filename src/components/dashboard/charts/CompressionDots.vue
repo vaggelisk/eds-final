@@ -58,24 +58,24 @@
                   {
                     type: 'line',
                   data: {
-                    labels: this.compressionPressureData.dataPoints.labels,
+                    labels: this.compressionPressureData.datapoints.labels,
                     datasets: [{
                       label: 'pressure',
-                      data: this.compressionPressureData.dataPoints.valMin,
+                      data: this.compressionPressureData.datapoints.valMin,
                       pointBackgroundColor: 'black',
                       pointRadius: 1,
                       fill: '+2',
                       showLine: true
                     },{
                       // label: 'pressure',
-                      data: this.compressionPressureData.dataPoints.val,
+                      data: this.compressionPressureData.datapoints.val,
                       pointBackgroundColor: 'white',
                       pointRadius: 1,
                       fill: false,
                       showLine: true
                     },{
                       // label: 'pressure',
-                      data: this.compressionPressureData.dataPoints.valMax,
+                      data: this.compressionPressureData.datapoints.valMax,
                       pointBackgroundColor: 'black',
                       pointRadius: 1,
                       fill: false,

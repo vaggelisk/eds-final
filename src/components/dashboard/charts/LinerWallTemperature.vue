@@ -7,8 +7,8 @@
         <v-card-title v-show="isShowing" primary-title>
             <v-divider class="mx-3" vertical></v-divider>
             <div>
-                <div class="headline">{{compressionPressureDataC.Value.toFixed(2)}}</div>
-                <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
+              <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
+                <span class="grey--text">Measured [{{ linerWallTemperatureData.Unit }}] </span>
             </div>
         </v-card-title>
 
@@ -44,7 +44,7 @@
     export default {
         name: "TurbineInletTemp",
         components: {DxButton,},
-        props: ['childLinerWallTemperatureDataLoaded', 'linerWallTemperatureData'],
+        props: { childLinerWallTemperatureDataLoaded: Boolean, linerWallTemperatureData: Object},
         data: function () {
             return {
                 isShowing: true,

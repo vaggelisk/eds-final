@@ -2,7 +2,13 @@
     <v-responsive>
         <div v-if='loading'>Loading...</div>
         <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
-          <v-card-title primary class="title"> BSFC </v-card-title>
+          <!--<v-card-title primary class="title">-->
+            <v-select
+              :items="items"
+              flat
+              value="BSFC"
+            ></v-select>
+          <!--</v-card-title>-->
 
         <v-card-title v-show="isShowing" primary-title>
             <v-divider class="mx-3" vertical></v-divider>
@@ -51,7 +57,7 @@
         data: function () {
             return {
                 isShowing: true,
-                text: "Enlarge",
+                items: ['BSFC', 'Indicated Power', 'Indicated Main Effective Pressure', ],
                 loading: false,
                 compressionPressureDataC: this.bsfcData,
                 dotsChartData:

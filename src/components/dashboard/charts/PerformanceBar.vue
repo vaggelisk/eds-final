@@ -23,13 +23,13 @@ export default {
       barChartData: {
         type: "bar",
         data: {
-          labels: this.performanceParamData.dataPoints.labels,
+          labels: this.performanceParamData.datapoints.labels,
           datasets: [
             {
               label: "%",
-              // label: this.performanceDataC.dataPoints.labels,
+              // label: this.performanceDataC.datapoints.labels,
               backgroundColor: "green",
-              data: this.performanceParamData.dataPoints.val
+              data: this.performanceParamData.datapoints.val
             }
           ]
         },
@@ -59,7 +59,7 @@ export default {
   mounted() {
     this.loading = false;
     this.createChart2("performance-dashboard-chart", this.barChartData);
-    this.$watch('performanceParamData.dataPoints.val', function (newVal, ) {
+    this.$watch('performanceParamData.datapoints.val', function (newVal, ) {
         this.updateDataChart(newVal);
     })
   }
