@@ -7,7 +7,12 @@
       <v-flex d-flex xs12 sm6 md4>
         <v-card dark>
           <v-card-title primary class="title"> Notification </v-card-title>
-          <v-card-text>{{ lorem.slice(0, 70) }}</v-card-text>
+
+
+          <v-responsive v-if="childNotificationDataLoaded" contain>
+            <Notification v-bind:notificationData="notificationData"
+                          v-bind:counter="counter" />
+          </v-responsive>
         </v-card>
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
@@ -19,7 +24,7 @@
               </v-card-title>
               <v-responsive v-if="childPerformanceParamDataLoaded" contain>
                 <PerformanceBar v-bind:performanceParamData="performanceParamData"
-                                v-bind:counter="counter"/>
+                                v-bind:counter="counter" />
               </v-responsive>
             </v-card>
           </v-flex>
@@ -59,18 +64,41 @@
 
       <v-flex d-flex xs12 sm6 md6 child-flex>
         <v-card height="400px" dark>
-          <v-responsive contain>
-            <EngineState />
+          <v-responsive v-if="childEngineStateDataLoaded" contain>
+            <EngineState v-bind:colorsEngineState="colorsObj.Cylinder"
+                         v-bind:counter="counter" />
           </v-responsive>
         </v-card>
       </v-flex>
 
+
       <v-flex d-flex xs12 sm6 md2>
-        <v-card v-if="childFiringPressureDataLoaded" contain dark>
-          <FiringPressure v-bind:firingPressureData="firingPressureData"
-                          v-bind:counter="counter" />
-        </v-card>
+        <v-layout row wrap>
+          <v-flex d-flex column>
+            <v-layout row wrap  style="height: 150px" >
+
+                <v-flex    d-flex xs12>
+                  <v-card v-if="childFiringPressureDataLoaded"   dark>
+                    <FiringPressure v-bind:firingPressureData="firingPressureData"
+                                    v-bind:counter="counter" />
+                  </v-card>
+                </v-flex>
+
+                <v-flex d-flex>
+                  <v-card v-if="childTcSpeedDataLoaded" dark>
+                    <TcSpeed v-bind:tcSpeedData="tcSpeedData"
+                             v-bind:counter="counter" />
+                  </v-card>
+                </v-flex>
+
+
+            </v-layout>
+          </v-flex>
+        </v-layout>
       </v-flex>
+
+
+
     </v-layout>
 
     <v-layout row wrap>
@@ -119,7 +147,9 @@
 
           <Bsfc
             v-bind:bsfcData="bsfcData"
-            v-bind:counter="counter"
+            v-bind:indiPowerData="indiPowerData"
+            v-bind:imepData="imepData"
+
           />
         </v-card>
       </v-flex>
@@ -134,27 +164,32 @@
 </template>
 
 <script>
-import axios from "axios";
-import CommitChart from "./CommitChart";
-import DoughnutChart from "./dashboard/charts/DoughnutChart";
-import PerformanceBar from "./dashboard/charts/PerformanceBar";
-import EngineDoughnut from "./dashboard/charts/EngineDoughnut";
-import CompressionDots from "./dashboard/charts/CompressionDots";
-import Gauge from "./dashboard/charts/Gauge";
-import EngineState from "./dashboard/charts/EngineState";
-import FiringPressure from "./dashboard/charts/FiringPressure";
-import FuelRailPressure from "./dashboard/charts/FuelRailPressure";
-import TurbineInletTemp from "./dashboard/charts/TurbineInletTemp";
-import ServoOilRailPressure from "./dashboard/charts/ServoOilRailPressure";
+import axios                    from "axios";
+import CommitChart              from "./CommitChart";
+import DoughnutChart            from "./dashboard/charts/DoughnutChart";
+import PerformanceBar           from "./dashboard/charts/PerformanceBar";
+import EngineDoughnut           from "./dashboard/charts/EngineDoughnut";
+import CompressionDots          from "./dashboard/charts/CompressionDots";
+import Gauge                    from "./dashboard/charts/Gauge";
+import EngineState              from "./dashboard/charts/EngineState";
+import FiringPressure           from "./dashboard/charts/FiringPressure";
+import FuelRailPressure         from "./dashboard/charts/FuelRailPressure";
+import TurbineInletTemp         from "./dashboard/charts/TurbineInletTemp";
+import ServoOilRailPressure     from "./dashboard/charts/ServoOilRailPressure";
 import ScavengeReceiverPressure from "./dashboard/charts/ScavengeReceiverPressure";
-import LinerWallTemperature from "./dashboard/charts/LinerWallTemperature";
-import Bsfc from "./dashboard/charts/Bsfc";
-import SubsystemsState from "./dashboard/charts/SubsystemsState";
-import LineChart from "./dashboard/charts/LineChart";
+import LinerWallTemperature     from "./dashboard/charts/LinerWallTemperature";
+import Bsfc                     from "./dashboard/charts/Bsfc";
+import SubsystemsState          from "./dashboard/charts/SubsystemsState";
+import LineChart                from "./dashboard/charts/LineChart";
+import TcSpeed                  from "./dashboard/charts/TcSpeed";
+import Notification             from "./dashboard/charts/Notification";
+
 
 export default {
   name: "Dashboard",
   components: {
+    TcSpeed,
+    Notification,
     CommitChart,
     DoughnutChart,
     PerformanceBar,
@@ -174,6 +209,9 @@ export default {
   },
   data: function() {
     return {
+      childNotificationDataLoaded: true,
+      notificationData: {},
+
       childCompressionDataLoaded: false,
       compressionPressureData: {},
 
@@ -201,11 +239,20 @@ export default {
       childLinerWallTemperatureDataLoaded: false,
       linerWallTemperatureData: {},
 
+
+      childTcSpeedDataLoaded: false,
+      tcSpeedData: {},
+
       childBsfcDataLoaded: false,
       bsfcData: {},
+      indiPowerData: {},
+      imepData: {},
+
+      childEngineStateDataLoaded: false,
+      colorsObj: {},
 
       lorem: `There is no Notification at the moment`,
-      counter: 31,
+      counter: 32,
       timer: '',
       myText: 0,
       avg: null,
@@ -216,38 +263,13 @@ export default {
     opts: function() {
       return {responsive: true, maintainAspectRatio: false}
     },
-    dataChart: function() {
-      return {
-        labels: ['January', 'February', 'March', 'April',],
-        datasets: [
-          {
-            label: 'GitHub Commits',
-            backgroundColor: '#f87979',
-            data: [40, 20, 12, 39,]
-          }
-        ]
-      }
-    }
   },
   mounted() {
     this.fetchEventsList();
     this.startInterval();
   },
-  watch: {
-    opts: {
-      handler(newVal, oldVal) {
-        // triggered when anything is changed within the Object
-        // console.log(newVal);
-        // console.log(oldVal);
-      },
-      deep: true
-    }
-  },
-  methods: {
-    changeData: function() {
-      this.dataChart = [6, 6, 3, 5]
-    },
 
+  methods: {
     startInterval: function () {
       this.interval = setInterval(() => {
         if (this.counter < 40) {
@@ -333,13 +355,76 @@ export default {
         this.$set(this.firingPressureData, 'datapoints',  data);
         this.childFiringPressureDataLoaded = true;
 
+
+        //TcSpeed getData
+
+        let tcSpeedArray = helperMatrix.TCspeed;
+        let tcSpeedValuesArray = tcSpeedArray[0];
+        let tcSpeedReferencesArray = tcSpeedArray[1];
+        sum = 0;
+        for( let i = 0; i < tcSpeedValuesArray.length; i++ ){
+          sum +=  tcSpeedValuesArray[i];
+        }
+        avg = (tcSpeedReferencesArray.length > 0) ?  sum/tcSpeedReferencesArray.length : 0;
+
+        sumRef = 0;
+        for( let i = 0; i < tcSpeedReferencesArray.length; i++ ){
+          sumRef +=  tcSpeedReferencesArray[i];
+        }
+        ref = (tcSpeedReferencesArray.length > 0) ?  sumRef/tcSpeedReferencesArray.length : 0;
+
+        min = tcSpeedArray[2];
+        max = tcSpeedArray[3];
+
+        this.$set(this.tcSpeedData, 'Value', avg);
+        this.$set(this.tcSpeedData, 'Ref', ref);
+
+
+
+        data = {"val": [], "valMin": [], "valMax": [], "labels": []};
+        for (let j = 0; j < len; j++) {
+
+          let helper = response.data[Object.keys(response.data)[j]];
+          tcSpeedArray = helper.TCspeed;
+          avg = (tcSpeedArray[0][0]) ? tcSpeedArray[0][0]  : 0;
+          ref = (tcSpeedArray[1][0]) ? tcSpeedArray[1][0]  : 0;
+
+          min = tcSpeedArray[2];
+          max = tcSpeedArray[3];
+          let valMin = ref / (1 - min / 100);
+          let valMax = ref / (1 - max / 100);
+
+          data.val.push(avg);
+          data.valMin.push(valMin);
+          data.valMax.push(valMax);
+          if (j < 10) {
+            data.labels.push('10.0' + j);
+          } else {
+            data.labels.push('10.' + j);
+          }
+        }
+        data.val = data.val.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMin = data.valMin.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+        data.valMax = data.valMax.map(function(each_element){
+          return Number(each_element.toFixed(2));
+        });
+
+        this.$set(this.tcSpeedData, 'datapoints',  data);
+        this.childTcSpeedDataLoaded = true;
+
+
+
         //Tliner getData
 
         let tLinerArray = helperMatrix.Tliner;
         let tLinerValuesArray = tLinerArray[0];
         let tLinerReferencesArray = tLinerArray[1];
         sum = 0;
-        for( let i = 0; i < pmaxValuesArray.length; i++ ){
+        for( let i = 0; i < tLinerValuesArray.length; i++ ){
           sum +=  tLinerValuesArray[i];
         }
         avg = (tLinerValuesArray.length > 0) ?  sum/tLinerValuesArray.length : 0;
@@ -453,7 +538,48 @@ export default {
         this.$set(this.scavengeReceiverPressureData, 'datapoints',  data);
         this.childScavengeReceiverPressureDataLoaded = true;
 
+        // bsfc and more getData
+        let bsfcArray = helperMatrix.bsfc;
+        // avg = (bsfcArray[0][0]) ? bsfcArray[0][0] : 0 ;
+        avg =  0 ;
+        ref = (bsfcArray[1][0]) ? bsfcArray[1][0] : 0 ;
+        min = bsfcArray[2];
+        max = bsfcArray[3];
+        this.$set(this.bsfcData, 'Value', avg);
+        this.$set(this.bsfcData, 'Ref', ref);
 
+
+        let indipArray = helperMatrix.indiP;
+        avg = (indipArray[0][0]) ? indipArray[0][0]*6 : 0 ;
+        ref = (indipArray[1][0]) ? indipArray[1][0] : 0 ;
+        min = indipArray[2];
+        max = indipArray[3];
+        this.$set(this.indiPowerData, 'Value', avg);
+        this.$set(this.indiPowerData, 'Ref', ref);
+
+
+
+        let imepArray = helperMatrix.imep;
+        let imepValuesArray = imepArray[0];
+        let imepReferencesArray = imepArray[1];
+        sum = 0;
+        for( let i = 0; i < imepValuesArray.length; i++ ){
+          sum +=  imepValuesArray[i];
+        }
+        avg = (imepValuesArray.length > 0) ?  sum/imepValuesArray.length : 0;
+
+        sumRef = 0;
+        for( let i = 0; i < imepReferencesArray.length; i++ ){
+          sumRef +=  imepReferencesArray[i];
+        }
+        ref = (imepReferencesArray.length > 0) ?  sumRef/imepReferencesArray.length : 0;
+
+        min = imepArray[2];
+        max = imepArray[3];
+        this.$set(this.imepData, 'Value', avg);
+        this.$set(this.imepData, 'Ref', ref);
+
+        this.childBsfcDataLoaded = true;
 
         //turbineInletTemperature getData
 
@@ -651,7 +777,6 @@ export default {
         }
         ref = (performanceIndipReferencesArray.length > 0) ?  sumRef/performanceIndipReferencesArray.length : 0;
 
-
         //ginetai mia mlkia me ta data kai prepei na diaireseis to ref dia 6
         data2.val.push( (ref !== 0) ? (avg - (ref/6))*100/(ref/6)  : 0 );
         data2.labels.push('Ind. Power');
@@ -677,13 +802,6 @@ export default {
 
         this.engineKpiData.Value = avg;
         this.childEngineDataLoaded = true;
-
-
-        // this.compressionPressureData.Value = avg;
-        // this.compressionPressureData.Ref = ref;
-        // this.childCompressionDataLoaded = true;
-
-
       });
 
       axios.get("http://localhost:8092/EDSMapping").then(resp => {
@@ -709,35 +827,51 @@ export default {
         this.linerWallTemperatureData.Title = resp.data.EDS_Parameter_Names.tlinerfore.longName;
         this.linerWallTemperatureData.Unit = resp.data.EDS_Parameter_Names.tlinerfore.unit;
 
+        this.tcSpeedData.Title = resp.data.EDS_Parameter_Names.tcspeed.longName;
+        this.tcSpeedData.Unit = resp.data.EDS_Parameter_Names.tcspeed.unit;
+
+
+
+
+      });
+
+      url  = "http://localhost:8092/EDSEvents/" + this.counter;
+
+      axios.get(url).then(response => {
+
+        let len2 = Object.keys(response.data).length;
+        // console.log(len);
+        // let helperMatrix2 = response.data[Object.keys(response.data)[len - 1]];
+        let helperMatrix2 = response.data;
+        // this.colorsObj = helperMatrix2.kpi;
+        this.$set( this.colorsObj, helperMatrix2.kpi );
+
+        // console.log( helperMatrix2.kpi.Turbine[0]);
+
+
+        //kai edw ginetai mia mlkia sta data kai iparxei
+        //askopos nested array px [[1,0]]
+        this.$set( this.colorsObj,  'Engine', helperMatrix2.kpi.Engine);
+        this.$set( this.colorsObj,  'Cylinder', helperMatrix2.kpi.Cylinder);
+        this.$set( this.colorsObj,  'Turbine', helperMatrix2.kpi.Turbine[0]);
+        this.$set( this.colorsObj,  'Compressor', helperMatrix2.kpi['Compressor'][0]);
+        this.$set( this.colorsObj,  'AirCooler', helperMatrix2.kpi['AirCooler'][0]);
+        this.$set( this.colorsObj,  'AirFilter', helperMatrix2.kpi['AirFilter'][0]);
+        this.$set( this.colorsObj,  'ServoOil', helperMatrix2.kpi['Servo Oil']);
+        this.$set( this.colorsObj,  'FuelInjection', helperMatrix2.kpi['Fuel Injection']);
+        this.$set( this.colorsObj,  'ScavengeAir', helperMatrix2.kpi['Scavenge Air']);
+        this.$set( this.colorsObj,  'ExhaustGas', helperMatrix2.kpi['Exhaust Gas']);
+        this.$set( this.colorsObj,  'GasAdmission', helperMatrix2.kpi['Gas Admission']);
+        this.$set( this.colorsObj,  'PistonRunning', helperMatrix2.kpi['Piston Running']);
+        this.$set( this.colorsObj,  'AutomationControl', helperMatrix2.kpi['Automation & Control']);
+
+        this.childEngineStateDataLoaded = true;
 
       });
 
 
       axios.get("http://localhost:8092/GetEDSWebData/20").then(response => {
-        // this.childdata.push(response.data.Card.Value);
-        // this.compressionPressureData = response.data.Card;
 
-        // this.engineKpiData = response.data.EngineKPI;
-
-
-        // this.ServoOilRailPressureData = response.data.Card;
-
-        // this.fuelRailPressureData = response.data.Card;
-        // this.childFuelRailPressureDataLoaded = true;
-
-        // this.turbineInletTempData = response.data.Card;
-        // this.childTurbineInletTempDataLoaded = true;
-
-        // this.scavengeReceiverPressureData = response.data.Card;
-        // this.childScavengeReceiverPressureDataLoaded = true;
-
-        // this.linerWallTemperatureData = response.data.Card;
-        // this.childLinerWallTemperatureDataLoaded = true;
-
-        this.bsfcData = response.data.Card;
-        this.childBsfcDataLoaded = true;
-
-        // console.log(response.data);
       });
     }
   },

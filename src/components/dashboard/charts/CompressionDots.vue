@@ -12,7 +12,7 @@
         </v-card-title>
 
         <v-card-actions>
-          <v-container style="margin-left: -21px;">
+          <v-container style="margin-left: -21px; margin-top: -20px">
             <v-layout row wrap style="margin-right: -30px;" >
              <v-flex v-show="isShowing" xs4>
 

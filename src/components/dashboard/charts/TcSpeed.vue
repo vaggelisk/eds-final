@@ -2,28 +2,28 @@
     <v-responsive>
         <div v-if='loading'>Loading...</div>
         <!--<v-card-title primary class="title"> Firing Pressure </v-card-title>-->
-        <v-card-title primary class="title">{{ firingPressureData.Title }} </v-card-title>
+        <v-card-title primary class="title">{{ tcSpeedData.Title }} </v-card-title>
         <v-card-title v-show="isShowing" primary-title style="margin-top: -20px">
             <v-divider class="mx-3" vertical></v-divider>
             <div>
                 <!--<div class="headline">{{ val }}</div>-->
-              <div class="headline"><h2>{{firingPressureData.Value.toFixed(2)}}</h2></div>
-                <span class="grey--text">Measured [{{ firingPressureData.Unit }}] </span>
+              <div class="headline"><h2>{{tcSpeedData.Value.toFixed(0)}}</h2></div>
+                <span class="grey--text">Measured [{{ tcSpeedData.Unit }}] </span>
             </div>
         </v-card-title>
 
         <v-card-actions>
-          <v-container style="margin-left: -21px; margin-top: -20px; margin-bottom: -40px" >
+          <v-container style="margin-left: -21px; margin-top: -20px; margin-bottom: -43px" >
             <v-layout row wrap style="margin-right: -30px;" >
              <v-flex v-show="isShowing" xs4>
 
-                <div class="headline" >{{firingPressureData.Ref.toFixed(2)}}</div>
+                <div class="headline" >{{tcSpeedData.Ref.toFixed(0)}}</div>
                 <span class="grey--text"> Reference  </span>
              </v-flex>
 
               <v-flex v-if="isShowing" xs8 style="margin-top: -20px" >
                 <!--<dx-button id="myButton"  @click="isShowing ^= true" :text="text"/>-->
-                <canvas id="dot-chart-1" @click="isShowing ^= true"></canvas>
+                <canvas id="dot-chart-10" @click="isShowing ^= true"></canvas>
               </v-flex>
               <v-flex v-else xs12 >
                   <canvas  @click="isShowing ^= true" ></canvas>
@@ -41,39 +41,39 @@
     import compressionDotsData from './compression-dots-data'
 
     export default {
-        name: "FiringPressure",
+        name: "TcSpeed",
         components: {DxButton,},
         props: {
-          childFiringPressureDataLoaded: Boolean,
-          firingPressureData: Object,
+          childTcSpeedDataLoaded: Boolean,
+          tcSpeedData: Object,
           counter: Number,
         },
         data: function () {
             return {
                 isShowing: true,
                 loading: false,
-                // firingPressureDataC: this.firingPressureData,
+                // tcSpeedDataC: this.tcSpeedData,
                 dotsChartData: {
                     type: 'line',
                     data: {
-                      labels: this.firingPressureData.datapoints.labels,
+                      labels: this.tcSpeedData.datapoints.labels,
                       datasets: [{
                         label: 'pressure',
-                        data: this.firingPressureData.datapoints.valMin,
+                        data: this.tcSpeedData.datapoints.valMin,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: '+2',
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data:  this.firingPressureData.datapoints.val,
+                        data:  this.tcSpeedData.datapoints.val,
                         pointBackgroundColor: 'white',
                         pointRadius: 1,
                         fill: false,
                         showLine: true
                       },{
                         // label: 'pressure',
-                        data:  this.firingPressureData.datapoints.valMax,
+                        data:  this.tcSpeedData.datapoints.valMax,
                         pointBackgroundColor: 'black',
                         pointRadius: 1,
                         fill: false,
@@ -118,21 +118,22 @@
                 }
             }
         },
+
         methods: {
           updateScaleChart(v) {
             if (v==1){
-              this.myChart2.options.scales.yAxes[0].display = false;
-              this.myChart2.options.scales.xAxes[0].display = false;
+              this.myChart10.options.scales.yAxes[0].display = false;
+              this.myChart10.options.scales.xAxes[0].display = false;
             }
             else {
-              this.myChart2.options.scales.yAxes[0].display = true;
-              this.myChart2.options.scales.xAxes[0].display = true;
-              this.myChart2.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+              this.myChart10.options.scales.yAxes[0].display = true;
+              this.myChart10.options.scales.xAxes[0].display = true;
+              this.myChart10.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
             }
           },
-          createChart2(chartId, data) {
+          createChart10(chartId, data) {
             const ctx = document.getElementById(chartId);
-            this.myChart2 = new Chart(ctx, data);
+            this.myChart10 = new Chart(ctx, data);
           }
         },
         mounted() {
@@ -141,7 +142,7 @@
           this.$watch('isShowing', function (newVal, ) {
             this.updateScaleChart(newVal);
           });
-          this.createChart2('dot-chart-1', this.dotsChartData);
+          this.createChart10('dot-chart-10', this.dotsChartData);
 
         }
     }

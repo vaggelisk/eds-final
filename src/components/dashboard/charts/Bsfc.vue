@@ -1,120 +1,153 @@
 <template>
-    <v-responsive>
-        <div v-if='loading'>Loading...</div>
-        <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
-          <!--<v-card-title primary class="title">-->
-            <v-select
-              :items="items"
-              flat
-              value="BSFC"
-            ></v-select>
-          <!--</v-card-title>-->
+  <v-responsive>
+    <div v-if="loading">Loading...</div>
+    <!--
+      <v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>
+    -->
+    <v-card-title primary class="title" style="margin-top: -20px">
+      <v-select v-model="select" :items="items" flat></v-select>
+    </v-card-title>
 
-        <v-card-title v-show="isShowing" primary-title>
-            <v-divider class="mx-3" vertical></v-divider>
-            <div>
-                <div class="headline">{{compressionPressureDataC.Value.toFixed(2)}}</div>
-                <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
+    <v-card-title v-if="select === 'BSFC'" primary-title>
+      <v-divider class="mx-3" vertical></v-divider>
+      <div>
+        <div class="headline"><h2>-</h2></div>
+        <span class="grey--text">Measured [gr/kWh ] </span>
+      </div>
+    </v-card-title>
+
+    <v-card-actions v-if="select === 'BSFC'">
+      <v-container>
+        <v-layout row wrap>
+          <v-flex xs4>
+            <div class="headline">
+              {{ compressionPressureDataC.Ref.toFixed(2) }}
             </div>
-        </v-card-title>
+            <span class="grey--text"> Reference </span>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card-actions>
 
-        <!--<v-card-actions>-->
-          <!--<v-container >-->
-            <!--<v-layout row wrap>-->
-             <!--<v-flex v-show="isShowing" xs4>-->
+    <v-card-title v-if="select === 'Indicated Power'" primary-title>
+      <v-divider class="mx-3" vertical></v-divider>
+      <div>
+        <div class="headline">
+          <h2>{{ indiPowerData.Value.toFixed(0) }}</h2>
+        </div>
+        <span class="grey--text">Measured [kW ] </span>
+      </div>
+    </v-card-title>
 
-                <!--<div class="headline" >{{compressionPressureDataC.Ref.toFixed(2)}}</div>-->
-                <!--<span class="grey&#45;&#45;text"> Reference  </span>-->
-             <!--</v-flex>-->
+    <v-card-actions v-if="select === 'Indicated Power'">
+      <v-container>
+        <v-layout row wrap>
+          <v-flex xs4>
+            <div class="headline">{{ indiPowerData.Ref.toFixed(0) }}</div>
+            <span class="grey--text"> Reference </span>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card-actions>
 
-              <!--<v-flex v-if="isShowing" xs8>-->
-                  <!--<canvas id="dot-chart-bsfc-1" @click="isShowing ^= true"></canvas>-->
-              <!--</v-flex>-->
-              <!--<v-flex v-else xs12>-->
-                   <!--<canvas id="dot-chart-bsfc-1" @click="isShowing ^= true"  ></canvas>-->
-              <!--</v-flex>-->
+    <v-card-title
+      v-if="select === 'Indicated Main Effective Pressure'"
+      primary-title
+    >
+      <v-divider class="mx-3" vertical></v-divider>
+      <div>
+        <div class="headline">
+          <h2>{{ imepData.Value.toFixed(2) }}</h2>
+        </div>
+        <span class="grey--text">Measured [kW ] </span>
+      </div>
+    </v-card-title>
 
-            <!--</v-layout>-->
-          <!--</v-container>-->
-        <!--</v-card-actions>-->
-    </v-responsive>
-
+    <v-card-actions v-if="select === 'Indicated Main Effective Pressure'">
+      <v-container>
+        <v-layout row wrap>
+          <v-flex xs4>
+            <div class="headline" v-if="imepData.Ref === -1000">-</div>
+            <div class="headline" v-else>{{ imepData.Ref.toFixed(2) }}</div>
+            <span class="grey--text"> Reference </span>
+          </v-flex>
+        </v-layout>
+      </v-container>
+    </v-card-actions>
+  </v-responsive>
 </template>
 
 <script>
-    import DxButton from 'devextreme-vue/button';
-    import Chart    from 'chart.js'
-    import compressionDotsData from './compression-dots-data'
+import DxButton from "devextreme-vue/button";
+import Chart from "chart.js";
+import compressionDotsData from "./compression-dots-data";
 
-    export default {
-        name: "Bsfc",
-        components: {DxButton,},
-        props:{
-          childBsfcDataLoaded: Boolean,
-          bsfcData: Object,
-          counter: Number,
-        },
-        data: function () {
-            return {
-                isShowing: true,
-                items: ['BSFC', 'Indicated Power', 'Indicated Main Effective Pressure', ],
-                loading: false,
-                compressionPressureDataC: this.bsfcData,
-                dotsChartData:
-                  {
-                    type: 'line',
-                    data: {
-                      labels: [ '10:00', '10:10', '10:20', '10:30', '10:40'],
-                      datasets: [{
-                        label: 'pressure',
-                        data: [3, 4, 1, 5, 6],
-                        pointBackgroundColor: 'black',
-                        pointRadius: 1,
-                        fill: '+2',
-                        showLine: true
-                      },{
-                        // label: 'pressure',
-                        data: [5, 6, 1, 7, 8],
-                        pointBackgroundColor: 'white',
-                        pointRadius: 1,
-                        fill: false,
-                        showLine: true
-                      },{
-                        // label: 'pressure',
-                        data: [7, 8, 1, 9, 10],
-                        pointBackgroundColor: 'black',
-                        pointRadius: 1,
-                        fill: false,
-                        showLine: true,
-                      }],
-                    },
-                  options: {
-                    legend: {
-                      display:  false ,
-                    },
-                  }
-                }
+export default {
+  name: "Bsfc",
+  components: { DxButton },
+  props: {
+    childBsfcDataLoaded: Boolean,
+    bsfcData: Object,
+    indiPowerData: Object,
+    imepData: Object
+  },
+  data: function() {
+    return {
+      isShowing: true,
+      select: "BSFC",
+      items: ["BSFC", "Indicated Power", "Indicated Main Effective Pressure"],
+      loading: false,
+      compressionPressureDataC: this.bsfcData,
+      dotsChartData: {
+        type: "line",
+        data: {
+          labels: ["10:00", "10:10", "10:20", "10:30", "10:40"],
+          datasets: [
+            {
+              label: "pressure",
+              data: [3, 4, 1, 5, 6],
+              pointBackgroundColor: "black",
+              pointRadius: 1,
+              fill: "+2",
+              showLine: true
+            },
+            {
+              // label: 'pressure',
+              data: [5, 6, 1, 7, 8],
+              pointBackgroundColor: "white",
+              pointRadius: 1,
+              fill: false,
+              showLine: true
+            },
+            {
+              // label: 'pressure',
+              data: [7, 8, 1, 9, 10],
+              pointBackgroundColor: "black",
+              pointRadius: 1,
+              fill: false,
+              showLine: true
             }
+          ]
         },
-
-        methods: {
-          createChart2(chartId, data) {
-            const ctx = document.getElementById(chartId);
-            const myChart2 = new Chart(ctx, data);
+        options: {
+          legend: {
+            display: false
           }
-        },
-        mounted() {
-          this.loading = false;
-          this.createChart2('dot-chart-bsfc-1', this.dotsChartData);
-
         }
-    }
+      }
+    };
+  },
+
+  methods: {},
+  mounted() {
+    this.loading = false;
+  }
+};
 </script>
 
 <style scoped>
-  #myButton {
-    color: red;
-    background-color: blueviolet;
-  }
-
+#myButton {
+  color: red;
+  background-color: blueviolet;
+}
 </style>

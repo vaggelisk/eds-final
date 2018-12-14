@@ -21,7 +21,7 @@
                 <span class="grey--text"> Reference  </span>
              </v-flex>
 
-              <v-flex v-if="isShowing" xs8>
+              <v-flex v-if="isShowing"  xs8 style="margin-top: -20px">
                   <canvas id="dot-chart-servo-1" @click="isShowing ^= true" height="180"></canvas>
               </v-flex>
               <v-flex v-else xs12>
