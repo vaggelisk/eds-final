@@ -1,39 +1,17 @@
 <template>
     <v-responsive>
         <div v-if='loading'>Loading...</div>
-        <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
         <v-card-title primary class="title"> Liner Wall Temperature </v-card-title>
 
         <v-card-title v-show="isShowing" primary-title>
-            <v-divider class="mx-3" vertical></v-divider>
-            <div>
+          <div style="border-left:5px solid green;height:50px; margin-right:10px; "></div>
+          <div>
               <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
                 <span class="grey--text">Measured [{{ linerWallTemperatureData.Unit }}] </span>
             </div>
         </v-card-title>
 
-        <!--<v-card-actions>-->
-          <!--<v-container >-->
-            <!--<v-layout row wrap>-->
-             <!--<v-flex v-show="isShowing" xs4>-->
-
-                <!--<div class="headline" >{{compressionPressureDataC.Ref.toFixed(2)}}</div>-->
-                <!--<span class="grey&#45;&#45;text"> Reference  </span>-->
-             <!--</v-flex>-->
-
-              <!--<v-flex v-if="isShowing" xs8>-->
-                  <!--<canvas id="dot-chart-liner-1" @click="isShowing ^= true"></canvas>-->
-              <!--</v-flex>-->
-
-              <!--<v-flex v-else xs12>-->
-                   <!--<canvas id="dot-chart-liner-1" @click="isShowing ^= true"  ></canvas>-->
-              <!--</v-flex>-->
-
-            <!--</v-layout>-->
-          <!--</v-container>-->
-        <!--</v-card-actions>-->
     </v-responsive>
-
 </template>
 
 <script>

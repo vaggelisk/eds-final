@@ -4,10 +4,9 @@
         <!--<v-card-title primary class="title"> Firing Pressure </v-card-title>-->
         <v-card-title primary class="title">{{ firingPressureData.Title }} </v-card-title>
         <v-card-title v-show="isShowing" primary-title style="margin-top: -20px">
-            <v-divider class="mx-3" vertical></v-divider>
+            <div style="border-left:5px solid green;height:50px; margin-right:10px; "></div>
             <div>
-                <!--<div class="headline">{{ val }}</div>-->
-              <div class="headline"><h2>{{firingPressureData.Value.toFixed(2)}}</h2></div>
+                <div class="headline"><h2>{{firingPressureData.Value.toFixed(2)}}</h2></div>
                 <span class="grey--text">Measured [{{ firingPressureData.Unit }}] </span>
             </div>
         </v-card-title>
@@ -61,7 +60,7 @@
                         label: 'pressure',
                         data: this.firingPressureData.datapoints.valMin,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: '+2',
                         showLine: true
                       },{
@@ -75,7 +74,7 @@
                         // label: 'pressure',
                         data:  this.firingPressureData.datapoints.valMax,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: false,
                         showLine: true,
                       }],

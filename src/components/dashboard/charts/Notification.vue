@@ -1,16 +1,16 @@
 <template>
   <v-responsive>
-    <dx-chart
-      id="chart"
-      :data-source="populationData"
-      title="World Population by Decade"
-    >
-      <dx-argument-axis :tick-interval="10">
-        <dx-label format="decimal"/>
-      </dx-argument-axis>
-      <dx-series type="bar"/>
-      <dx-legend :visible="false"/>
-    </dx-chart>
+    <!--<dx-chart-->
+      <!--id="chart"-->
+      <!--:data-source="populationData"-->
+      <!--title="World Population by Decade"-->
+    <!--&gt;-->
+      <!--<dx-argument-axis :tick-interval="10">-->
+        <!--<dx-label format="decimal"/>-->
+      <!--</dx-argument-axis>-->
+      <!--<dx-series type="bar"/>-->
+      <!--<dx-legend :visible="false"/>-->
+    <!--</dx-chart>-->
   </v-responsive>
 </template>
 

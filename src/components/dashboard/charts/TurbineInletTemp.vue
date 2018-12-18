@@ -5,8 +5,8 @@
         <v-card-title primary class="title"> {{turbineInletTempData.Title}} </v-card-title>
 
         <v-card-title v-show="isShowing" primary-title>
-            <v-divider class="mx-3" vertical></v-divider>
-            <div>
+          <div style="border-left:5px solid green;height:50px; margin-right:10px; "></div>
+          <div>
               <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
                 <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
             </div>
@@ -59,7 +59,7 @@
                         label: 'pressure',
                         data: this.turbineInletTempData.datapoints.valMin,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: '+2',
                         showLine: true
                       },{
@@ -73,7 +73,7 @@
                         // label: 'pressure',
                         data: this.turbineInletTempData.datapoints.valMax,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: false,
                         showLine: true,
                       }],

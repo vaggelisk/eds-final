@@ -4,7 +4,7 @@
         <!--<v-card-title primary class="title"> Firing Pressure </v-card-title>-->
         <v-card-title primary class="title">{{ tcSpeedData.Title }} </v-card-title>
         <v-card-title v-show="isShowing" primary-title style="margin-top: -20px">
-            <v-divider class="mx-3" vertical></v-divider>
+            <div style="border-left:5px solid green;height:50px; margin-right:10px; "></div>
             <div>
                 <!--<div class="headline">{{ val }}</div>-->
               <div class="headline"><h2>{{tcSpeedData.Value.toFixed(0)}}</h2></div>
@@ -61,7 +61,7 @@
                         label: 'pressure',
                         data: this.tcSpeedData.datapoints.valMin,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: '+2',
                         showLine: true
                       },{
@@ -75,7 +75,7 @@
                         // label: 'pressure',
                         data:  this.tcSpeedData.datapoints.valMax,
                         pointBackgroundColor: 'black',
-                        pointRadius: 1,
+                        pointRadius: 0,
                         fill: false,
                         showLine: true,
                       }],

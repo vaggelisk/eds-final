@@ -56,8 +56,17 @@
 
       <v-flex d-flex xs12 sm6 md4>
         <v-card dark height="400px">
-          <v-responsive contain>
-            <SubsystemsState />
+          <v-responsive v-if="childSubsystemDataLoaded" contain>
+            <SubsystemsState
+              v-bind:colorsSubsystemServoOil="colorsObj.ServoOil"
+              v-bind:colorsSubsystemFuelInjection="colorsObj.FuelInjection"
+              v-bind:colorsSubsystemScavengeAir="colorsObj.ScavengeAir"
+              v-bind:colorsSubsystemExhaustGas="colorsObj.ExhaustGas "
+              v-bind:colorsSubsystemPistonRunning="colorsObj.PistonRunning"
+              v-bind:colorsSubsystemAutomationControl="colorsObj.AutomationControl"
+              v-bind:colorsSubsystemGasAdmission="colorsObj.GasAdmission"
+            />
+
           </v-responsive>
         </v-card>
       </v-flex>
@@ -66,6 +75,10 @@
         <v-card height="400px" dark>
           <v-responsive v-if="childEngineStateDataLoaded" contain>
             <EngineState v-bind:colorsEngineState="colorsObj.Cylinder"
+                         v-bind:colorsSubsystemTurbine="colorsObj.Turbine"
+                         v-bind:colorsSubsystemCompressor="colorsObj.Compressor"
+                         v-bind:colorsSubsystemAirCooler="colorsObj.AirCooler"
+                         v-bind:colorsSubsystemAirFilter="colorsObj.AirFilter"
                          v-bind:counter="counter" />
           </v-responsive>
         </v-card>
@@ -238,6 +251,8 @@ export default {
 
       childLinerWallTemperatureDataLoaded: false,
       linerWallTemperatureData: {},
+
+      childSubsystemDataLoaded: false,
 
 
       childTcSpeedDataLoaded: false,
@@ -841,9 +856,7 @@ export default {
 
         let len2 = Object.keys(response.data).length;
         // console.log(len);
-        // let helperMatrix2 = response.data[Object.keys(response.data)[len - 1]];
         let helperMatrix2 = response.data;
-        // this.colorsObj = helperMatrix2.kpi;
         this.$set( this.colorsObj, helperMatrix2.kpi );
 
         // console.log( helperMatrix2.kpi.Turbine[0]);
@@ -851,21 +864,22 @@ export default {
 
         //kai edw ginetai mia mlkia sta data kai iparxei
         //askopos nested array px [[1,0]]
-        this.$set( this.colorsObj,  'Engine', helperMatrix2.kpi.Engine);
-        this.$set( this.colorsObj,  'Cylinder', helperMatrix2.kpi.Cylinder);
-        this.$set( this.colorsObj,  'Turbine', helperMatrix2.kpi.Turbine[0]);
+        this.$set( this.colorsObj,  'Engine',     helperMatrix2.kpi.Engine);
+        this.$set( this.colorsObj,  'Cylinder',   helperMatrix2.kpi.Cylinder);
+        this.$set( this.colorsObj,  'Turbine',    helperMatrix2.kpi.Turbine[0]);
         this.$set( this.colorsObj,  'Compressor', helperMatrix2.kpi['Compressor'][0]);
-        this.$set( this.colorsObj,  'AirCooler', helperMatrix2.kpi['AirCooler'][0]);
-        this.$set( this.colorsObj,  'AirFilter', helperMatrix2.kpi['AirFilter'][0]);
-        this.$set( this.colorsObj,  'ServoOil', helperMatrix2.kpi['Servo Oil']);
+        this.$set( this.colorsObj,  'AirCooler',  helperMatrix2.kpi['AirCooler'][0]);
+        this.$set( this.colorsObj,  'AirFilter',  helperMatrix2.kpi['AirFilter'][0]);
+        this.$set( this.colorsObj,  'ServoOil',   helperMatrix2.kpi['Servo Oil']);
         this.$set( this.colorsObj,  'FuelInjection', helperMatrix2.kpi['Fuel Injection']);
         this.$set( this.colorsObj,  'ScavengeAir', helperMatrix2.kpi['Scavenge Air']);
-        this.$set( this.colorsObj,  'ExhaustGas', helperMatrix2.kpi['Exhaust Gas']);
-        this.$set( this.colorsObj,  'GasAdmission', helperMatrix2.kpi['Gas Admission']);
+        this.$set( this.colorsObj,  'ExhaustGas',  helperMatrix2.kpi['Exhaust Gas']);
+        this.$set( this.colorsObj,  'GasAdmission',  helperMatrix2.kpi['Gas Admission']);
         this.$set( this.colorsObj,  'PistonRunning', helperMatrix2.kpi['Piston Running']);
         this.$set( this.colorsObj,  'AutomationControl', helperMatrix2.kpi['Automation & Control']);
 
         this.childEngineStateDataLoaded = true;
+        this.childSubsystemDataLoaded = true;
 
       });
 
@@ -881,85 +895,7 @@ export default {
 };
 </script>
 
-<style scoped></style>
+<style scoped>
 
-<!-- μέσα στα μάτια κοίτα απο το πάτωμα πάντοτε λίγο πριν πέσει θα πέτα, -->
-<!-- Ο επιμένων νικά, γενικά, αρμονικά, ανοδικα, μόνο ομαδικά -->
-<!-- φωτιά στα αφεντικά, μας χωρίζουν ταξικά -->
-<!-- φυλετικά χρωματικά από τα υλικά από τα λεφτά -->
-<!-- και ο νους εν πτώση θα δεις ισχύς εν τη ένωση -->
-<!-- θεριά ταπεινά που πεινάν αναζητάν να φαν γνώση -->
-<!-- όση δύναμη μας κλέβουνε θα βρίσκουμε άλλη τόση, -->
-<!-- θα σπερνω για να δω το δέντρο να ριζώσει, -->
-<!-- παιδιά μόνα που πολεμάγαν γνωθη σαυτον μηδέν άγαν -->
-<!-- όσα εθαβα μπροστά μου έβρισκα και αν δε τα έλυνα με κυνηγάγαν, -->
-<!--
-  πολλοί είναι αυτοί που λόγια λέγαν πολλά μα ηταν λίγοι εκείνοι που βοηθαγαν
--->
-<!-- και είχα αδέρφια στα ντέρτια σα βράχια βασταγαν. -->
-<!-- αναθεμα ανάμεσα σε όλα τα πρόβατα ανάμεικτα -->
-<!-- λύκοι δε φάνηκαν λίγοι που κράτησαν πολλοί -->
-<!-- που ταφήσαν πολλοί που μαγγιζαν μείναμε εδώ -->
-<!--
-  πέτυχαν μαζί όσοι βαδισαν μαζί σηκώθηκαν όταν γονατισαν όταν πάλεψαν ενωμένοι ταγγιξαν
--->
-<!-- αυτό είμαι εγώ λάσπη και ιδρώτα μεροκάματο και beatια στην υπογα, -->
-<!-- fer de Lance σε στιγμές Μοναξιάς Είναι η φλόγα, είναι ατόφιο όχι μόδα -->
-<!--
-  βιοπαλη όχι κονόμα όσο και Αν δεν τσουλαει θα το σπρώχνω η ζωή μια τρύπια ρόδα
--->
-<!-- Ελλάδα όνειρα στην πηγάδα -->
-<!-- εμείς ξυπνάμε τον κόσμο όσο κυνηγάτε τα φράγκα -->
-<!-- οικογένεια όχι ομάδα λόγος που καίει σα δάδα -->
-<!-- για πάντα, φασίστες και ρουφιάνοι στον Καιάδα.. -->
 
-<!--
-  fer de Lance μαζί σου όταν πετάς,
-  fer de Lance μαζί σου όταν πονάς,
-  fer de Lance βαθιά αληθινά συναισθήματα
-  με χρηματα και πλούτη δε μας ακουμπάς (x2)
--->
-
-<!--
-  Αλήθειας έργων επιχειρήματα γιναν συνθήματα και η μουσική μας θα δίνει μηνύματα,
--->
-<!-- κι αν λυναμε όλα μας τα προβλήματα ποιος θα γράφε για τον πόνο ε; -->
-<!-- κι αν επιβιωνω στη ζούγκλα που κάποιοι πουλάνε το χρόνο -->
-<!-- προσπαθώ να ξυπνήσω το πίσω διαζωμα ματιά που είδαν τον φόνο -->
-<!-- πάλευα μέρες να ρίξω τον τοίχο που χτισαν οι προκαταληψεις -->
-<!-- πως τι και σε ποιον να αποδείξεις σκάβω βαθιά για να βρω τις ενδείξεις -->
-<!-- θέλησα και έκλεισα χρόνια το στόμα σα μπω στην υπογα να μείνω σκυφτός -->
-<!--
-  από όλους τους φιλους(σκύλους;) ο πιο ταπεινός ήρεμη δύναμη και εσοπλισμος
--->
-<!--
-  αλλάζει η ζωή μας το είδα πιάσε το πρόβλημα από τα μαλλιά εικόνων επαναφορα
--->
-<!-- φιλικά και ο ρατσισμός δε χώρα στη δική μου σελίδα -->
-<!--
-  όταν απέφυγα την πρώτη παγίδα υποπτευθηκα πως υπάρχω για να σε πληρώνω πατρίδα
--->
-<!-- κοιτάζω μόνο την πυξίδα τώρα -->
-<!-- στο δαίμονα πριν κάνεις προσευχή πιάσου από την ύστατη στιγμή -->
-<!-- να απολαύσεις τη διαδρομή μου είναι η φωνή η πνοη και η τιμή μου -->
-<!-- και η ανθρώπινη ενέργεια που θέλει να αγκαλιάσει τη μουσική μου -->
-<!-- ήλιος να μπει μέσα στη ψυχή μου πάμε όσο θα τρέφουμε μυαλά παντα -->
-<!--
-  κάποιοι θα το εκτιμάνε θα είναι εκεί και μη κοιτάς που πάντα θα πεινάμε καλλιτέχνες
--->
-<!--
-  δεν υπάρχουν μέσα σε ένα κόσμο που την τέχνη καθε μέρα θα την ξεπουλάμε πολεμιστές
--->
-<!-- όλοι μαζι και πάμε Όσο προσέχουμε τους στίχους μας γύρνα θα το θυμάμαι -->
-<!-- θα ναι εκεί και αυτοί μαζι μας θα πεινάνε -->
-<!--
-  καλλιτέχνες δεν υπάρχουν μέσα σε ένα κόσμο που την τέχνη καθε μέρα θα την ξεπουλάμε
-   πολεμιστές για όσα και για όσους αγαπάμε.
--->
-
-<!--
-  fer de Lance μαζί σου όταν πετάς,
-   fer de Lance μαζί σου όταν πονάς,
-    fer de Lance βαθιά αληθινά συναισθήματα
-     με χρηματα και πλούτη δε μας ακουμπάς
--->
+</style>

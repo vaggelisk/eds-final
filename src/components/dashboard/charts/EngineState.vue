@@ -14,16 +14,13 @@
         <v-flex xs-12 >
 
 
-          <!--<div class="speed-value">-->
-            <!--<span><h4>{{ speedValue }}% </h4></span>-->
-          <!--</div>-->
           <v-layout style="position: relative; top: -25%" >
 
             <v-flex xs2>
               <div class="speed-value-1" >
                 <span><h4> 1 </h4></span>
               </div>
-              <dx-circular-gauge :value.sync="speedValue">
+              <dx-circular-gauge :value.sync="speedValueArr[0]">
                 <dx-size :width="120" />
 
                 <dx-value-indicator
@@ -43,166 +40,176 @@
                 </dx-scale>
                 <dx-range-container >
                   <dx-range :start-value="0"
-                            :end-value.sync="speedValue" color="green"></dx-range>
+                            :end-value.sync="speedValueArr[0]"
+                            :color="colors[0]"></dx-range>
 
                 </dx-range-container>
               </dx-circular-gauge>
             </v-flex>
 
-            <!--<v-flex xs2>-->
-              <!--<div class="speed-value-2" >-->
-                <!--<span><h4> 2 </h4></span>-->
-              <!--</div>-->
-            <!--<dx-circular-gauge  :value="speedValue">-->
-              <!--<dx-size :width="120" />-->
+            <v-flex xs2>
+              <div class="speed-value-2" >
+                <span><h4> 2 </h4></span>
+              </div>
+            <dx-circular-gauge  :value.sync="speedValueArr[1]">
+              <dx-size :width="120" />
 
-              <!--<dx-value-indicator-->
-                 <!--spindleGapSize=0-->
-                <!--type="disable"-->
-                <!--color="transparent"-->
-              <!--/>-->
-              <!--<dx-geometry-->
-                <!--:start-angle="270"-->
-                <!--:end-angle="271"-->
-              <!--/>-->
-              <!--<dx-scale-->
-                <!--:start-value="0"-->
-                <!--:end-value="100"-->
-                <!--:tick-interval="100">-->
-                                <!--<dx-label :visible=false></dx-label>-->
-              <!--</dx-scale>-->
-              <!--<dx-range-container >-->
-                <!--<dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>-->
-                <!--&lt;!&ndash;<dx-range :start-value="speedValue" :end-value="100" color="white"></dx-range>&ndash;&gt;-->
+              <dx-value-indicator
+                 spindleGapSize=0
+                type="disable"
+                color="transparent"
+              />
+              <dx-geometry
+                :start-angle="270"
+                :end-angle="271"
+              />
+              <dx-scale
+                :start-value="0"
+                :end-value="100"
+                :tick-interval="100">
+                                <dx-label :visible=false></dx-label>
+              </dx-scale>
+              <dx-range-container >
+                <dx-range :start-value="0"
+                          :end-value.sync="speedValueArr[1]"
+                          :color="colors[1]"></dx-range>
+                <!--<dx-range :start-value="speedValue" :end-value="100" color="white"></dx-range>-->
 
-              <!--</dx-range-container>-->
-            <!--</dx-circular-gauge>-->
-            <!--</v-flex>-->
+              </dx-range-container>
+            </dx-circular-gauge>
+            </v-flex>
 
-            <!--<v-flex xs2>-->
-              <!--<div class="speed-value-3" >-->
-                <!--<span><h4> 3 </h4></span>-->
-              <!--</div>-->
-            <!--<dx-circular-gauge :value="speedValue">-->
-              <!--<dx-size :width="120" />-->
+            <v-flex xs2>
+              <div class="speed-value-3" >
+                <span><h4> 3 </h4></span>
+              </div>
+            <dx-circular-gauge :value.sync="speedValueArr[2]">
+              <dx-size :width="120" />
 
-              <!--<dx-value-indicator-->
-                <!--spindleGapSize=0-->
-                <!--type="disable"-->
-                <!--color="transparent"-->
-              <!--/>-->
-              <!--<dx-geometry-->
-                <!--:start-angle="270"-->
-                <!--:end-angle="271"-->
-              <!--/>-->
-              <!--<dx-scale-->
-                <!--:start-value="0"-->
-                <!--:end-value="100"-->
-                <!--:tick-interval="100" >-->
-                                <!--<dx-label :visible=false></dx-label>-->
-              <!--</dx-scale>-->
-              <!--<dx-range-container >-->
-                <!--<dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>-->
-                <!--&lt;!&ndash;<dx-range :start-value="speedValue" :end-value="100" color="white"></dx-range>&ndash;&gt;-->
+              <dx-value-indicator
+                spindleGapSize=0
+                type="disable"
+                color="transparent"
+              />
+              <dx-geometry
+                :start-angle="270"
+                :end-angle="271"
+              />
+              <dx-scale
+                :start-value="0"
+                :end-value="100"
+                :tick-interval="100" >
+                                <dx-label :visible=false></dx-label>
+              </dx-scale>
+              <dx-range-container >
+                <dx-range :start-value="0"
+                          :end-value.sync="speedValueArr[2]"
+                          :color="colors[2]"></dx-range>
+                <!--<dx-range :start-value="speedValue" :end-value="100" color="white"></dx-range>-->
 
-              <!--</dx-range-container>-->
-            <!--</dx-circular-gauge>-->
-            <!--</v-flex>-->
+              </dx-range-container>
+            </dx-circular-gauge>
+            </v-flex>
 
-            <!--<v-flex xs2>-->
-              <!--<div class="speed-value-4" >-->
-                <!--<span><h4> 4 </h4></span>-->
-              <!--</div>-->
-            <!--<dx-circular-gauge :value="speedValue">-->
-              <!--<dx-size :width="120" />-->
+            <v-flex xs2>
+              <div class="speed-value-4" >
+                <span><h4> 4 </h4></span>
+              </div>
+            <dx-circular-gauge :value.sync="speedValueArr[3]">
+              <dx-size :width="120" />
 
-              <!--<dx-value-indicator-->
-                 <!--spindleGapSize=0-->
-                <!--type="disable"-->
-                <!--color="transparent">-->
-                                <!--<dx-label :visible=false></dx-label>-->
-              <!--</dx-value-indicator>-->
-              <!--<dx-geometry-->
-                <!--:start-angle="270"-->
-                <!--:end-angle="271"-->
-              <!--/>-->
-              <!--<dx-scale-->
-                <!--:start-value="0"-->
-                <!--:end-value="100"-->
-                <!--:tick-interval="100">-->
-                <!--<dx-label :visible=false></dx-label>-->
+              <dx-value-indicator
+                 spindleGapSize=0
+                type="disable"
+                color="transparent">
+                                <dx-label :visible=false></dx-label>
+              </dx-value-indicator>
+              <dx-geometry
+                :start-angle="270"
+                :end-angle="271"
+              />
+              <dx-scale
+                :start-value="0"
+                :end-value="100"
+                :tick-interval="100">
+                <dx-label :visible=false></dx-label>
 
-              <!--</dx-scale>-->
+              </dx-scale>
 
-              <!--<dx-range-container >-->
-                <!--<dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>-->
+              <dx-range-container >
+                <dx-range :start-value="0"
+                          :end-value.sync="speedValueArr[3]"
+                          :color="colors[3]"></dx-range>
 
-              <!--</dx-range-container>-->
-            <!--</dx-circular-gauge>-->
-            <!--</v-flex>-->
+              </dx-range-container>
+            </dx-circular-gauge>
+            </v-flex>
 
-            <!--<v-flex xs2>-->
-              <!--<div class="speed-value-5" >-->
-                <!--<span><h4> 5 </h4></span>-->
-              <!--</div>-->
-            <!--<dx-circular-gauge :value="speedValue">-->
-              <!--<dx-size :width="120" />-->
+            <v-flex xs2>
+              <div class="speed-value-5" >
+                <span><h4> 5 </h4></span>
+              </div>
+            <dx-circular-gauge :value.sync="speedValueArr[4]">
+              <dx-size :width="120" />
 
-              <!--<dx-value-indicator-->
-                <!--spindleGapSize=0-->
-                <!--type="disable"-->
-                <!--color="transparent"-->
-              <!--/>-->
-              <!--<dx-geometry-->
-                <!--:start-angle="270"-->
-                <!--:end-angle="271"-->
-              <!--/>-->
-              <!--<dx-scale-->
-                <!--:start-value="0"-->
-                <!--:end-value="100"-->
-                <!--:tick-interval="100">-->
-                <!--<dx-label :visible=false></dx-label>-->
-              <!--</dx-scale>-->
-              <!--<dx-range-container >-->
-                <!--<dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>-->
+              <dx-value-indicator
+                spindleGapSize=0
+                type="disable"
+                color="transparent"
+              />
+              <dx-geometry
+                :start-angle="270"
+                :end-angle="271"
+              />
+              <dx-scale
+                :start-value="0"
+                :end-value="100"
+                :tick-interval="100">
+                <dx-label :visible=false></dx-label>
+              </dx-scale>
+              <dx-range-container >
+                <dx-range :start-value="0"
+                          :end-value.sync="speedValueArr[4]"
+                          :color="colors[4]" ></dx-range>
 
-              <!--</dx-range-container>-->
-            <!--</dx-circular-gauge>-->
-            <!--</v-flex>-->
+              </dx-range-container>
+            </dx-circular-gauge>
+            </v-flex>
 
-            <!--<v-flex xs2>-->
-              <!--<div class="speed-value-6" >-->
-                <!--<span><h4> 6 </h4></span>-->
-              <!--</div>-->
-              <!--<dx-circular-gauge :value="speedValue">-->
-                <!--<dx-size :width="120" />-->
+            <v-flex xs2>
+              <div class="speed-value-6" >
+                <span><h4> 6 </h4></span>
+              </div>
+              <dx-circular-gauge :value.sync="speedValueArr[5]">
+                <dx-size :width="120" />
 
-                <!--<dx-value-indicator-->
-                   <!--spindleGapSize=0-->
-                  <!--type="disable"-->
-                  <!--color="transparent"-->
-                <!--/>-->
-                <!--<dx-geometry-->
-                  <!--:start-angle="270"-->
-                  <!--:end-angle="271"-->
-                <!--/>-->
-                <!--<dx-scale-->
-                  <!--:start-value="0"-->
-                  <!--:end-value="100"-->
-                  <!--:tick-interval="100">-->
-                  <!--<dx-label :visible=false></dx-label>-->
-                <!--</dx-scale>-->
-              <!--<dx-range-container >-->
-                  <!--<dx-range :start-value="0"  :end-value="speedValue" color="green"></dx-range>-->
+                <dx-value-indicator
+                   spindleGapSize=0
+                  type="disable"
+                  color="transparent"
+                />
+                <dx-geometry
+                  :start-angle="270"
+                  :end-angle="271"
+                />
+                <dx-scale
+                  :start-value="0"
+                  :end-value="100"
+                  :tick-interval="100">
+                  <dx-label :visible=false></dx-label>
+                </dx-scale>
+              <dx-range-container >
+                  <dx-range :start-value="0"  :end-value.sync="speedValueArr[5]"
+                            :color="colors[5]"></dx-range>
 
-                <!--</dx-range-container>-->
-              <!--</dx-circular-gauge>-->
-            <!--</v-flex>-->
+                </dx-range-container>
+              </dx-circular-gauge>
+            </v-flex>
 
-          <!--</v-layout>-->
+          </v-layout>
 
-        <!--</v-flex>-->
-      <!--</v-layout>-->
+        </v-flex>
+      </v-layout>
 
       <!--<v-layout row wrap align-center  >-->
 
@@ -219,12 +226,34 @@
 
               <!--<v-btn large flat color="white">Air Filters</v-btn>-->
 
-              {{colorsEngineStateC[0]}}  {{colorsEngineState[0]}} {{speedValue}} {{counter}}
-          </v-layout>
-        </v-flex>
+
+          <!--</v-layout>-->
+        <!--</v-flex>-->
+
+        <v-layout class="buttons"  row wrap>
+          <v-flex  xs3>
+            <v-btn block color="secondary" dark> Turbines </v-btn>
+            <hr :style="'height:8px; border:none; color:' + colorSubsystemTurbine + '; background-color:' + colorSubsystemTurbine +'; width:' + colorsSubsystemTurbine[0]*100+ '%;' " />
+
+          </v-flex>
+          <v-flex  xs3>
+            <v-btn block color="secondary" dark> Compressors </v-btn>
+           <hr :style="'height:8px; border:none; color:' + colorSubsystemCompressor + '; background-color:' + colorSubsystemCompressor +'; width:' + colorsSubsystemCompressor[0]*100+ '%;' " />
+
+          </v-flex>
+          <v-flex  xs3>
+            <v-btn block color="secondary" dark> Air Coolers </v-btn>
+           <hr :style="'height:8px; border:none; color:' + colorSubsystemAirCooler + '; background-color:' + colorSubsystemAirCooler +'; width:' + colorsSubsystemAirCooler[0]*100+ '%;' " />
+          </v-flex>
+          <v-flex  xs3>
+            <v-btn block color="secondary" dark> Air Filters </v-btn>
+            <hr :style="'height:8px; border:none; color:' + colorSubsystemAirFilter + '; background-color:' + colorSubsystemAirFilter +'; width:' + colorsSubsystemAirFilter[0]*100+ '%;' " />
+
+          </v-flex>
+        </v-layout>
 
 
-      </v-layout>
+      <!--</v-layout>-->
 
     </v-container>
 
@@ -253,6 +282,10 @@ export default {
       childEngineDataLoaded: Boolean,
       engineKpiData: Object,
       colorsEngineState: Array,
+      colorsSubsystemTurbine: Array,
+      colorsSubsystemCompressor: Array,
+      colorsSubsystemAirCooler: Array,
+      colorsSubsystemAirFilter: Array,
       counter: Number,
     },
     components: {
@@ -274,8 +307,12 @@ export default {
         return {
           speedValue: 91,
           speedValueArr: [],
+          colors: [],
           textTitle: "",
-          colorsEngineStateC: this.colorsEngineState,
+          colorSubsystemTurbine: "",
+          colorSubsystemCompressor: "",
+          colorSubsystemAirCooler: "",
+          colorSubsystemAirFilter: "",
         }
     },
     methods: {
@@ -290,23 +327,99 @@ export default {
             });
         }
     },
-    computed() {
 
-    },
     mounted () {
+      if (this.colorsSubsystemTurbine[1]===0){
+        this.colorSubsystemTurbine = "green" ;
+      } else if (this.colorsSubsystemServoOil[1]===10 ){
+        this.colorSubsystemTurbine = "orange" ;
+      } else {
+        this.colorSubsystemTurbine = "red" ;
+      }
+      if (this.colorsSubsystemAirFilter[1]===0){
+        this.colorSubsystemAirFilter = "green" ;
+      } else if (this.colorsSubsystemAirFilter[1]===10 ){
+        this.colorSubsystemAirFilter = "orange" ;
+      } else {
+        this.colorSubsystemAirFilter = "red" ;
+      }
+      if (this.colorsSubsystemAirCooler[1]===0){
+        this.colorSubsystemAirCooler = "green" ;
+      } else if (this.colorsSubsystemAirCooler[1]===10 ){
+        this.colorSubsystemAirCooler = "orange" ;
+      } else {
+        this.colorSubsystemAirCooler = "red" ;
+      }
+      if (this.colorsSubsystemCompressor[1]===0){
+        this.colorSubsystemCompressor = "green" ;
+      } else if (this.colorsSubsystemCompressor[1]===10 ){
+        this.colorSubsystemCompressor = "orange" ;
+      } else {
+        this.colorSubsystemCompressor = "red" ;
+      }
+      for (let i = 0; i < 6; i++) {
+        this.$set(this.speedValueArr, i, this.colorsEngineState[i][0] * 100);
+        if (this.colorsEngineState[i][1]===0){
+          this.$set(this.colors, i, "green");
+        } else if (this.colorsEngineState[i][1]===10 ){
+          this.$set(this.colors, i, "orange");
+        } else {
+          this.$set(this.colors, i, "red");
+        }
+      }
       this.loading = false;
       this.textTitle = this.speedValue.toString() + "%";
       this.speedValue = this.colorsEngineState[0][0]*100;
-      this.$watch('colorsEngineState[0][0]', function (newVal, ) {
-        this.speedValue =  newVal*100;
-      });
-      this.speedValueArr.push( this.colorsEngineState[0][0]*100 );
-      // this.$watch()
-      console.log( this.speedValueArr[0] );
-
-
+      this.$watch('colorsSubsystemTurbine', function(newVal) {
+        if (newVal[1]===0){
+          this.colorSubsystemTurbine = "green" ;
+        } else if (newVal[1]===10 ){
+          this.colorSubsystemTurbine = "orange" ;
+        } else {
+          this.colorSubsystemTurbine = "red" ;
+        }
+      }, {deep:true});
+      this.$watch('colorsSubsystemAirFilter', function(newVal) {
+        if (newVal[1]===0){
+          this.colorSubsystemAirFilter = "green" ;
+        } else if (newVal[1]===10 ){
+          this.colorSubsystemAirFilter = "orange" ;
+        } else {
+          this.colorSubsystemAirFilter = "red" ;
+        }
+      }, {deep:true});
+      this.$watch('colorsSubsystemAirCooler', function(newVal) {
+        if (newVal[1]===0){
+          this.colorSubsystemAirCooler = "green" ;
+        } else if (newVal[1]===10 ){
+          this.colorSubsystemAirCooler = "orange" ;
+        } else {
+          this.colorSubsystemAirCooler = "red" ;
+        }
+      }, {deep:true});
+      this.$watch('colorsSubsystemCompressor', function(newVal) {
+        if (newVal[1]===0){
+          this.colorSubsystemCompressor = "green" ;
+        } else if (newVal[1]===10 ){
+          this.colorSubsystemCompressor = "orange" ;
+        } else {
+          this.colorSubsystemCompressor = "red" ;
+        }
+      }, {deep:true});
+      this.$watch('colorsEngineState', function (newVal, ) {
+        this.speedValue =  newVal[0][0]*100;
+        for (let i = 0; i < 6; i++) {
+          this.$set(this.speedValueArr, i, newVal[i][0] * 100);
+          if (newVal[i][1]===0){
+            this.$set(this.colors, i, "green");
+          } else if (newVal[i][1]===10 ){
+            this.$set(this.colors, i, "orange");
+          } else {
+            this.$set(this.colors, i, "red");
+          }
+        }
+      }, {deep:true});
     }
-
 }
 </script>
 
