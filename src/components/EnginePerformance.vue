@@ -1,40 +1,104 @@
 <template>
   <div>
     <v-tabs
-      v-model="active"
-      color="flat"
       dark
       slider-color="yellow"
     >
+
       <v-tab
-        v-for="n in 4"
+        v-for="n in 3"
         :key="n"
         ripple
       >
-        Item {{ n }}
+        <span v-if="n===1"> Overview </span>
+        <span v-if="n===2"> Detailed View </span>
+        <span v-if="n===3"> T/C Performance </span>
+
+
 
       </v-tab>
+
+      <v-tab>
+        <v-menu
+          v-if="more.length"
+          bottom
+          class="v-tabs__div"
+          left
+        >
+          <a slot="activator" class="v-tabs__item">
+            Cylinder Performance
+            <v-icon>arrow_drop_down</v-icon>
+          </a>
+
+          <v-list class="grey darken-3">
+            <v-list-tile
+              v-for="item in more"
+              :key="item"
+              @click="addItem(item)"
+            >
+              {{ item }}
+            </v-list-tile>
+          </v-list>
+        </v-menu>
+      </v-tab>
+
       <v-tab-item
         v-for="n in 4"
         :key="n"
       >
-        <v-card flat>
-          <v-card-text>{{ text }}</v-card-text>
-        </v-card>
+
+        <div v-if="n===1" >
+          <Overview />
+        </div>
+        <div v-if="n===2" flat>
+          <DetailedView />
+        </div>
+        <div v-if="n===3" flat>
+          <TcPerformance />
+        </div>
+
+
+
       </v-tab-item>
     </v-tabs>
-    <div style="position: relative; top: 30%; left: 20%;">
-      <h1>
-      Welcome to Engine Performance
-      </h1>
-    </div>
   </div>
+
+
+
 </template>
 
 <script>
-    export default {
-        name: "EnginePerformance"
+
+
+import Overview                from "./enginePerformance/Overview"
+import DetailedView            from "./enginePerformance/DetailedView"
+import TcPerformance           from "./enginePerformance/TcPerformance"
+import CylinderPerformance     from "./enginePerformance/CylinderPerformance"
+
+
+
+export default {
+  name: "EnginePerformance",
+  components: {
+    Overview,
+    DetailedView,
+    TcPerformance,
+    CylinderPerformance,
+  },
+  data () {
+    return {
+      tab: null,
+      items: [
+        'overview', 'detailed view',  't/c performance',
+      ],
+      more: [
+        'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6'
+      ],
+      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
     }
+  }
+}
+
 </script>
 
 <style scoped>

@@ -41,7 +41,7 @@
       <v-flex d-flex xs12 sm6 md2>
         <v-card dark>
           <!-- the above if is for loading data before make the card -->
-          <!-- otherwise make th card without data -->
+          <!-- otherwise make the card without data -->
           <v-responsive v-if="childCompressionDataLoaded" contain>
             <CompressionDots
               v-bind:compressionPressureData="compressionPressureData"
@@ -61,7 +61,7 @@
               v-bind:colorsSubsystemServoOil="colorsObj.ServoOil"
               v-bind:colorsSubsystemFuelInjection="colorsObj.FuelInjection"
               v-bind:colorsSubsystemScavengeAir="colorsObj.ScavengeAir"
-              v-bind:colorsSubsystemExhaustGas="colorsObj.ExhaustGas "
+              v-bind:colorsSubsystemExhaustGas="colorsObj.ExhaustGas"
               v-bind:colorsSubsystemPistonRunning="colorsObj.PistonRunning"
               v-bind:colorsSubsystemAutomationControl="colorsObj.AutomationControl"
               v-bind:colorsSubsystemGasAdmission="colorsObj.GasAdmission"
@@ -864,18 +864,18 @@ export default {
 
         //kai edw ginetai mia mlkia sta data kai iparxei
         //askopos nested array px [[1,0]]
-        this.$set( this.colorsObj,  'Engine',     helperMatrix2.kpi.Engine);
-        this.$set( this.colorsObj,  'Cylinder',   helperMatrix2.kpi.Cylinder);
-        this.$set( this.colorsObj,  'Turbine',    helperMatrix2.kpi.Turbine[0]);
-        this.$set( this.colorsObj,  'Compressor', helperMatrix2.kpi['Compressor'][0]);
-        this.$set( this.colorsObj,  'AirCooler',  helperMatrix2.kpi['AirCooler'][0]);
-        this.$set( this.colorsObj,  'AirFilter',  helperMatrix2.kpi['AirFilter'][0]);
-        this.$set( this.colorsObj,  'ServoOil',   helperMatrix2.kpi['Servo Oil']);
-        this.$set( this.colorsObj,  'FuelInjection', helperMatrix2.kpi['Fuel Injection']);
-        this.$set( this.colorsObj,  'ScavengeAir', helperMatrix2.kpi['Scavenge Air']);
-        this.$set( this.colorsObj,  'ExhaustGas',  helperMatrix2.kpi['Exhaust Gas']);
-        this.$set( this.colorsObj,  'GasAdmission',  helperMatrix2.kpi['Gas Admission']);
-        this.$set( this.colorsObj,  'PistonRunning', helperMatrix2.kpi['Piston Running']);
+        this.$set( this.colorsObj,  'Engine',            helperMatrix2.kpi.Engine);
+        this.$set( this.colorsObj,  'Cylinder',          helperMatrix2.kpi.Cylinder);
+        this.$set( this.colorsObj,  'Turbine',           helperMatrix2.kpi.Turbine[0]);
+        this.$set( this.colorsObj,  'Compressor',        helperMatrix2.kpi['Compressor'][0]);
+        this.$set( this.colorsObj,  'AirCooler',         helperMatrix2.kpi['AirCooler'][0]);
+        this.$set( this.colorsObj,  'AirFilter',         helperMatrix2.kpi['AirFilter'][0]);
+        this.$set( this.colorsObj,  'ServoOil',          helperMatrix2.kpi['Servo Oil']);
+        this.$set( this.colorsObj,  'FuelInjection',     helperMatrix2.kpi['Fuel Injection']);
+        this.$set( this.colorsObj,  'ScavengeAir',       helperMatrix2.kpi['Scavenge Air']);
+        this.$set( this.colorsObj,  'ExhaustGas',        helperMatrix2.kpi['Exhaust Gas']);
+        this.$set( this.colorsObj,  'GasAdmission',      helperMatrix2.kpi['Gas Admission']);
+        this.$set( this.colorsObj,  'PistonRunning',     helperMatrix2.kpi['Piston Running']);
         this.$set( this.colorsObj,  'AutomationControl', helperMatrix2.kpi['Automation & Control']);
 
         this.childEngineStateDataLoaded = true;
