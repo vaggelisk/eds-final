@@ -82,49 +82,64 @@
 </template>
 
 <script>
-  // import axios                    from "axios";
   import {APIService}                from '../../api/getCardData';
 
-  const API_URL = 'http://localhost:8092';
-  const apiService = new APIService("pmax");
 
   export default {
     name: "Overview",
     data: function () {
         return {
+          overviewCardsData: {},
           lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
-          posts: [],
-          errors: [],
-          longname: "",
-          unit: "",
+          counter: 32,
         }
     },
     methods: {
-      getContacts(){
-        apiService.getCardData().then((data) => {
-          console.log("hiiiiiiiiiiiiiii");
-          console.log(data);})
-          // console.log(apiService.getCardData())
-          // this.contacts = data;
-          // this.numberOfContacts= data.count;
+      startInterval: function () {
+        this.interval = setInterval(() => {
+          if (this.counter < 40) {
+            this.getCardsData( this.counter );
+            this.counter = this.counter + 1;
+          } else {
+            clearInterval(this.interval);
+          }
+        }, 3000)
+      },
+      getCardsData( counter ) {
+        this.getScavengeReceiverPressure( counter );
+      },
+      getFiringPressure(){
+        const apiService = new APIService("pmax");
+        apiService.getCardStaticData().then((data) => {
+          console.log(data.data.d.longName);
+          this.$set( this.overviewCardsData, 'firingPressure', data.data.d);
+          console.log( this.overviewCardsData.firingPressure.unit );
+        })
+      },
+      getScavengeReceiverPressure( c ){
+        const apiService = new APIService("pscav");
+        this.$set( this.overviewCardsData, 'scavengeReceiverPressure', {});
+
+        apiService.getCardStaticData().then((data) => {
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'unit', data.data.d.unit );
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'name', data.data.d.longName );
+
+        });
+
+        apiService.getCardDynamicData( c ).then((data) => {
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'value', data.data.d.value);
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'color', data.data.d.color);
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'reference', data.data.d.ref);
+          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'datapoints', data.data.d.datapoints);
+        });
       },
     },
     mounted() {
-      this.getContacts();
+      this.startInterval();
     },
 
 
-    // // Fetches posts when the component is created.
-    // created() {
-    //   axios.get(`http://jsonplaceholder.typicode.com/posts`)
-    //     .then(response => {
-    //       // JSON responses are automatically parsed.
-    //       this.posts = response.data
-    //     })
-    //     .catch(e => {
-    //       this.errors.push(e)
-    //     })
-    // }
+
   }
 </script>
 
