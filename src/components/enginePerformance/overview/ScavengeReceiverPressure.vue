@@ -1,38 +1,47 @@
 <template>
     <v-responsive>
-        <div v-if='loading'>Loading...</div>
-        <!--<v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>-->
-        <v-card-title primary class="title"> {{this.scavengeReceiverPressureData.Title}}</v-card-title>
+        <div >
+          <v-card-title  primary class="title"> {{ scavengeReceiverPressureData.name }}</v-card-title>
 
-        <v-card-title v-show="isShowing" primary-title>
-          <div style="border-left:5px solid green;height:50px; margin-right:10px; "></div>
-          <div>
-              <div class="headline"><h2>{{compressionPressureDataC.Value.toFixed(2)}}</h2></div>
-                <span class="grey--text">Measured [{{compressionPressureDataC.Unit}}] </span>
-            </div>
-        </v-card-title>
+          <v-card-title v-show="isShowingRef" primary-title>
 
-        <v-card-actions>
-          <v-container style="margin-left: -21px;"  >
-            <v-layout row wrap  style="margin-right: -30px;">
-             <v-flex v-show="isShowing" xs4>
+            <div :style="'border-left:5px solid ' + scavengeReceiverPressureData.color + ';height:50px; margin-right:10px;' "></div>
 
-                <div class="headline" >{{compressionPressureDataC.Ref.toFixed(2)}}</div>
-                <span class="grey--text"> Reference  </span>
-             </v-flex>
 
-              <v-flex v-if="isShowing"  xs8 style="margin-top: -40px">
-                  <canvas id="dot-chart-scav-2" @click="isShowing ^= true"></canvas>
-              </v-flex>
-              <v-flex v-else xs12>
-                   <canvas  @click="isShowing ^= true"  ></canvas>
-              </v-flex>
+            <div>
+                <div class="headline">
+                  <h2 v-if="scavengeReceiverPressureData.color==='red'" style="color: red">{{ scavengeReceiverPressureData.value}} </h2>
+                  <h2 v-else >{{ scavengeReceiverPressureData.value}} </h2>
+                </div>
+                 <span class="grey--text">Measured [{{ scavengeReceiverPressureData.unit}}] </span>
 
-            </v-layout>
-          </v-container>
-        </v-card-actions>
+              </div>
+          </v-card-title>
+
+          <v-card-actions>
+            <v-container style="margin-left: -21px;"  >
+              <v-layout row wrap  style="margin-right: -30px;">
+               <v-flex v-show="isShowingRef" xs4>
+
+                  <div class="headline" >{{  scavengeReceiverPressureData.reference }}</div>
+
+                  <span class="grey--text"> Reference  </span>
+               </v-flex>
+
+
+                <v-flex v-if="isShowingRef"  xs8 style="margin-top: -40px">
+                    <canvas id="dot-chart-scav-4" @click="isShowingRef ^= true"></canvas>
+                </v-flex>
+                <v-flex v-else  xs12>
+                     <canvas id="dot-chart-scav-4"  @click="isShowingRef ^= true"  ></canvas>
+                </v-flex>
+
+              </v-layout>
+            </v-container>
+          </v-card-actions>
+        </div>
+
     </v-responsive>
-
 </template>
 
 <script>
@@ -40,110 +49,124 @@
     import Chart    from 'chart.js'
 
     export default {
-        name: "ScavengeReceiverPressure",
-        components: {DxButton,},
-        props: {
-          childScavengeReceiverPressureDataLoaded: Boolean,
-          scavengeReceiverPressureData: Object
+      name: "ScavengeReceiverPressure",
+      components: {DxButton,},
+      props: {
+        scavengeReceiverPressureData: {
+          type: Object,
         },
-        data: function () {
-            return {
-                isShowing: true,
-                loading: false,
-                compressionPressureDataC: this.scavengeReceiverPressureData,
-                dotsChartData:
+        counter: Number,
+      },
+      data: function () {
+        return {
+          isShowingRef: true,
+          loading: true,
+        }
+      },
+      computed: {
+        forchartrender: function() {
+         return  this.scavengeReceiverPressureData.datapoints.labels;
+        },
+        dotsChartData: function () {
+          return {
+            type: 'line',
+            data: {
+              labels: this.scavengeReceiverPressureData.datapoints.labels,
+              datasets: [{
+                label: 'pressure',
+                data: this.scavengeReceiverPressureData.datapoints.valMin,
+                pointBackgroundColor: 'black',
+                pointRadius: 0,
+                fill: '+2',
+                showLine: true
+              }, {
+                // label: 'pressure',
+                data: this.scavengeReceiverPressureData.datapoints.value,
+                pointBackgroundColor: 'white',
+                pointRadius: 1,
+                fill: false,
+                showLine: true
+              }, {
+                // label: 'pressure',
+                data: this.scavengeReceiverPressureData.datapoints.valMax,
+                pointBackgroundColor: 'black',
+                pointRadius: 0,
+                fill: false,
+                showLine: true,
+              }],
+            },
+            options: {
+              layout: {
+                padding: {
+                  left: 0,
+                  right: 0,
+                },
+
+              },
+              scales: {
+                xAxes: [
                   {
-                    type: 'line',
-                    data: {
-                      labels: this.scavengeReceiverPressureData.datapoints.labels,
-                      datasets: [{
-                        label: 'pressure',
-                        data: this.scavengeReceiverPressureData.datapoints.valMin,
-                        pointBackgroundColor: 'black',
-                        pointRadius: 0,
-                        fill: '+2',
-                        showLine: true
-                      },{
-                        // label: 'pressure',
-                        data: this.scavengeReceiverPressureData.datapoints.val,
-                        pointBackgroundColor: 'white',
-                        pointRadius: 1,
-                        fill: false,
-                        showLine: true
-                      },{
-                        // label: 'pressure',
-                        data: this.scavengeReceiverPressureData.datapoints.valMax,
-                        pointBackgroundColor: 'black',
-                        pointRadius: 0,
-                        fill: false,
-                        showLine: true,
-                      }],
-                    },
-                  options: {
-                    layout: {
-                      padding: {
-                        left: 0,
-                        right: 0,
+                    display: false,
+                    ticks: {
+                      callback: function (value, index, values) {
+                        return parseFloat(value).toFixed(2);
                       },
 
-                    },
-                    scales: {
-                      xAxes: [
-                        {
-                          display: false,
-                          ticks: {
-                            callback: function(value, index, values) {
-                              return parseFloat(value).toFixed(2);
-                            },
-
-                            maxTicksLimit: 3,
-                          },
-                        }
-                      ],
-                      yAxes: [{
-                        display: false,
-                        scaleLabel: {
-                          display: true,
-                          labelString: '[bar]',
-                          padding: -2,
-                        }
-                      }
-                      ],
-                    },
-                    legend: {
-                      display:  false ,
+                      maxTicksLimit: 3,
                     },
                   }
+                ],
+                yAxes: [{
+                  display: false,
+                  scaleLabel: {
+                    display: true,
+                    labelString: '[bar]',
+                    padding: -2,
+                  }
                 }
+                ],
+              },
+              legend: {
+                display: false,
+              },
             }
-        },
-
-        methods: {
-          updateScaleChart(v) {
-            if (v==1){
-              this.myChart7.options.scales.yAxes[0].display = false;
-              this.myChart7.options.scales.xAxes[0].display = false;
-            }
-            else {
-              this.myChart7.options.scales.yAxes[0].display = true;
-              this.myChart7.options.scales.xAxes[0].display = true;
-              this.myChart7.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
-            }
-          },
-          createChart7(chartId, data) {
-            const ctx = document.getElementById(chartId);
-            this.myChart7 = new Chart(ctx, data);
+          }
+        }
+      },
+      methods: {
+        updateScaleChart(v) {
+          if (v==1){
+            this.mychart8.options.scales.yAxes[0].display = false;
+            this.mychart8.options.scales.xAxes[0].display = false;
+          }
+          else {
+            this.mychart8.options.scales.yAxes[0].display = true;
+            this.mychart8.options.scales.xAxes[0].display = true;
+            this.mychart8.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
           }
         },
-        mounted() {
+        createChart8(chartId, data) {
+          const ctx = document.getElementById(chartId);
+          this.mychart8 = new Chart(ctx, data);
+        }
+      },
+      mounted() {
           this.loading = false;
-          this.showing = true;
-          this.$watch('isShowing', function (newVal, ) {
+          this.$watch('isShowingRef', function (newVal,) {
             this.updateScaleChart(newVal);
           });
-          this.createChart7('dot-chart-scav-2', this.dotsChartData);
+          this.$watch('forchartrender', function () {
+            if (this.counter === 33) {
+              this.createChart8('dot-chart-scav-4', this.dotsChartData);
+            } else {
+              this.mychart8.destroy();
+              this.isShowingRef = true;
+              this.createChart8('dot-chart-scav-4', this.dotsChartData);
+            }
+          });
 
-        }
+
+      }
     }
 </script>
 

@@ -42,11 +42,18 @@ export class APIService {
         let helperMatrix = mydynamicobj[Object.keys(mydynamicobj)[len - 1]];
         let helperValueArray = helperMatrix[id];
 
+        let typeRef = helperValueArray[4];
+        let avg = (helperValueArray[0][0]) ? helperValueArray[0][0].toFixed(2) : 0;
+        let ref = (helperValueArray[1][0]) ? helperValueArray[1][0].toFixed(2) : 0;
+        let min = (typeRef === "%diff") ? helperValueArray[2]/100 : helperValueArray[2];
+        let max = (typeRef === "%diff") ? helperValueArray[3]/100 : helperValueArray[3];
 
-        let avg = (helperValueArray[0][0]) ? helperValueArray[0][0] : 0;
-        let ref = (helperValueArray[1][0]) ? helperValueArray[1][0] : 0;
-        let min = helperValueArray[2];
-        let max = helperValueArray[3];
+        // console.log(ref);
+        // console.log(max);
+
+        // let p =(avg -  ref)/avg;
+        // console.log(p);
+        let clr = (  Math.abs( (avg -  ref)/avg ) < max  ) ? "green" : "red";
 
 
         let datapoints = {"val": [], "valMin": [], "valMax": [], "labels": []};
@@ -86,11 +93,16 @@ export class APIService {
         let dataTransformed = {
           d: {
             "value" : avg,
-            "color" : "green",
+            "color" : clr,
             "reference" : ref,
             "min": min,
             "max": max,
-            "datapoints": datapoints,
+            "datapoints": {
+              "value": datapoints.val,
+              "valMin": datapoints.valMin,
+              "valMax": datapoints.valMax,
+              "labels": datapoints.labels,
+            }
           },
         };
         return dataTransformed;

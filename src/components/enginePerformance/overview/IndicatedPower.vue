@@ -1,19 +1,19 @@
 <template>
   <v-responsive>
     <div >
-      <v-card-title  primary class="title"> {{ exhaustReceiverPressureData.name }}</v-card-title>
+      <v-card-title  primary class="title"> {{ indicatedPowerData.name }}</v-card-title>
 
       <v-card-title v-show="isShowingRef" primary-title>
 
-        <div :style="'border-left:5px solid ' + exhaustReceiverPressureData.color + ';height:50px; margin-right:10px;' "></div>
+        <div :style="'border-left:5px solid ' + indicatedPowerData.color + ';height:50px; margin-right:10px;' "></div>
 
 
         <div>
           <div class="headline">
-            <h2 v-if="exhaustReceiverPressureData.color==='red'" style="color: red">{{ exhaustReceiverPressureData.value}} </h2>
-            <h2 v-else >{{ exhaustReceiverPressureData.value}} </h2>
+            <h2 v-if="indicatedPowerData.color==='red'" style="color: red">{{ indicatedPowerData.value}} </h2>
+            <h2 v-else >{{ indicatedPowerData.value}} </h2>
           </div>
-          <span class="grey--text">Measured [{{ exhaustReceiverPressureData.unit}}] </span>
+          <span class="grey--text">Measured [{{ indicatedPowerData.unit}}] </span>
 
         </div>
       </v-card-title>
@@ -23,17 +23,17 @@
           <v-layout row wrap  style="margin-right: -30px;">
             <v-flex v-show="isShowingRef" xs4>
 
-              <div class="headline" >{{  exhaustReceiverPressureData.reference }}</div>
+              <div class="headline" >{{  indicatedPowerData.reference }}</div>
 
               <span class="grey--text"> Reference  </span>
             </v-flex>
 
 
             <v-flex v-if="isShowingRef"  xs8 style="margin-top: -40px">
-              <canvas id="dot-chart-pexh-4" @click="isShowingRef ^= true"></canvas>
+              <canvas id="dot-chart-indip-4" @click="isShowingRef ^= true"></canvas>
             </v-flex>
             <v-flex v-else  xs12>
-              <canvas id="dot-chart-pexh-4"  @click="isShowingRef ^= true"  ></canvas>
+              <canvas id="dot-chart-indip-4"  @click="isShowingRef ^= true"  ></canvas>
             </v-flex>
 
           </v-layout>
@@ -52,7 +52,7 @@
     name: "ScavengeReceiverPressure",
     components: {DxButton,},
     props: {
-      exhaustReceiverPressureData: {
+      indicatedPowerData: {
         type: Object,
       },
       counter: Number,
@@ -65,30 +65,30 @@
     },
     computed: {
       forchartrender: function() {
-        return  this.exhaustReceiverPressureData.datapoints.labels;
+        return  this.indicatedPowerData.datapoints.labels;
       },
       dotsChartData: function () {
         return {
           type: 'line',
           data: {
-            labels: this.exhaustReceiverPressureData.datapoints.labels,
+            labels: this.indicatedPowerData.datapoints.labels,
             datasets: [{
               label: 'pressure',
-              data: this.exhaustReceiverPressureData.datapoints.valMin,
+              data: this.indicatedPowerData.datapoints.valMin,
               pointBackgroundColor: 'black',
               pointRadius: 0,
               fill: '+2',
               showLine: true
             }, {
               // label: 'pressure',
-              data: this.exhaustReceiverPressureData.datapoints.value,
+              data: this.indicatedPowerData.datapoints.value,
               pointBackgroundColor: 'white',
               pointRadius: 1,
               fill: false,
               showLine: true
             }, {
               // label: 'pressure',
-              data: this.exhaustReceiverPressureData.datapoints.valMax,
+              data: this.indicatedPowerData.datapoints.valMax,
               pointBackgroundColor: 'black',
               pointRadius: 0,
               fill: false,
@@ -136,18 +136,18 @@
     methods: {
       updateScaleChart(v) {
         if (v==1){
-          this.mychart9.options.scales.yAxes[0].display = false;
-          this.mychart9.options.scales.xAxes[0].display = false;
+          this.mychart11.options.scales.yAxes[0].display = false;
+          this.mychart11.options.scales.xAxes[0].display = false;
         }
         else {
-          this.mychart9.options.scales.yAxes[0].display = true;
-          this.mychart9.options.scales.xAxes[0].display = true;
-          this.mychart9.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
+          this.mychart11.options.scales.yAxes[0].display = true;
+          this.mychart11.options.scales.xAxes[0].display = true;
+          this.mychart11.options.scales.xAxes[0].ticks.maxTicksLimit = 3;
         }
       },
-      createChart8(chartId, data) {
+      createChart(chartId, data) {
         const ctx = document.getElementById(chartId);
-        this.mychart9 = new Chart(ctx, data);
+        this.mychart11 = new Chart(ctx, data);
       }
     },
     mounted() {
@@ -157,11 +157,11 @@
       });
       this.$watch('forchartrender', function () {
         if (this.counter === 33) {
-          this.createChart8('dot-chart-pexh-4', this.dotsChartData);
+          this.createChart('dot-chart-indip-4', this.dotsChartData);
         } else {
-          this.mychart9.destroy();
+          this.mychart11.destroy();
           this.isShowingRef = true;
-          this.createChart8('dot-chart-pexh-4', this.dotsChartData);
+          this.createChart('dot-chart-indip-4', this.dotsChartData);
         }
       });
 
