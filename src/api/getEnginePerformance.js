@@ -11,12 +11,30 @@ export class getEnginePerformance {
     this.count = count;
   }
 
+  getDataFromHybercube() {
+    const url3 = `${API_URL}/HyperCubeData/${this.count}`;
+    console.log(url3);
+    return axios({
+      method: 'get',
+      url: url3,
+      transformResponse: function (data,) {
+        let myobj = JSON.parse(data);
+        let len = Object.keys(myobj).length;
 
-  getDetailedViewData() {
+        let dataTranformed = {
+          'values': myobj.pressureTrace.Expexted,
+          'arrangements': myobj.crankAngle,
+        };
+        console.log(myobj.crankAngle[1]);
+        return dataTranformed;
+      }
+    })
+  }
+
+
+  getDataFromTimeline() {
     const url2 = `${API_URL}/EDSTimelineData/${this.count}`;
     console.log(url2);
-      // console.log(EDS_Mapping.ensp.elementName);
-
 
     function getArrangements(map) {
       return {
@@ -25,32 +43,32 @@ export class getEnginePerformance {
         'yaxis': map.unit
       };
     }
-
-
     function validateAndColor(val, ref, max, typeRef) {
       if (typeRef === "%diff"){
         max =  max/100
       }
       return  ( Math.abs( (val -  ref)/val ) < max  ) ? 0 : 1;
     }
-
-
     function getBarChartData( param, param2, hMatrix ) {
       let helperValueArray = hMatrix[param];
       // console.log(helperValueArray);
       let valueBarData = [];
       for (let i=0; i < 6; i++ ){
-        valueBarData.push( { 'cylinder': (i+1).toString(), 'value': helperValueArray[0][i].toFixed(2), 'tag': validateAndColor( helperValueArray[0][i], helperValueArray[1][i], helperValueArray[3], helperValueArray[4] ) } );
-      };
+        valueBarData.push({
+          'cylinder': (i+1).toString(),
+          'value': helperValueArray[0][i].toFixed(2),
+          'tag': validateAndColor(
+            helperValueArray[0][i], helperValueArray[1][i], helperValueArray[3], helperValueArray[4]
+          )
+        });
+      }
       // console.log(valueBarData);
       let arrangements = getArrangements( EDS_Mapping[param2] );
-      // console.log(arrangements);
       return  {
         'arrangements'  : arrangements,
         'values': valueBarData,
       };
     }
-
 
     return axios({
       method: 'get',
