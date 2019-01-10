@@ -1,19 +1,25 @@
 export const dataFiringPressure = [{
   cylinder: '1',
-  oranges: 3
+  value: 3,
+  tag: 1,
 }, {
   cylinder: '2',
-  oranges: 4
+  value: 4,
+  tag: 0,
 }, {
   cylinder: '3',
-  oranges: 3
+  value: 3.45,
+  tag: 0,
 }, {
   cylinder: '4',
-  oranges: 4
+  value: 4,
+  tag: 0,
 }, {
   cylinder: '5',
-  oranges: 3
+  value: 3.5,
+  tag: 0,
 }, {
   cylinder: '6',
-  oranges: 5
+  value: 5.45,
+  tag: 1,
 }, ];
