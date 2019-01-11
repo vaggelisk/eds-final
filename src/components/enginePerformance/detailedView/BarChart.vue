@@ -32,14 +32,7 @@
           color="#949494"
           :width="1"
           dashStyle="solid">
-         <!-- <dx-label
-            :visible="true"
-            backgroundColor="#949494">
-            <dx-font
-              color="#fff"
-              :size="12">
-            </dx-font>
-          </dx-label>-->
+
         </dx-crosshair>
 
         <dx-tooltip
@@ -48,7 +41,7 @@
         </dx-tooltip>
 
         <dx-legend
-            :visible="false"
+          :visible="false"
         ></dx-legend>
 
       </dx-chart>

@@ -5,62 +5,79 @@
     <v-card-title primary class="title" style="margin-top: -20px">
       <v-select v-model="select" :items="items" flat></v-select>
     </v-card-title>
+    {{dataChart.sources}} <br>
+    {{dataChart.sourcesInfo}} <br>
 
-        <v-flex  v-if="select === 'Pressure Trace'" d-flex>
-          <p><em>Pressure [bar]</em> </p>
+    <v-flex  v-if="select === 'Pressure Trace'" d-flex>
+      <p><em>Pressure [bar] {{counter}}</em> </p>
 
-          <dx-chart
-            id="chart"
-            :data-source="dataSource"
-          >
-            <dx-common-series-settings
-              :type="type"
-              argument-field="country"
-            />
-            <dx-series
-              v-for="energy in energySources"
-              :key="energy.value"
-              :value-field="energy.value"
-              :name="energy.name"
-            >
-              <DxPoint :visible="false" />
-            </dx-series>
-            <dx-margin :bottom="20"/>
-            <dx-argument-axis
-              :value-margins-enabled="false"
-              discrete-axis-division-mode="crossLabels"
-            >
-            </dx-argument-axis>
-            <dx-value-axis
-            >
-              <dx-grid :visible="true"
-                       :opacity="0.3" />
-            </dx-value-axis>
-            <dx-crosshair
-              :horizontal-line="false"
-              :enabled="true"
-              color="#949494"
-              :width="1"
-              dashStyle="solid">
+      <!--<dx-chart-->
+      <!--id="chart"-->
+      <!--:data-source="dataSources"-->
+      <!--&gt;-->
+      <dx-chart
+        id="chart"
+        :data-source="dataChart.sources" >
+        <dx-common-series-settings
+          :type="type"
+          argument-field="crankAngle"
+        />
+        <!--<dx-series-->
+          <!--v-for="item in dataChart.sourcesInfo"-->
+          <!--v-bind:key="item.value"-->
+          <!--v-bind:value-field="i.value"-->
+          <!--v-bind:name="i.name"-->
+        <!--&gt;-->
 
-            </dx-crosshair>
+          <dx-series
+          argument-field="crankAngle"
+          :value-field="dataChart.sourcesInfo[0].value"
+          :name="dataChart.sourcesInfo[0].name" >
 
 
-            <dx-legend
-              vertical-alignment="top"
-              horizontal-alignment="center"
-              item-text-position="bottom"
-            />
+          <!--<dx-series-->
+          <!--v-for="i in dataChart.sourcesInfo"-->
+          <!--:key="i.value"-->
+          <!--:value-field="i.value"-->
+          <!--:name="i.name" >-->
+          <DxPoint :visible="false" />
+        </dx-series>
+        <dx-margin :bottom="20"/>
+        <dx-argument-axis
+          :value-margins-enabled="false"
+          discrete-axis-division-mode="crossLabels"
+        >
+        </dx-argument-axis>
+        <dx-value-axis
+        >
+          <dx-grid :visible="true"
+                   :opacity="0.3" />
+        </dx-value-axis>
+        <dx-crosshair
+          :horizontal-line="false"
+          :enabled="true"
+          color="#949494"
+          :width="1"
+          dashStyle="solid">
 
-            <dx-tooltip
-              :enabled="true"
-              :customize-tooltip="customizeTooltip"
-            />
-          </dx-chart>
+        </dx-crosshair>
+
+
+        <dx-legend
+          vertical-alignment="top"
+          horizontal-alignment="center"
+          item-text-position="bottom"
+        />
+
+        <!--<dx-tooltip-->
+        <!--:enabled="true"-->
+        <!--:customize-tooltip="customizeTooltip"-->
+        <!--/>-->
+      </dx-chart>
 
 
 
-        </v-flex>
+    </v-flex>
 
 
     <v-card-title v-if="select === 'Pressure Trace (firing order)'" primary-title>
@@ -142,20 +159,29 @@
       DxSubtitle,
       DxTooltip
     },
+    props: {
+      dataChart: Object,
+      counter: Number,
+    },
     data: function () {
       return {
         select: "Pressure Trace",
         items: ["Pressure Trace", "Pressure Trace (firing order)", "Pressure vs Volume"],
-        dataSource: service.getCountriesInfo(),
-        energySources: service.getEnergySources(),
+        dataSources: service.getSources(),
+        // dataSourcesInfo: service.getSourcesInfo(),
         type: 'spline'
       }
     },
     methods: {
-      customizeTooltip: (arg) => {
-        return {
-          text: arg.valueText
-        };
+      // customizeTooltip: (arg) => {
+      //   return {
+      //     text: arg.valueText
+      //   };
+      // }
+    },
+    beforeCreate() {
+      return {
+        // dataSourcesInfo : this.dataChart.sourcesInfo,
       }
     }
   }
@@ -177,3 +203,11 @@
   }
 
 </style>
+
+
+<!--<dx-chart-->
+<!--id="chart"-->
+<!--:data-source="dataChart.sources" >-->
+<!--<dx-series-->
+<!--argument-field="crankAngle"-->
+<!--value-field="cyl1">-->

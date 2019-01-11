@@ -72,69 +72,74 @@
 <script>
 
 
-import Overview                from "./enginePerformance/Overview"
-import DetailedView            from "./enginePerformance/DetailedView"
-import TcPerformance           from "./enginePerformance/TcPerformance"
-import CylinderPerformance     from "./enginePerformance/CylinderPerformance"
-import {getEnginePerformance}  from "../api/getEnginePerformance";
+  import Overview                from "./enginePerformance/Overview"
+  import DetailedView            from "./enginePerformance/DetailedView"
+  import TcPerformance           from "./enginePerformance/TcPerformance"
+  import CylinderPerformance     from "./enginePerformance/CylinderPerformance"
+  import {getEnginePerformance}  from "../api/getEnginePerformance";
 
 
 
-export default {
-  name: "EnginePerformance",
-  components: {
-    Overview,
-    DetailedView,
-    TcPerformance,
-    CylinderPerformance,
-  },
-  data () {
-    return {
-      tab: null,
-      detailedViewData: {
-        'firingPressure': { 'arrangements': {}, 'values': []},
-        'compressionPressure': { 'arrangements': {}, 'values': [] },
-        'indicatedPressure': { 'arrangements': {}, 'values': [] },
-        'exhaustedTemp': { 'arrangements': {}, 'values': [] },
-      },
-      items: [
-        'overview', 'detailed view',  't/c performance',
-      ],
-      more: [
-        'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6'
-      ],
-      counter: 32,
-      text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
-    }
-  },
-  methods: {
-    startInterval: function () {
-      this.interval = setInterval(() => {
-        if (this.counter < 37) {
-          this.getDetailedViewData( this.counter );
-          this.counter = this.counter + 1;
-        } else {
-          clearInterval(this.interval);
-        }
-      }, 3000)
+  export default {
+    name: "EnginePerformance",
+    components: {
+      Overview,
+      DetailedView,
+      TcPerformance,
+      CylinderPerformance,
     },
-    getDetailedViewData( counter ) {
-      const apiService = new getEnginePerformance( counter );
-      apiService.getDataFromHybercube();
+    data () {
+      return {
+        tab: null,
+        detailedViewData: {
+          'firingPressure': { 'arrangements': {}, 'values': []},
+          'compressionPressure': { 'arrangements': {}, 'values': [] },
+          'indicatedPressure': { 'arrangements': {}, 'values': [] },
+          'exhaustedTemp': { 'arrangements': {}, 'values': [] },
+          'pressureTrace': { 'sourcesInfo': [], 'sources': [] },
+        },
+        items: [
+          'overview', 'detailed view',  't/c performance',
+        ],
+        more: [
+          'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6'
+        ],
+        counter: 32,
+        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
+      }
+    },
+    methods: {
+      startInterval: function () {
+        this.interval = setInterval(() => {
+          if (this.counter < 37) {
+            this.getDetailedViewData( this.counter );
+            this.counter = this.counter + 1;
+          } else {
+            clearInterval(this.interval);
+          }
+        }, 3000)
+      },
+      getDetailedViewData( counter ) {
+        const apiService = new getEnginePerformance( counter );
+        apiService.getDataFromHybercube().then((data) => {
+          this.$set( this.detailedViewData, 'pressureTrace', data.data.pressureTrace);
+        });
 
-      // apiService = new getEnginePerformance( counter );
-      apiService.getDataFromTimeline().then((data) => {
-        this.$set( this.detailedViewData, 'firingPressure', data.data.Pmax );
-        this.$set( this.detailedViewData, 'compressionPressure', data.data.Pcomp );
-        this.$set( this.detailedViewData, 'indicatedPressure', data.data.imep );
-        this.$set( this.detailedViewData, 'exhaustedTemp', data.data.Texh );
-      });
+        console.log(this.detailedViewData.pressureTrace.sources[0].crankAngle);
+
+        // apiService = new getEnginePerformance( counter );
+        apiService.getDataFromTimeline().then((data) => {
+          this.$set( this.detailedViewData, 'firingPressure', data.data.Pmax );
+          this.$set( this.detailedViewData, 'compressionPressure', data.data.Pcomp );
+          this.$set( this.detailedViewData, 'indicatedPressure', data.data.imep );
+          this.$set( this.detailedViewData, 'exhaustedTemp', data.data.Texh );
+        });
+      }
+    },
+    mounted() {
+      this.startInterval();
     }
-  },
-  mounted() {
-    this.startInterval();
   }
-}
 
 </script>
 

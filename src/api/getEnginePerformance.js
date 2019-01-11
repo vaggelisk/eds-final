@@ -1,5 +1,6 @@
-import axios from 'axios';
+import axios         from 'axios';
 import {EDS_Mapping} from "./dataEdsMapping";
+import service       from "../components/enginePerformance/detailedView/dataLineChart";
 
 
 const API_URL = 'http://localhost:8092';
@@ -14,6 +15,32 @@ export class getEnginePerformance {
   getDataFromHybercube() {
     const url3 = `${API_URL}/HyperCubeData/${this.count}`;
     console.log(url3);
+
+    function transformStructureOfData(pT, cA ) {
+      let len1 = cA.length;
+      let len2 = pT.Expected.length;
+
+      let len = Math.min(cA.length,  pT.Expected.length);
+
+
+      // console.log(len);
+      // console.log(len1);
+      // console.log(len2);
+      let s = [];
+      // for (let j = 0; j < len; j++) {
+      for (let j = 0; j < 5; j++) {
+        let v = {
+          crankAngle: cA[j],
+          cyl1: pT["Cylinder 1"][j],
+          cyl2: pT["Cylinder 2"][j],
+          ref:  pT.Expected[j],
+        };
+        s.push(v);
+      }
+
+      return s;
+    }
+
     return axios({
       method: 'get',
       url: url3,
@@ -21,12 +48,17 @@ export class getEnginePerformance {
         let myobj = JSON.parse(data);
         let len = Object.keys(myobj).length;
 
-        let dataTranformed = {
-          'values': myobj.pressureTrace.Expexted,
-          'arrangements': myobj.crankAngle,
+        let dataTransformed = {
+          'pressureTrace': {
+            'sourcesInfo': service.getSourcesInfo2(),
+            'sources': transformStructureOfData(
+              myobj.pressureTrace,
+              myobj.crankAngle,
+            )
+          }
         };
-        console.log(myobj.crankAngle[1]);
-        return dataTranformed;
+        console.log(dataTransformed.pressureTrace.sources[0].crankAngle);
+        return dataTransformed;
       }
     })
   }
