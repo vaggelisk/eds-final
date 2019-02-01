@@ -1,6 +1,6 @@
 <template>
-  <v-responsive>
-    <div v-if="loading">Loading...</div>
+    <v-card style="height: 250px%; width : 100%; background-color: rgb(42,42,42);">
+    <!-- <div v-if="loading">Loading...</div> -->
     <!--
       <v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>
     -->
@@ -74,7 +74,7 @@
         </v-layout>
       </v-container>
     </v-card-actions>
-  </v-responsive>
+  </v-card>
 </template>
 
 <script>

@@ -1,5 +1,5 @@
 <template>
-    <v-responsive>
+    <v-card style="height: 250px; width : 100%; background-color: rgb(42,42,42);">
         <div v-if='loading'>Loading...</div>
         <v-card-title primary class="title"> Liner Wall Temperature </v-card-title>
 
@@ -11,13 +11,12 @@
             </div>
         </v-card-title>
 
-    </v-responsive>
+    </v-card>
 </template>
 
 <script>
     import DxButton from 'devextreme-vue/button';
     import Chart    from 'chart.js'
-    import compressionDotsData from './compression-dots-data'
 
     export default {
         name: "TurbineInletTemp",
@@ -66,23 +65,13 @@
             }
         },
         methods: {
-          createChart2(chartId, data) {
-            const ctx = document.getElementById(chartId);
-            const myChart2 = new Chart(ctx, data);
-          }
         },
         mounted() {
           this.loading = false;
-          this.createChart2('dot-chart-liner-1', this.dotsChartData);
 
         }
     }
 </script>
 
 <style scoped>
-  #myButton {
-    color: red;
-    background-color: blueviolet;
-  }
-
 </style>

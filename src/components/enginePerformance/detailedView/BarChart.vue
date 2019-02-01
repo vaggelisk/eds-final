@@ -41,7 +41,7 @@
         </dx-tooltip>
 
         <dx-legend
-          :visible="false"
+            :visible="false"
         ></dx-legend>
 
       </dx-chart>
@@ -105,3 +105,6 @@
   }
 
 </style>
+
+
+

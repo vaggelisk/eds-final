@@ -58,9 +58,10 @@
 
                       <v-responsive contain>
                         <LineChart
-                          v-if="detailedViewData.pressureTrace.sources"
+                          v-if="detailedViewData.pressureTrace.sourcesInfo"
                           v-bind:dataChart="detailedViewData.pressureTrace"
                           v-bind:counter="counter2"
+                          v-bind:currentItem="currentItem"
                         />
                       </v-responsive>
 
@@ -125,7 +126,10 @@
 
                 <v-card dark >
                   <v-responsive contain>
-                    <!--<BarChartTrial />-->
+                    <BarChart
+                      v-if="detailedViewData.pressureRise.values"
+                      v-bind:data-chart="detailedViewData.pressureRise"
+                      v-bind:counter="counter2" />
                   </v-responsive>
                 </v-card>
 
@@ -219,12 +223,7 @@
     },
     data: function () {
       return {
-        // detailedViewData: {
-        //   'firingPressure': { 'arrangements': {}, 'values': []},
-        //   'compressionPressure': { 'arrangements': {}, 'values': [] },
-        //   'indicatedPressure': { 'arrangements': {}, 'values': [] },
-        //   'exhaustedTemp': { 'arrangements': {}, 'values': [] },
-        // },
+        currentItem: 'detailedView',
         lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
         // counter2: 32,
       }

@@ -1,17 +1,16 @@
 <template>
-  <div>
-    <div v-if='loading'>Loading...</div>
+  <v-card style="width:100%;height:100%; background-color: rgb(42,42,42);">
+    <!-- <div v-if='loading'>Loading...</div> -->
     <v-card-title primary class="title"> Engine KPI </v-card-title>
-    <span style="color:transparent">{{counter}}</span>
-    <v-card-actions >
-      <v-layout>
-        <v-flex xs6   style="margin-left:10%;" >
-
-          <div class="speed-value" >
-            <span><h5>{{ engineKpiData.Value.toFixed(1) }}% </h5></span>
+    <v-card-actions fill-height >
+      <!-- <v-layout>
+        <v-flex xs12> -->
+            
+          <dx-circular-gauge style="position:relative; left:15%; width:100%;height:100%;" :value="engineKpiData.Value">
+            <div class="speed-value"  >
+            <span><h5 style="color:white;width:100%;height:100%;">{{ engineKpiData.Value.toFixed(1) }}% </h5></span>
           </div>
-          <dx-circular-gauge style="position: relative; top: -25%" :value="engineKpiData.Value">
-            <dx-size style="margin-left:10%;" :width="180"/>
+            <dx-size  :width="180"/>            
 
             <dx-value-indicator
               spindleGapSize=0
@@ -20,28 +19,29 @@
             />
             <dx-geometry
               :start-angle="270"
-              :end-angle="271"
+              :end-angle="270"
             />
             <dx-scale
               :start-value="0"
               :end-value="100"
               :tick-interval="100" >
-              <dx-label :visible=false> </dx-label>
+              <dx-label :visible="false" />
+              <dx-tick :visible="false" />
             </dx-scale>
-            <dx-range-container >
-              <dx-range :start-value="0"  :end-value="engineKpiData.Value" color="green"></dx-range>
+            <dx-range-container :width="10" background-color="rgb(67,67,67)">
+              <dx-range :start-value="0"  :end-value="engineKpiData.Value" color="rgb(60, 171, 48)"></dx-range>
             </dx-range-container>
           </dx-circular-gauge>
-        </v-flex>
-      </v-layout>
+        <!-- </v-flex>
+      </v-layout> -->
 
     </v-card-actions>
-  </div>
+  </v-card>
 </template>
 
 <script>
 import Chart             from 'chart.js'
-import DxCircularGauge, {
+import { DxCircularGauge,
  DxSize,
  DxValueIndicator,
  DxGeometry,
@@ -50,6 +50,7 @@ import DxCircularGauge, {
  DxRange,
  DxTitle,
  DxLabel,
+ DxTick
 } from "devextreme-vue/circular-gauge"
 
 import GaugeIndicator from "./GaugeIndicator"
@@ -73,6 +74,7 @@ export default {
       DxRange,
       DxTitle,
       DxLabel,
+      DxTick,
 
       GaugeIndicator,
     },
@@ -133,7 +135,6 @@ export default {
         }
 
       };
-      // this.createChart2('engine-dashboard-chart', this.doughnutChartData);
 
     }
 

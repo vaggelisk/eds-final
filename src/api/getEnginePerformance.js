@@ -16,28 +16,44 @@ export class getEnginePerformance {
     const url3 = `${API_URL}/HyperCubeData/${this.count}`;
     console.log(url3);
 
-    function transformStructureOfData(pT, cA ) {
-      let len1 = cA.length;
-      let len2 = pT.Expected.length;
-
-      let len = Math.min(cA.length,  pT.Expected.length);
-
-
-      // console.log(len);
-      // console.log(len1);
-      // console.log(len2);
+    function transformStructureOfData(pT, xA ) {
+      let len = Math.min(xA.length,  pT.Expected.length);
       let s = [];
-      // for (let j = 0; j < len; j++) {
-      for (let j = 0; j < 5; j++) {
+      for (let j = 0; j < len; j++) {
         let v = {
-          crankAngle: cA[j],
+          x: xA[j],
           cyl1: pT["Cylinder 1"][j],
           cyl2: pT["Cylinder 2"][j],
+          cyl3: pT["Cylinder 3"][j],
+          cyl4: pT["Cylinder 4"][j],
+          cyl5: pT["Cylinder 5"][j],
+          cyl6: pT["Cylinder 6"][j],
           ref:  pT.Expected[j],
         };
         s.push(v);
       }
 
+      return s;
+    }
+
+    function transformStructureOfComplicatedData(pT, xA) {
+      let s = [];
+      let itemsx = [ "CA1", "CA2", "CA3", "CA4", "CA5", "CA6"];
+      let itemsxvarname = [ "cyl1", "cyl2", "cyl3", "cyl4", "cyl5", "cyl6"];
+      let itemsy = [  "Cylinder 1",  "Cylinder 2", "Cylinder 3", "Cylinder 4", "Cylinder 5", "Cylinder 6" ];
+
+      for (let j = 0; j < 360; j = j + 0.5 ) {
+        let v = {
+          x: j.toString()
+        };
+        for (let i = 0; i < 6; i++ ) {
+          if (xA[itemsx[i]].indexOf(j) !== -1) {
+            let q = xA[itemsx[i]].indexOf(j);
+            v[itemsxvarname[i]] = pT[itemsy[i]][q];
+          }
+        }
+        s.push(v);
+      }
       return s;
     }
 
@@ -54,10 +70,17 @@ export class getEnginePerformance {
             'sources': transformStructureOfData(
               myobj.pressureTrace,
               myobj.crankAngle,
+            ),
+            'sources2': transformStructureOfComplicatedData(
+              myobj.pressureTrace,
+              myobj.crankAnglePerCyl,
+            ),
+            'sources3': transformStructureOfData(
+              myobj.pressureTrace,
+              myobj.volume,
             )
           }
         };
-        console.log(dataTransformed.pressureTrace.sources[0].crankAngle);
         return dataTransformed;
       }
     })
@@ -71,7 +94,8 @@ export class getEnginePerformance {
     function getArrangements(map) {
       return {
         'name':   map.longName,
-        // 'xaxis': map.elementName, //den einai toso sta kala tous ta data, isws prostethei argotera
+        // 'xaxis': map.elementName,
+        // den einai toso sta kala tous ta data, isws prostethei argotera
         'yaxis': map.unit
       };
     }
@@ -112,8 +136,9 @@ export class getEnginePerformance {
         let detailedViewDataTransformed = {
           'Pmax' : getBarChartData( "Pmax",  "pmax",   helperMatrix ),
           'Pcomp': getBarChartData( "Pcomp", "pcomp",  helperMatrix ),
-          'imep':  getBarChartData( "imep",  "imep1",  helperMatrix ),
-          'Texh':  getBarChartData( "Texh",  "tExhC1", helperMatrix ),
+          'imep' :  getBarChartData( "imep",  "imep1",  helperMatrix ),
+          'Texh' :  getBarChartData( "Texh",  "tExhC1", helperMatrix ),
+          'PressureRise': getBarChartData( "PressureRise", "pmaxPcomp", helperMatrix),
         };
 
         return detailedViewDataTransformed;

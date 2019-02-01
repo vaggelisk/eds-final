@@ -2896,7 +2896,15 @@ export const EDS_Mapping = {
       "unit": "",
       "elementName": "Engine",
       "combinedName": "SCR Mode On Engine 0"
-  }
+  },
+  "pmaxPcomp": {
+    "name": "pmaxPcomp",
+    "EHCtag": "out14",
+    "longName": "Pfire - Pcomp",
+    "unit": "bar",
+    "shortName": "Pfire - Pcomp"
+  },
+
 };
 
 

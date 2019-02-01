@@ -1,5 +1,5 @@
 <template>
-  <v-app dark>
+  <v-app dark style="background-color:rgb(26,26,26);">
 
     <Navigate/>
 
@@ -27,19 +27,13 @@
 </template>
 
 <script>
-import HelloWorld  from './components/HelloWorld'
+
 import Dashboard   from './components/Dashboard'
 import Navigate    from './components/Navigate'
-import CommitChart from './components/CommitChart'
 
 export default {
   components: {
-
-
-    HelloWorld,
-    Dashboard,
-    Navigate,
-    CommitChart
+    Navigate
   },
   data () {
     return {

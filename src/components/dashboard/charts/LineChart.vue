@@ -14,11 +14,7 @@
       console.log(this.data);
       this.renderChart( this.chartData, this.opts );
     },
-    // data: function() {
-    //   return {
-    //
-    //   }
-    // }
+
     computed: {
       chartData: function() {
         return  this.data ;

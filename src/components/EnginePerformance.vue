@@ -10,27 +10,27 @@
         :key="n"
         ripple
       >
-        <span v-if="n===1"> Overview </span>
-        <span v-if="n===2"> Detailed View </span>
-        <span v-if="n===3"> T/C Performance </span>
+        <span v-if="n===1" @click="currentItem='Cylinder Performance'"> Overview </span>
+        <span v-if="n===2" @click="currentItem='Cylinder Performance'"> Detailed View </span>
+        <span v-if="n===3" @click="currentItem='Cylinder Performance'"> T/C Performance </span>
 
 
 
       </v-tab>
 
-      <v-tab>
+      <v-tab >
         <v-menu
           v-if="more.length"
           bottom
           class="v-tabs__div"
           left
         >
-          <a slot="activator" class="v-tabs__item">
-            Cylinder Performance
+          <a slot="activator" class="v-tabs__item" >
+            {{currentItem}}
             <v-icon>arrow_drop_down</v-icon>
           </a>
 
-          <v-list class="grey darken-3">
+          <v-list dark >
             <v-list-tile
               v-for="item in more"
               :key="item"
@@ -43,7 +43,7 @@
       </v-tab>
 
       <v-tab-item
-        v-for="n in 4"
+        v-for="n in 3"
         :key="n"
       >
 
@@ -55,22 +55,30 @@
                          v-bind:detailedViewData="detailedViewData"
                          v-bind:counter2="counter" />
         </div>
+
         <div v-if="n===3" flat>
           <TcPerformance />
         </div>
+      </v-tab-item>
 
+      <v-tab-item
+        v-for="m in more"
+        :key="m"    >
+
+        <h3>{{currentItem}}</h3>
+            <CylinderPerformance v-if="currentItem!=='Cylinder Performance'"
+                v-bind:detailedViewData="detailedViewData"
+                v-bind:counter2="counter"
+                v-bind:currentItem="currentItem"
+            />
 
 
       </v-tab-item>
     </v-tabs>
   </div>
-
-
-
 </template>
 
 <script>
-
 
   import Overview                from "./enginePerformance/Overview"
   import DetailedView            from "./enginePerformance/DetailedView"
@@ -90,25 +98,32 @@
     },
     data () {
       return {
+        currentItem: 'Cylinder Performance',
         tab: null,
         detailedViewData: {
-          'firingPressure': { 'arrangements': {}, 'values': []},
+          'firingPressure':      { 'arrangements': {}, 'values': []},
           'compressionPressure': { 'arrangements': {}, 'values': [] },
-          'indicatedPressure': { 'arrangements': {}, 'values': [] },
-          'exhaustedTemp': { 'arrangements': {}, 'values': [] },
-          'pressureTrace': { 'sourcesInfo': [], 'sources': [] },
+          'indicatedPressure':   { 'arrangements': {}, 'values': [] },
+          'exhaustedTemp':       { 'arrangements': {}, 'values': [] },
+          'pressureRise':        { 'arrangements': {}, 'values': [] },
+          'pressureTrace':       {
+            'sourcesInfo' : [], 'sources': [], 'sources2': [], 'sources3': [],
+          },
         },
         items: [
           'overview', 'detailed view',  't/c performance',
         ],
         more: [
-          'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6'
+          'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6',
         ],
         counter: 32,
         text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       }
     },
     methods: {
+      addItem (item) {
+        this.$nextTick(() => { this.currentItem =  item })
+      },
       startInterval: function () {
         this.interval = setInterval(() => {
           if (this.counter < 37) {
@@ -125,14 +140,13 @@
           this.$set( this.detailedViewData, 'pressureTrace', data.data.pressureTrace);
         });
 
-        console.log(this.detailedViewData.pressureTrace.sources[0].crankAngle);
-
         // apiService = new getEnginePerformance( counter );
         apiService.getDataFromTimeline().then((data) => {
           this.$set( this.detailedViewData, 'firingPressure', data.data.Pmax );
           this.$set( this.detailedViewData, 'compressionPressure', data.data.Pcomp );
           this.$set( this.detailedViewData, 'indicatedPressure', data.data.imep );
           this.$set( this.detailedViewData, 'exhaustedTemp', data.data.Texh );
+          this.$set( this.detailedViewData, 'pressureRise', data.data.PressureRise );
         });
       }
     },

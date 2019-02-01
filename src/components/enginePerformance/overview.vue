@@ -1,292 +1,207 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-layout row wrap>
-
-      <v-flex d-flex xs12 sm6 md4>
-        <v-layout row wrap>
-          <v-flex d-flex>
-            <v-layout row wrap>
-              <v-flex
-                v-for="n in 2"
-                :key="n"
-                d-flex
-                xs12
-              >
-                <v-card v-if="n===1"
-                    dark
-                >
-                  <v-responsive>
-                    <LoadDiagram />
-                  </v-responsive>
-                </v-card>
-                <v-card v-if="n===2"
-                    dark
-                >
-                  <v-responsive contain >
-                    <EnergyBalanceReference />
-                  </v-responsive>
-                </v-card>
-              </v-flex>
-            </v-layout>
+    <v-layout row >
+      <v-flex d-flex md4>
+        <v-layout column >
+          <v-flex d-flex md6>
+            <v-card dark>
+                <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
+            </v-card>
           </v-flex>
-        </v-layout>
-      </v-flex>
-
-
-
-      <v-flex d-flex xs12 sm6 md2>
-        <v-layout row wrap>
-          <v-flex d-flex>
-            <v-layout row wrap>
-              <v-flex
-                v-for="n in 4"
-                :key="n"
-                d-flex
-                xs12
-              >
-                <v-card v-if="n===1"
-                        dark
-                >
-                  <!--<v-responsive  contain >-->
-                  <v-responsive  contain >
-                    <ScavengeReceiverPressure v-if="overviewCardsData.scavengeReceiverPressure"
-                      v-bind:scavengeReceiverPressureData="overviewCardsData.scavengeReceiverPressure"
-                      v-bind:counter="counter"
-                    />
-                  </v-responsive>
-                </v-card>
-                <v-card v-if="n===2"
-                        dark
-                >
-                  <v-responsive  contain >
-                    <!--<BrakeMeanEffectivePressure v-if="overviewCardsData.brakeMeanEffectivePressure"-->
-                                              <!--v-bind:brakeMeanEffectivePressureData="overviewCardsData.brakeMeanEffectivePressure"-->
-                                              <!--v-bind:counter="counter"-->
-                    <!--/>-->
-                  </v-responsive>
-                </v-card>
-                <v-card v-if="n===3"
-                        dark
-                >
-                  <v-responsive  contain >
-                    <IndicatedPower   v-if="overviewCardsData.indicatedPower"
-                                      v-bind:indicatedPowerData="overviewCardsData.indicatedPower"
-                                      v-bind:counter="counter" />
-                  </v-responsive>
-                </v-card>
-                <v-card v-if="n===4"
-                        dark
-                >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
+          <v-flex d-flex md6>
+            <v-card dark>
+                <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
+            </v-card>
           </v-flex>
-        </v-layout>
+        </v-layout>        
       </v-flex>
-
-      <v-flex d-flex xs12 sm6 md2>
-        <v-layout row wrap>
-          <v-flex d-flex>
-            <v-layout row wrap>
-              <v-flex
-                v-for="n in 4"
-                :key="n"
-                d-flex
-                xs12
-              >
-                <v-card v-if="n===1"
-                  dark
-                >
-                  <v-responsive  contain >
-                    <ExhaustReceiverPressure v-if="overviewCardsData.exhaustReceiverPressure"
-                                             v-bind:exhaustReceiverPressureData="overviewCardsData.exhaustReceiverPressure"
-                                             v-bind:counter="counter"
-                    />
-                  </v-responsive>
-                </v-card>
-                <v-card v-if="n===2"
-                  dark
-                >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
-                </v-card>
-                <v-card v-if="n===3"
-                  dark
-                >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
-                </v-card>
-                <v-card v-if="n===4"
-                  dark
-                >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-        </v-layout>
-      </v-flex>
-
-
-      <v-flex d-flex xs12 sm6 md4>
-        <v-card  dark>
-          <v-card-text>
+      <v-flex d-flex md2>
+        <v-layout column >
+          <v-flex d-flex  v-for="name in firstCol" :key="name" md3>
             <v-responsive contain>
-              <OverviewPaneDiagrams />
-            </v-responsive>
-
-
-          </v-card-text>
-        </v-card>
+                  <Card  v-if="overviewCardsData[name]"
+                      v-bind:cardData="overviewCardsData[name]"
+                      v-bind:counter="counter" /> 
+            </v-responsive> 
+          </v-flex>
+        </v-layout>        
       </v-flex>
-
+      <v-flex d-flex md2>
+        <v-layout column >
+          <v-flex d-flex  v-for="name in secCol" :key="name" md3>
+            <v-responsive contain>
+                  <Card  v-if="overviewCardsData[name]"
+                      v-bind:cardData="overviewCardsData[name]"
+                      v-bind:counter="counter" /> 
+            </v-responsive> 
+          </v-flex>
+        </v-layout>        
+      </v-flex>
+      <v-flex d-flex md4>
+        <v-layout column>
+          <v-flex d-flex v-for="name in chart" :key="name">            
+            <v-responsive contain>              
+                 <TimelineChart v-if="overviewCardsData[name]"
+                    v-bind:tlData="overviewCardsData[name]"
+                    v-bind:counter="counter" />                     
+            </v-responsive>  
+          </v-flex>
+        </v-layout>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>
 
 <script>
-  import {APIService}                from '../../api/getCardData';
-  import ScavengeReceiverPressure    from "../enginePerformance/overview/ScavengeReceiverPressure";
-  import ExhaustReceiverPressure     from "../enginePerformance/overview/ExhaustReceiverPressure";
-  import BrakeMeanEffectivePressure  from "../enginePerformance/overview/BrakeMeanEffectivePressure";
-  import IndicatedPower              from "../enginePerformance/overview/IndicatedPower";
-  import EnergyBalanceReference      from "./overview/EnergyBalanceReference";
-  import OverviewPaneDiagrams        from "./overview/OverviewPaneDiagrams";
-  import LoadDiagram                 from "./overview/LoadDiagram";
+  import axios                    from "axios";
+  import Card                     from "../Controls/Card" 
+  import LoadDiagram              from "./overview/LoadDiagram";
+  import TimelineChart            from "../Controls/TimelineChart";
 
 
   export default {
     name: "Overview",
     components: {
       LoadDiagram,
-      OverviewPaneDiagrams,
-      EnergyBalanceReference,
-      ScavengeReceiverPressure,
-      ExhaustReceiverPressure,
-      BrakeMeanEffectivePressure,
-      IndicatedPower
+      Card,
+      TimelineChart
     },
     data: function () {
         return {
           overviewCardsData: {},
-          childScavengeReceiverPressureDataLoaded: false,
-          lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
-          counter: 32,
+          counter: 31,
+          firstCol: ['pscav', 'bmep', 'indiP', 'bsfc'],
+          secCol:['mechEff', 'co2Em','torque','pexh'],
+          chart:['pcomp', 'pmax', 'pmaxPcomp', 'tcspeed','tTurbIn']
         }
     },
     methods: {
       startInterval: function () {
         this.interval = setInterval(() => {
-          if (this.counter < 36) {
-            this.getCardsData( this.counter );
+          if (this.counter < 60) {
+            this.getAllCardsData( this.counter );
             this.counter = this.counter + 1;
           } else {
             clearInterval(this.interval);
           }
         }, 3000)
       },
-      getCardsData( counter ) {
-        this.getScavengeReceiverPressure( counter );
-        this.getExhaustReceiverPressure( counter );
-        this.getBrakeMeanEffectivePressure( counter );
-        this.getIndicatedPower( counter );
+      getAllCardsData( counter ) {
+        axios.get("http://localhost:8092/EDSMapping").then(resp => {
 
-      },
-      getFiringPressure(){
-        const apiService = new APIService("pmax");
-        apiService.getCardStaticData().then((data) => {
-          console.log(data.data.d.longName);
-          this.$set( this.overviewCardsData, 'firingPressure', data.data.d);
-          console.log( this.overviewCardsData.firingPressure.unit );
-        })
-      },
-      getScavengeReceiverPressure( c ){
-        const apiService = new APIService("pscav");
-        this.$set( this.overviewCardsData, 'scavengeReceiverPressure', {});
-        this.$set( this.overviewCardsData.scavengeReceiverPressure, 'datapoints', {});
+          let params = ['pscav', 'bmep', 'indiP', 'bsfc','mechEff', 'co2Em','torque','pexh','pcomp', 'pmax', 'pmaxPcomp', 'tcspeed', 'tTurbIn'];
 
-        apiService.getCardStaticData().then((data) => {
-          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'unit', data.data.d.unit );
-          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'name', data.data.d.longName );
+          let objs = ['pscav', 'bmep', 'indiP', 'bsfc','mechEff', 'co2Em','torque','pexh','pcomp', 'pmax', 'pmaxPcomp', 'tcspeed', 'tTurbIn'];
+
+          for( let i = 0; i < params.length; i++ )
+          {
+            this.$set(this.overviewCardsData[objs[i]], 'Title',resp.data.EDS_Parameter_Names[params[i]].longName);
+            this.$set(this.overviewCardsData[objs[i]], 'Unit',resp.data.EDS_Parameter_Names[params[i]].unit);
+          }
 
         });
 
-        apiService.getCardDynamicData( c ).then((data) => {
-          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'value', data.data.d.value);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'color', data.data.d.color);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure, 'reference', data.data.d.reference);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure.datapoints, 'value', data.data.d.datapoints.value);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure.datapoints, 'labels', data.data.d.datapoints.labels);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure.datapoints, 'valMin', data.data.d.datapoints.valMin);
-          this.$set( this.overviewCardsData.scavengeReceiverPressure.datapoints, 'valMax', data.data.d.datapoints.valMax);
-        });
-      },
-      getExhaustReceiverPressure( c ){
-        const apiService = new APIService("pexh");
-        this.$set( this.overviewCardsData, 'exhaustReceiverPressure', {});
-        this.$set( this.overviewCardsData.exhaustReceiverPressure, 'datapoints', {});
+      let url  = "http://localhost:8092/EDSTimelineData/" + this.counter;
 
-        apiService.getCardStaticData().then((data) => {
-          this.$set( this.overviewCardsData.exhaustReceiverPressure, 'unit', data.data.d.unit );
-          this.$set( this.overviewCardsData.exhaustReceiverPressure, 'name', data.data.d.longName );
+      axios.get(url).then(response => {
+        let len = Object.keys(response.data).length;
+        // console.log(len);
+        let helperMatrix = response.data[Object.keys(response.data)[len - 1]];
 
-        });
+        let params = ['pscav','bmep', 'indiP', 'bsfc', 'co2Em','torque','pexh','Pcomp', 'Pmax', 'PressureRise', 'TCspeed', 'Tturbin'];
 
-        apiService.getCardDynamicData( c ).then((data) => {
-          this.$set( this.overviewCardsData.exhaustReceiverPressure, 'value', data.data.d.value);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure, 'color', data.data.d.color);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure, 'reference', data.data.d.reference);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure.datapoints, 'value', data.data.d.datapoints.value);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure.datapoints, 'labels', data.data.d.datapoints.labels);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure.datapoints, 'valMin', data.data.d.datapoints.valMin);
-          this.$set( this.overviewCardsData.exhaustReceiverPressure.datapoints, 'valMax', data.data.d.datapoints.valMax);
-        });
-      },
-      getBrakeMeanEffectivePressure( c ){
-        const apiService = new APIService("bmep");
-        this.$set( this.overviewCardsData, 'brakeMeanEffectivePressure', {});
-        this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'datapoints', {});
+        let objs = ['pscav', 'bmep', 'indiP', 'bsfc', 'co2Em','torque','pexh','pcomp', 'pmax', 'pmaxPcomp', 'tcspeed', 'tTurbIn'];
 
-        apiService.getCardStaticData().then((data) => {
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'unit', data.data.d.unit );
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'name', data.data.d.longName );
+        for (let i=0; i<params.length;i++)
+        {
+          let array = helperMatrix[params[i]];
 
-        });
+          let average = (array) => array.reduce((a, b) => a + b) / array.length;
 
-        apiService.getCardDynamicData( c ).then((data) => {
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'value', data.data.d.value);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'color', data.data.d.color);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure, 'reference', data.data.d.reference);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure.datapoints, 'value', data.data.d.datapoints.value);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure.datapoints, 'labels', data.data.d.datapoints.labels);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure.datapoints, 'valMin', data.data.d.datapoints.valMin);
-          this.$set( this.overviewCardsData.brakeMeanEffectivePressure.datapoints, 'valMax', data.data.d.datapoints.valMax);
-        });
-      },
-      getIndicatedPower( c ){
-          const apiService = new APIService("indiP");
-          this.$set( this.overviewCardsData, 'indicatedPower', {});
-          this.$set( this.overviewCardsData.indicatedPower, 'datapoints', {});
+          let avg = average(array[0]);
+          let ref = average(array[1]);
 
-          apiService.getCardStaticData().then((data) => {
-            this.$set( this.overviewCardsData.indicatedPower, 'unit', data.data.d.unit );
-            this.$set( this.overviewCardsData.indicatedPower, 'name', data.data.d.longName );
+          this.$set(this.overviewCardsData[objs[i]],'Value',avg);
+          this.$set(this.overviewCardsData[objs[i]],'Ref',ref);
 
+          let min = array[2];
+          let max = array[3];
+
+          let temp = ( (avg -  ref)/avg) * 100;
+
+          let clr =  ((temp > min) && (temp < max))? "green" : "red";
+
+          if ((avg==-1000)||(ref==-1000)) this.$set(this.overviewCardsData[objs[i]], 'Color', 'gray');
+          else this.$set(this.overviewCardsData[objs[i]], 'Color', clr);
+
+          let data = [];
+          for (let j = 0; j < len; j++){
+
+            let helper = response.data[Object.keys(response.data)[j]];
+
+            array = helper[params[i]];
+
+            avg = average(array[0]);
+            ref = average(array[1]);
+
+            min = array[2];
+            max = array[3];
+
+            let valMin = ref/(1 - min/100);
+            let valMax = ref/(1 - max/100);
+
+            clr =  ((avg > valMin) && (avg < valMax))? "green" : "red";
+
+            let point = {};
+
+            point.date = new Date(Object.keys(response.data)[j]);
+            point.val = avg;
+            point.valMin = valMin;
+            point.valMax = valMax;
+            point.color = clr;
+
+            data.push(point);
+          }
+
+          var anyMinus1000 = data.some(function (item) {
+	        return  item.val == -1000;
           });
 
-          apiService.getCardDynamicData( c ).then((data) => {
-            this.$set( this.overviewCardsData.indicatedPower, 'value', data.data.d.value);
-            this.$set( this.overviewCardsData.indicatedPower, 'color', data.data.d.color);
-            this.$set( this.overviewCardsData.indicatedPower, 'reference', data.data.d.reference);
-            this.$set( this.overviewCardsData.indicatedPower.datapoints, 'value', data.data.d.datapoints.value);
-            this.$set( this.overviewCardsData.indicatedPower.datapoints, 'labels', data.data.d.datapoints.labels);
-            this.$set( this.overviewCardsData.indicatedPower.datapoints, 'valMin', data.data.d.datapoints.valMin);
-            this.$set( this.overviewCardsData.indicatedPower.datapoints, 'valMax', data.data.d.datapoints.valMax);
-          });
+          if (anyMinus1000) this.$set(this.overviewCardsData[objs[i]],'datapoints',[]);
+          else this.$set(this.overviewCardsData[objs[i]],'datapoints', data);
+        }
+
+        });     
+        
+        url  = "http://localhost:8092/HyperCubeData/" + this.counter;
+
+        axios.get(url).then(response => {
+
+
+          this.$set(this.overviewCardsData.mechEff,'Value',response.data.pressureTrace["Mech Efficiency"][0]);
+          this.$set(this.overviewCardsData.mechEff,'Ref',response.data.pressureTrace["Mech EfficiencyExp"][0]);
+          
+          this.$set(this.overviewCardsData.mechEff,'Color', 'gray');
+
+          let data = [];
+          this.$set(this.overviewCardsData.mechEff,'datapoints', data);
+        }); 
       },
     },
     mounted() {
+      this.getAllCardsData();
       this.startInterval();
-      // this.childScavengeReceiverPressureDataLoaded = true;
+
+      for (let i=0; i<this.firstCol.length;i++)
+        this.$set( this.overviewCardsData, this.firstCol[i], {});
+
+
+      for (let i=0; i<this.secCol.length;i++)
+         this.$set( this.overviewCardsData, this.secCol[i], {});
+
+
+      for (let i=0; i<this.chart.length;i++)
+         this.$set( this.overviewCardsData, this.chart[i], {});
 
     },
 

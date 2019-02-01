@@ -40,12 +40,12 @@
         data () {
             return {
                 items: [
-                    { title: 'Dashboard', link: 'dashboard', icon: 'home', },
-                    { title: 'Engine Performance', link: 'engine-performance', icon: 'show_chart' },
-                    { title: 'Components Diagnostics', link: 'components-diagnostics', icon: 'multiline_chart' },
-                    { title: 'Troubleshooting', link: 'troubleshooting', icon: 'build' },
-                    { title: 'Maintenance', link: 'maintenance', icon: 'calendar_today' },
-                    { title: 'Spare Parts', link:'spare-parts', icon: 'settings' },
+                    { title: 'Dashboard',               link: 'dashboard',              icon: 'home', },
+                    { title: 'Engine Performance',      link: 'engine-performance',     icon: 'show_chart' },
+                    { title: 'Components Diagnostics',  link: 'components-diagnostics', icon: 'multiline_chart' },
+                    { title: 'Troubleshooting',         link: 'troubleshooting',        icon: 'build' },
+                    { title: 'Maintenance',             link: 'maintenance',            icon: 'calendar_today' },
+                    { title: 'Spare Parts',             link: 'spare-parts',            icon: 'settings' },
                 ],
                 right: null
             }

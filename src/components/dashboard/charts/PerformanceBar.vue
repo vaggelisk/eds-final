@@ -1,67 +1,65 @@
 <template>
-  <div>
-    <canvas style="margin-top: 10px !important" id="performance-dashboard-chart"></canvas>
-  </div>
+  <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);height:250px;">
+      <v-card-title  style="height: 10%; width : 100%;" primary class="title">Performance parameters</v-card-title>
+      <v-card-actions style="height: 90%; width : 100%;">
+        <dx-chart  id="chart" style="width : 100%; height:100%;"
+                   :dataSource="performanceParamData" 
+                   :customize-point="customizePoint"
+                   :redraw-on-resize="true" >
+          <dx-animation :enabled="false"/>
+          <dx-legend :visible="false"/>  
+          <dx-value-axis>
+              <dx-grid color="rgb(67,67,67)"/>
+          </dx-value-axis>                              
+          <dx-series
+                  type="bar"
+                  argument-field="label"
+                  value-field="val"
+                  name="Values"/>
+        </dx-chart>
+      </v-card-actions>
+    </v-card>
 </template>
 
 <script>
-import Chart from "chart.js";
-
-// const myChart2={};
+import DxChart, {
+    DxArgumentAxis,
+    DxSeries,
+    DxPoint,
+    DxValueAxis,
+    DxAnimation,
+    DxLegend,
+    DxCommonAxisSettings, 
+    DxGrid
+} from 'devextreme-vue/chart';
 
 export default {
   name: "PerformanceBar",
+  components: {
+      DxChart,
+      DxArgumentAxis,
+      DxSeries,
+      DxPoint,
+      DxValueAxis,
+      DxAnimation,
+      DxLegend,
+      DxCommonAxisSettings, 
+      DxGrid
+  },
   props: {
-    childPerformanceParamDataLoaded: Boolean,
-    performanceParamData: Object,
-    counter: Number
+    performanceParamData: Array
   },
   data: function() {
     return {
-      loading: true,
-      performanceDataC: this.performanceParamData,
-      barChartData: {
-        type: "bar",
-        data: {
-          labels: this.performanceParamData.datapoints.labels,
-          datasets: [
-            {
-              label: "%",
-              // label: this.performanceDataC.datapoints.labels,
-              backgroundColor: "green",
-              data: this.performanceParamData.datapoints.val
-            }
-          ]
-        },
-        options: {
-          maintainAspectRatio: false,
-          legend: {
-            display: false
-          }
-        }
-      }
     };
   },
   methods: {
-    updateDataChart(v) {
-      this.myChart2.data.datasets.forEach((ds) => {
-         ds.data = v;
-      });
-      this.myChart2.update();
-    },
-
-    createChart2(chartId, data) {
-      const ctx = document.getElementById(chartId);
-      this.myChart2 = new Chart(ctx, data);
-
+    customizePoint(arg) {
+      if (arg.data.color == "red") return { color : '#cd3940'};
+      else return { color: '#3cab30'};
     }
   },
   mounted() {
-    this.loading = false;
-    this.createChart2("performance-dashboard-chart", this.barChartData);
-    this.$watch('performanceParamData.datapoints.val', function (newVal, ) {
-        this.updateDataChart(newVal);
-    })
   }
 };
 </script>

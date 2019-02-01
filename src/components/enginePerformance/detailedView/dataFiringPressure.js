@@ -1,0 +1,19 @@
+export const dataFiringPressure = [{
+  cylinder: '1',
+  oranges: 3
+}, {
+  cylinder: '2',
+  oranges: 4
+}, {
+  cylinder: '3',
+  oranges: 3
+}, {
+  cylinder: '4',
+  oranges: 4
+}, {
+  cylinder: '5',
+  oranges: 3
+}, {
+  cylinder: '6',
+  oranges: 5
+}, ];

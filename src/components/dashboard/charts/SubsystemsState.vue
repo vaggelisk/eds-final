@@ -1,63 +1,96 @@
-<template>
-    <v-responsive>
-      <v-card-title primary class="title"> Subsystems State </v-card-title>
+<template>    
+    <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);">
+      <v-card-title  style="height: 10%; width : 100%;"primary class="title"> Subsystems State </v-card-title>
 
-      <v-container >
-        <v-layout row wrap>
-          <v-flex  xs6>
+      <v-card-actions style="height: 90%; width : 100%;">
+         <v-container fluid grid-list-md style="height: 100%; width : 100%;">
+          <v-layout column wrap style="height: 100%; width : 100%;">
+            <v-flex d-flex md4>
+              <v-layout row wrap>
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Servo Oil </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorServoOil + '; background-color:' + colorServoOil +'; width:' + colorsSubsystemServoOil[0]*100 + '%;'" />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
 
-            <v-btn block color="secondary" dark> Servo Oil </v-btn>
-              <hr :style="'height:8px; border:none; color:' + colorServoOil + '; background-color:' + colorServoOil +'; width:' + colorsSubsystemServoOil[0]*100 + '%;'" />
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Fuel Injection </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorFuelInjection + '; background-color:' + colorFuelInjection +'; width:' + colorsSubsystemFuelInjection[0]*100+ '%;' " />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-flex>
 
-          </v-flex>
+            <v-flex d-flex md4>
+              <v-layout row wrap>
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Scavenge Air </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorScavengeAir + '; background-color:' + colorScavengeAir +'; width:' + colorsSubsystemScavengeAir[0]*100+ '%;' " />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
 
-          <v-flex xs6>
-            <v-btn block color="secondary" dark> Fuel Injection</v-btn>
-            <!--<v-divider style="height:20px;color:white;"></v-divider>-->
-            <!--<hr style="size:100px; color:green" />-->
-            <hr :style="'height:8px; border:none; color:' + colorFuelInjection + '; background-color:' + colorFuelInjection +'; width:' + colorsSubsystemFuelInjection[0]*100+ '%;' " />
-          </v-flex>
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Exhaust Gas </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorExhaustGas + '; background-color:' + colorExhaustGas +'; width:' + colorsSubsystemExhaustGas[0]*100+ '%;' " />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-flex>
 
-        </v-layout>
+            <v-flex d-flex md4>
+              <v-layout row wrap>
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Piston Running </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorPistonRunning + '; background-color:' + colorPistonRunning +'; width:' + colorsSubsystemPistonRunning[0]*100+ '%;' " />
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
 
-        <v-layout row wrap>
-          <v-flex  xs6>
-            <v-btn block color="secondary" dark> Scavenge Air </v-btn>
-            <hr :style="'height:8px; border:none; color:' + colorScavengeAir + '; background-color:' + colorScavengeAir +'; width:' + colorsSubsystemScavengeAir[0]*100+ '%;' " />
+                <v-flex md6>
+                  <v-layout column wrap style="height: 100%; width : 100%;">
+                    <v-flex md10>
+                      <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Automation & Control </v-btn>
+                    </v-flex>
+                    <v-flex md2>
+                      <div :style="'height:4px; border:none; color:' + colorAutomationControl + '; background-color:' + colorAutomationControl +'; width:' + colorsSubsystemAutomationControl[0]*100+ '%;' " />                  
+                    </v-flex>
+                  </v-layout>
+                </v-flex>
+              </v-layout>
+            </v-flex>
 
-          </v-flex>
-          <v-flex  xs6>
-            <v-btn block color="secondary" dark> Exhaust Gas </v-btn>
-            <hr :style="'height:8px; border:none; color:' + colorExhaustGas + '; background-color:' + colorExhaustGas +'; width:' + colorsSubsystemExhaustGas[0]*100+ '%;' " />
+          </v-layout>  
+        </v-container>
+      
+      </v-card-actions>
 
-          </v-flex>
-        </v-layout>
+     
 
-        <v-layout row wrap>
-          <v-flex  xs12>
-            <v-btn block color="secondary" dark> Piston Running </v-btn>
-            <hr :style="'height:8px; border:none; color:' + colorPistonRunning + '; background-color:' + colorPistonRunning +'; width:' + colorsSubsystemPistonRunning[0]*100+ '%;' " />
-
-          </v-flex>
-
-        </v-layout>
-
-        <v-layout row wrap>
-          <v-flex  xs6>
-            <v-btn block color="secondary" dark> Bearings </v-btn>
-            <hr style="height:8px;border:none;color:green;background-color:green;" />
-
-          </v-flex>
-          <v-flex  xs6>
-            <v-btn block color="secondary" dark> Automation & Control</v-btn>
-            <hr :style="'height:8px; border:none; color:' + colorAutomationControl + '; background-color:' + colorAutomationControl +'; width:' + colorsSubsystemAutomationControl[0]*100+ '%;' " />
-
-          </v-flex>
-        </v-layout>
-
-       </v-container>
-
-    </v-responsive>
+    </v-card>
 </template>
 
 <script>
@@ -89,105 +122,127 @@
 
       mounted () {
         if (this.colorsSubsystemServoOil[1]===0){
-          this.colorServoOil = "green" ;
+          this.colorServoOil = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemServoOil[1]===10 ){
-          this.colorServoOil = "orange" ;
+          this.colorServoOil = "rgb(255, 184, 29)" ;
         } else {
-          this.colorServoOil = "red" ;
+          this.colorServoOil = "rgb(205, 57, 64)" ;
         }
         if (this.colorsSubsystemFuelInjection[1]===0){
-          this.colorFuelInjection = "green" ;
+          this.colorFuelInjection = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemFuelInjection[1]===10 ){
-          this.colorFuelInjection = "orange" ;
+          this.colorFuelInjection = "rgb(255, 184, 29)" ;
         } else {
-          this.colorFuelInjection = "red" ;
+          this.colorFuelInjection = "rgb(205, 57, 64)" ;
         }
         if (this.colorsSubsystemScavengeAir[1]===0){
-          this.colorScavengeAir = "green" ;
+          this.colorScavengeAir = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemScavengeAir[1]===10 ){
-          this.colorScavengeAir = "orange" ;
+          this.colorScavengeAir = "rgb(255, 184, 29)" ;
         } else {
-          this.colorScavengeAir = "red" ;
+          this.colorScavengeAir = "rgb(205, 57, 64)" ;
         }
         if (this.colorsSubsystemExhaustGas[1]===0){
-          this.colorExhaustGas = "green" ;
+          this.colorExhaustGas = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemExhaustGas[1]===10 ){
-          this.colorExhaustGas = "orange" ;
+          this.colorExhaustGas = "rgb(255, 184, 29)" ;
         } else {
-          this.colorExhaustGas = "red" ;
+          this.colorExhaustGas = "rgb(205, 57, 64)" ;
         }
         if (this.colorsSubsystemPistonRunning[1]===0){
-          this.colorPistonRunning = "green" ;
+          this.colorPistonRunning = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemPistonRunning[1]===10 ){
-          this.colorPistonRunning = "orange" ;
+          this.colorPistonRunning = "rgb(255, 184, 29)" ;
         } else {
-          this.colorPistonRunning = "red" ;
+          this.colorPistonRunning = "rgb(205, 57, 64)" ;
         }
         if (this.colorsSubsystemAutomationControl[1]===0){
-          this.colorAutomationControl = "green" ;
+          this.colorAutomationControl = "rgb(60, 171, 48)" ;
         } else if (this.colorsSubsystemAutomationControl[1]===10 ){
-          this.colorAutomationControl = "orange" ;
+          this.colorAutomationControl = "rgb(255, 184, 29)" ;
         } else {
-          this.colorAutomationControl = "red" ;
+          this.colorAutomationControl = "rgb(205, 57, 64)" ;
         }
         this.$watch('colorsSubsystemServoOil', function(newVal) {
           if (newVal[1]===0){
-            this.colorServoOil = "green" ;
+            this.colorServoOil = "rgb(60, 171, 48)" ;
           } else if (newVal[1]===10 ){
-            this.colorServoOil = "orange" ;
+            this.colorServoOil = "rgb(255, 184, 29)" ;
           } else {
-            this.colorServoOil = "red" ;
+            this.colorServoOil = "rgb(205, 57, 64)" ;
           }
         }, {deep:true});
         this.$watch('colorsSubsystemFuelInjection', function(newVal) {
           if (newVal[1]===0){
-            this.colorFuelInjection = "green" ;
+            this.colorFuelInjection = "rgb(60, 171, 48)" ;
           } else if (newVal[1]===10 ){
-            this.colorFuelInjection = "orange" ;
+            this.colorFuelInjection = "rgb(255, 184, 29)" ;
           } else {
-            this.colorFuelInjection = "red" ;
+            this.colorFuelInjection = "rgb(205, 57, 64)" ;
           }
         }, {deep:true});
         this.$watch('colorsSubsystemScavengeAir', function(newVal) {
             if (newVal[1]===0){
-              this.colorScavengeAir = "green" ;
+              this.colorScavengeAir = "rgb(60, 171, 48)" ;
             } else if (newVal[1]===10 ){
-              this.colorScavengeAir = "orange" ;
+              this.colorScavengeAir = "rgb(255, 184, 29)" ;
             } else {
-              this.colorScavengeAir = "red" ;
+              this.colorScavengeAir = "rgb(205, 57, 64)" ;
             }
           }, {deep:true});
         this.$watch('colorsSubsystemExhaustGas', function(newVal) {
             if (newVal[1]===0){
-              this.colorExhaustGas = "green" ;
+              this.colorExhaustGas = "rgb(60, 171, 48)" ;
             } else if (newVal[1]===10 ){
-              this.colorExhaustGas = "orange" ;
+              this.colorExhaustGas = "rgb(255, 184, 29)" ;
             } else {
-              this.colorExhaustGas = "red" ;
+              this.colorExhaustGas = "rgb(205, 57, 64)" ;
             }
           }, {deep:true});
         this.$watch('colorsSubsystemPistonRunning', function(newVal) {
           if (newVal[1]===0){
-            this.colorPistonRunning = "green" ;
+            this.colorPistonRunning = "rgb(60, 171, 48)" ;
           } else if (newVal[1]===10 ){
-            this.colorPistonRunning = "orange" ;
+            this.colorPistonRunning = "rgb(255, 184, 29)" ;
           } else {
-            this.colorPistonRunning = "red" ;
+            this.colorPistonRunning = "rgb(205, 57, 64)" ;
           }
         }, {deep:true});
         this.$watch('colorsSubsystemPistonRunning', function(newVal) {
           if (newVal[1]===0){
-            this.colorAutomationControl = "green" ;
+            this.colorAutomationControl = "rgb(60, 171, 48)" ;
           } else if (newVal[1]===10 ){
-            this.colorAutomationControl = "orange" ;
+            this.colorAutomationControl = "rgb(255, 184, 29)" ;
           } else {
-            this.colorAutomationControl = "red" ;
+            this.colorAutomationControl = "rgb(205, 57, 64)" ;
           }
         }, {deep:true});
+      },
+      methods:
+      {
+        hoverButton(event)
+        {
+          event.srcElement.classList.add("subSysBtnHover");
+        }, 
+        leaveButton(event)
+        {
+          event.srcElement.classList.remove("subSysBtnHover");
+        }
       }
     }
 </script>
 
 <style scoped>
-
+.subSysBtn
+{
+  height:100%;
+  width:100%;
+  text-transform: none !important;  
+  font-size: 25px;  
+  font-style: normal;  
+}
+.subSysBtnHover
+{
+   background-color:rgb(0,0,0); 
+}
 </style>
