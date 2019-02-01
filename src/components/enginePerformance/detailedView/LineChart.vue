@@ -5,11 +5,11 @@
     <v-card-title primary class="title" style="margin-top: -20px">
       <v-select v-model="select" :items="items" flat></v-select>
     </v-card-title>
-    {{dataChart.sources}} <br>
-    {{dataChart.sourcesInfo}} <br>
+    <!--{{dataChart.sources}} <br>-->
+    <!--{{dataChart.sourcesInfo}} <br>-->
 
     <v-flex  v-if="select === 'Pressure Trace'" d-flex>
-      <p><em>Pressure [bar] {{counter}}</em> </p>
+      <p><em>Pressure [bar] </em> </p>
 
       <!--<dx-chart-->
       <!--id="chart"-->
@@ -30,18 +30,14 @@
         <!--&gt;-->
 
           <dx-series
-          argument-field="crankAngle"
-          :value-field="dataChart.sourcesInfo[0].value"
-          :name="dataChart.sourcesInfo[0].name" >
+            argument-field="crankAngle"
+            :value-field="dataChart.sourcesInfo[0].value"
+            :name="dataChart.sourcesInfo[0].name" >
+            <DxPoint :visible="false" />
+          </dx-series>
 
 
-          <!--<dx-series-->
-          <!--v-for="i in dataChart.sourcesInfo"-->
-          <!--:key="i.value"-->
-          <!--:value-field="i.value"-->
-          <!--:name="i.name" >-->
-          <DxPoint :visible="false" />
-        </dx-series>
+
         <dx-margin :bottom="20"/>
         <dx-argument-axis
           :value-margins-enabled="false"
@@ -167,7 +163,7 @@
       return {
         select: "Pressure Trace",
         items: ["Pressure Trace", "Pressure Trace (firing order)", "Pressure vs Volume"],
-        dataSources: service.getSources(),
+        // dataSources: service.getSources(),
         // dataSourcesInfo: service.getSourcesInfo(),
         type: 'spline'
       }
@@ -179,11 +175,11 @@
       //   };
       // }
     },
-    beforeCreate() {
-      return {
+    // beforeCreate() {
+    //   return {
         // dataSourcesInfo : this.dataChart.sourcesInfo,
-      }
-    }
+      // }
+    // }
   }
 </script>
 
