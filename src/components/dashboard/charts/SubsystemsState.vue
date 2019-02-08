@@ -1,14 +1,14 @@
 <template>    
     <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);">
-      <v-card-title  style="height: 10%; width : 100%;"primary class="title"> Subsystems State </v-card-title>
+      <v-card-title  style="height: 10%; width : 100%;" primary class="title"> Subsystems State </v-card-title>
 
       <v-card-actions style="height: 90%; width : 100%;">
          <v-container fluid grid-list-md style="height: 100%; width : 100%;">
-          <v-layout column wrap style="height: 100%; width : 100%;">
+          <v-layout column  style="height: 100%; width : 100%;">
             <v-flex d-flex md4>
-              <v-layout row wrap>
+              <v-layout row >
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Servo Oil </v-btn>
                     </v-flex>
@@ -19,7 +19,7 @@
                 </v-flex>
 
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Fuel Injection </v-btn>
                     </v-flex>
@@ -32,9 +32,9 @@
             </v-flex>
 
             <v-flex d-flex md4>
-              <v-layout row wrap>
+              <v-layout row >
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Scavenge Air </v-btn>
                     </v-flex>
@@ -45,7 +45,7 @@
                 </v-flex>
 
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Exhaust Gas </v-btn>
                     </v-flex>
@@ -58,9 +58,9 @@
             </v-flex>
 
             <v-flex d-flex md4>
-              <v-layout row wrap>
+              <v-layout row >
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Piston Running </v-btn>
                     </v-flex>
@@ -71,7 +71,7 @@
                 </v-flex>
 
                 <v-flex md6>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Automation & Control </v-btn>
                     </v-flex>

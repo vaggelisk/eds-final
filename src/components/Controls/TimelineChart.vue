@@ -1,16 +1,16 @@
 <template>
-    <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);max-height:250px;">
+    <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);">
         <v-card-title style="height:20%;" primary class="title">{{ tlData.Title }} </v-card-title>
 
         <v-card-actions fill-height  style="width : 100%; height:80%;">
-             <!-- <v-container fluid>
-                <v-layout row wrap  style="width:100%; height:100%" >
-                    <v-flex d-flex> -->   
-                        <v-responsive style="width : 100%; height:100%;" contain>     
-                            <dx-chart  id="chart"
+            <!-- <v-container fluid style="width:100%; height:100%; padding:10px;" >
+                <v-layout row wrap  style="width:100%; height:100%; " >
+                    <v-flex d-flex md12 fill-height> -->
+                            <dx-chart  id="chart" :ref="chartRefName"
                                         style="width : 100%; height:100%;"
                                         :dataSource="tlData.datapoints" 
-                                        :customize-point="customizePoint" >
+                                        :customize-point="customizePoint"
+                                       >
                                 <dx-animation :enabled="false"/>
                                 <dx-legend :visible="false"/>
                                 <dx-value-axis>
@@ -39,8 +39,7 @@
                                     <dx-point size="4"/>
                                 </dx-series>
                             </dx-chart>
-                        </v-responsive>
-                   <!--  </v-flex>
+                   <!-- </v-flex>
                 </v-layout>
             </v-container> -->
         </v-card-actions>
@@ -84,15 +83,11 @@
         data: function () {
             return {
                 isShowing: true,
-                loading: true
+                loading: true,
+                chartRefName: "chart"
             }
         },
-        methods: {
-            updateChart() {
-                this.isShowing = !this.isShowing;
-                const test = document.getElementById(this._self._uid);
-                test.__vue__._render;
-            },           
+        methods: {          
             customizePoint(arg) {
                 if (arg.series.type == "scatter")
                 {
@@ -102,18 +97,35 @@
             }, 
             onResize(event)
             {
-                this.chart._render();
+                setTimeout(() => {
+                    this.$refs[this.chartRefName].instance.render();
+                });
             }
         },
         mounted() {
-            this.chart._render();
+            //this.chart._render();
 
-            //window.addEventListener('resize', this.onResize);
+            window.addEventListener('resize', this.onResize);
 
             this.loading = false;
             this.isShowing = true;
-            //document.getElementById('chart').setAttribute('id',this._self._uid);            
+            //document.getElementById('chart').setAttribute('id',this._self._uid);         
+            
+            this.$refs[this.chartRefName].instance.render();
+            // setTimeout(() => {
+            //     this.$refs[this.chartRefName].instance.render();
+            // });   
 
+        }, 
+        watch:
+        {
+            counter : function(c)
+            {
+                this.$refs[this.chartRefName].instance.render();
+                //  setTimeout(() => {
+                //     this.$refs[this.chartRefName].instance.render();
+                // });  
+            }
         }
     }
 </script>

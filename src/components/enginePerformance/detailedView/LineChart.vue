@@ -14,7 +14,9 @@
 
             <v-dialog
               v-model="dialog"
-              width="780">
+              width="780"
+
+            >
 
               <span  slot="activator">
 
@@ -28,43 +30,43 @@
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[0].value"
-                    :name="dataChart.sourcesInfo[0].name" >
+                    :name="dataChart.sourcesInfo[0].name"  color="#2b8066" >
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[1].value"
-                    :name="dataChart.sourcesInfo[1].name" >
+                    :name="dataChart.sourcesInfo[1].name" color="#c28f41" >
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 3'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[2].value"
-                    :name="dataChart.sourcesInfo[2].name" >
+                    :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[3].value"
-                    :name="dataChart.sourcesInfo[3].name" >
+                    :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[4].value"
-                    :name="dataChart.sourcesInfo[4].name" >
+                    :name="dataChart.sourcesInfo[4].name" color="#be4046">
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[5].value"
-                    :name="dataChart.sourcesInfo[5].name" >
+                    :name="dataChart.sourcesInfo[5].name"  color="#c26041">
                     <DxPoint :visible="false" />
                   </dx-series>
                   <dx-series
                     argument-field="x"
                     :value-field="dataChart.sourcesInfo[6].value"
-                    :name="dataChart.sourcesInfo[6].name" >
+                    :name="dataChart.sourcesInfo[6].name" color="#335280">
                     <DxPoint :visible="false" />
                   </dx-series>
 
@@ -111,7 +113,7 @@
                </span>
 
                 <!--HERE IS STARTING DIALOG CODE-->
-                <v-card style="padding-top: 20px">
+                <v-card style="padding-top: 20px; background-color: rgb(41, 41,41)">
                   <v-flex d-flex>
                   <p><em>Pressure [bar] </em> </p>
 
@@ -130,43 +132,43 @@
                       <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[0].value"
-                        :name="dataChart.sourcesInfo[0].name" >
+                        :name="dataChart.sourcesInfo[0].name" color="#2b8066" >
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[1].value"
-                        :name="dataChart.sourcesInfo[1].name" >
+                        :name="dataChart.sourcesInfo[1].name" color="#c28f41">
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series v-if="currentItem==='Cylinder 3'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[2].value"
-                        :name="dataChart.sourcesInfo[2].name" >
+                        :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[3].value"
-                        :name="dataChart.sourcesInfo[3].name" >
+                       :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[4].value"
-                        :name="dataChart.sourcesInfo[4].name" >
+                       :name="dataChart.sourcesInfo[4].name" color="#be4046" >
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[5].value"
-                        :name="dataChart.sourcesInfo[5].name" >
+                        :name="dataChart.sourcesInfo[5].name" color="#c26041" >
                         <DxPoint :visible="false" />
                       </dx-series>
                       <dx-series
                         argument-field="x"
                         :value-field="dataChart.sourcesInfo[6].value"
-                        :name="dataChart.sourcesInfo[6].name" >
+                        :name="dataChart.sourcesInfo[6].name" color="#335280" >
                         <DxPoint :visible="false" />
                       </dx-series>
 
@@ -282,37 +284,37 @@
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[0].value"
-              :name="dataChart.sourcesInfo[0].name" >
+              :name="dataChart.sourcesInfo[0].name" color="#2b8066" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[1].value"
-              :name="dataChart.sourcesInfo[1].name" >
+              :name="dataChart.sourcesInfo[1].name" color="#c28f41">
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 3'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[2].value"
-              :name="dataChart.sourcesInfo[2].name" >
+              :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[3].value"
-              :name="dataChart.sourcesInfo[3].name" >
+             :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[4].value"
-              :name="dataChart.sourcesInfo[4].name" >
+             :name="dataChart.sourcesInfo[4].name" color="#be4046" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[5].value"
-              :name="dataChart.sourcesInfo[5].name" >
+              :name="dataChart.sourcesInfo[5].name" color="#c26041" >
               <DxPoint :visible="false" />
             </dx-series>
 
@@ -353,7 +355,7 @@
           </span>
 
           <!--HERE IS STARTING DIALOG CODE-->
-          <v-card style="padding-top: 20px">
+          <v-card style="padding-top: 20px; background-color: rgb(41, 41,41)">
             <v-flex d-flex>
 
               <p><em>Pressure [bar] </em> </p>
@@ -373,37 +375,37 @@
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[0].value"
-                  :name="dataChart.sourcesInfo[0].name" >
+                  :name="dataChart.sourcesInfo[0].name" color="#2b8066" >
                   <DxPoint :visible="false" />
                 </dx-series>
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[1].value"
-                  :name="dataChart.sourcesInfo[1].name" >
+                  :name="dataChart.sourcesInfo[1].name" color="#c28f41">
                   <DxPoint :visible="false" />
                 </dx-series>
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 3'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[2].value"
-                  :name="dataChart.sourcesInfo[2].name" >
+                  :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
                   <DxPoint :visible="false" />
                 </dx-series>
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[3].value"
-                  :name="dataChart.sourcesInfo[3].name" >
+                 :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
                   <DxPoint :visible="false" />
                 </dx-series>
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[4].value"
-                  :name="dataChart.sourcesInfo[4].name" >
+                 :name="dataChart.sourcesInfo[4].name" color="#be4046" >
                   <DxPoint :visible="false" />
                 </dx-series>
                 <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
                   argument-field="x"
                   :value-field="dataChart.sourcesInfo[5].value"
-                  :name="dataChart.sourcesInfo[5].name" >
+                  :name="dataChart.sourcesInfo[5].name" color="#c26041" >
                   <DxPoint :visible="false" />
                 </dx-series>
 
@@ -507,43 +509,43 @@
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[0].value"
-              :name="dataChart.sourcesInfo[0].name" >
+              :name="dataChart.sourcesInfo[0].name" color="#2b8066" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[1].value"
-              :name="dataChart.sourcesInfo[1].name" >
+              :name="dataChart.sourcesInfo[1].name" color="#c28f41">
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 3'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[2].value"
-              :name="dataChart.sourcesInfo[2].name" >
+              :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[3].value"
-              :name="dataChart.sourcesInfo[3].name" >
+             :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[4].value"
-              :name="dataChart.sourcesInfo[4].name" >
+             :name="dataChart.sourcesInfo[4].name" color="#be4046" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[5].value"
-              :name="dataChart.sourcesInfo[5].name" >
+              :name="dataChart.sourcesInfo[5].name" color="#c26041" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series
               argument-field="x"
               :value-field="dataChart.sourcesInfo[6].value"
-              :name="dataChart.sourcesInfo[6].name" >
+              :name="dataChart.sourcesInfo[6].name" color="#335280" >
               <DxPoint :visible="false" />
             </dx-series>
 
@@ -584,7 +586,7 @@
           </span>
 
           <!--HERE IS STARTING DIALOG CODE-->
-          <v-card style="padding-top: 20px">
+          <v-card style="padding-top: 20px; background-color: rgb(41, 41,41)">
           <v-flex d-flex>
 
           <p><em>Pressure [bar] </em></p>
@@ -601,43 +603,43 @@
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 1'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[0].value"
-              :name="dataChart.sourcesInfo[0].name" >
+              :name="dataChart.sourcesInfo[0].name" color="#2b8066" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 2'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[1].value"
-              :name="dataChart.sourcesInfo[1].name" >
+              :name="dataChart.sourcesInfo[1].name" color="#c28f41">
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 3'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[2].value"
-              :name="dataChart.sourcesInfo[2].name" >
+              :name="dataChart.sourcesInfo[2].name" color="#ad3a5d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 4'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[3].value"
-              :name="dataChart.sourcesInfo[3].name" >
+             :name="dataChart.sourcesInfo[3].name" color="#308f4d" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 5'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[4].value"
-              :name="dataChart.sourcesInfo[4].name" >
+             :name="dataChart.sourcesInfo[4].name" color="#be4046" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series  v-if="currentItem==='detailedView' | currentItem==='Cylinder 6'"
               argument-field="x"
               :value-field="dataChart.sourcesInfo[5].value"
-              :name="dataChart.sourcesInfo[5].name" >
+              :name="dataChart.sourcesInfo[5].name" color="#c26041" >
               <DxPoint :visible="false" />
             </dx-series>
             <dx-series
               argument-field="x"
               :value-field="dataChart.sourcesInfo[6].value"
-              :name="dataChart.sourcesInfo[6].name" >
+              :name="dataChart.sourcesInfo[6].name" color="#335280" >
               <DxPoint :visible="false" />
             </dx-series>
 
@@ -736,7 +738,7 @@
   } from 'devextreme-vue/chart';
 
   import { DxButton, } from "devextreme-vue/button";
-  import {DxTextBox}  from "devextreme-vue";
+  import { DxTextBox }  from "devextreme-vue";
 
   ///////////////   http://localhost:8092/HyperCubeData/{{counter}}
 

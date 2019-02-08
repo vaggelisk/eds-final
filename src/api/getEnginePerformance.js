@@ -94,9 +94,8 @@ export class getEnginePerformance {
     function getArrangements(map) {
       return {
         'name':   map.longName,
-        // 'xaxis': map.elementName,
-        // den einai toso sta kala tous ta data, isws prostethei argotera
-        'yaxis': map.unit
+        'xaxis': map.elementName,
+        'yaxis': '['+map.unit+']'
       };
     }
     function validateAndColor(val, ref, max, typeRef) {
@@ -111,8 +110,8 @@ export class getEnginePerformance {
       let valueBarData = [];
       for (let i=0; i < 6; i++ ){
         valueBarData.push({
-          'cylinder': (i+1).toString(),
-          'value': helperValueArray[0][i].toFixed(2),
+          'arg': (i+1).toString(),
+          'value': helperValueArray[0][i],
           'tag': validateAndColor(
             helperValueArray[0][i], helperValueArray[1][i], helperValueArray[3], helperValueArray[4]
           )

@@ -1,101 +1,85 @@
 <template>
   <v-container fluid grid-list-md>
-    <v-layout row wrap>
-
-
-      <v-flex  xs12 sm6 md4>
-        <div   v-for="(item, index) in currentFaults"
-             v-bind:item="item"
-             v-bind:index="index"
-             v-bind:key="index" >
-          <v-card v-if="currentFaultId===index" color="grey darken-2"   >
-            <v-card-actions  @click="selectedTab( index ) " >
-                <GridCard2  v-bind:currentFault="item" />
-            </v-card-actions>
-          </v-card>
-          <v-card   v-else  >
-            <v-card-actions  @click="selectedTab( index )" >
-              <GridCard2  v-bind:currentFault="item" />
-            </v-card-actions>
-          </v-card>
-        </div>
-
-       <!--<div v-bind:currentInnerFaultId.sync="currentInnerFaultId">{{ currentInnerFaultId }} vag</div>-->
-        <div >{{ currentFaultId }} </div>
-        <div >{{ currentInnerFaultId }} vag</div>
-        <!--<div>{{currentInnerFaults}}</div>-->
-
+    <v-layout row >
+      <v-flex d-flex md4>
+        <v-card style="background-color: rgb(42,42,42);">
+          <div v-for="(item, index) in currentFaults"
+              v-bind:item="item"
+              v-bind:index="index"
+              v-bind:key="index" >
+            <v-card v-if="currentFaultId===index" style="background-color: rgb(66, 66, 66);"  >
+              <v-card-actions  @click="selectedTab( index ) " >
+                  <GridCard  v-bind:currentFault="item" />
+              </v-card-actions>
+            </v-card>
+            <v-card   v-else  style="background-color: rgb(31, 31, 31);" >
+              <v-card-actions  @click="selectedTab( index )"  >
+                <GridCard  v-bind:currentFault="item" />
+              </v-card-actions>
+            </v-card>
+          </div>
+          <!--<div >{{ currentInnerFaultId }} vag </div>-->
+        </v-card>
       </v-flex>
-
-      <v-flex  md8>
-        <v-layout row wrap>
-
-          <v-flex d-flex md4>
-            <v-card  dark>
-              <PossibleCauses  v-bind:current-inner-fault-id.sync="currentInnerFaultId"
-                               v-bind:current-fault-id="currentFaultId"
-                               v-bind:current-inner-faults="currentInnerFaults"
-              />
+      <v-flex d-flex md8>
+        <v-layout column>
+          <v-flex  md5>
+            <v-layout row>
+              <v-flex d-flex md4>
+                <v-card d-flex style="background-color: rgb(42,42,42);">
+                  <PossibleCauses
+                    v-bind:current-inner-fault-id.sync="currentInnerFaultId"
+                    v-bind:current-fault-id="currentFaultId"
+                    v-bind:current-inner-faults="currentInnerFaults"
+                  />
+                </v-card>
+              </v-flex>
+              <v-flex d-flex md8>
+                  <FaultDetails
+                    v-bind:faultData="selInnFault"
+                    v-bind:aggrData="selAggrFault"
+                    v-bind:engMap="engMap"
+                  />
+              </v-flex>
+            </v-layout>
+          </v-flex>
+          <v-flex  md5>
+            <v-card style="background-color: rgb(42,42,42);">
+              <Grid
+                  v-bind:current-inner-fault-id.sync="currentInnerFaultId"
+                  v-bind:current-fault-id="currentFaultId"
+                  v-bind:current-inner-faults="currentInnerFaults"
+                  />
             </v-card>
           </v-flex>
-
-
-          <v-flex d-flex md8>
-            <v-layout row wrap>
-              <v-flex
-                v-for="n in 2"
-                :key="n"
-                d-flex
-                xs12
-              >
-                <v-card dark >
-                  <v-card-text>{{ lorem.slice(0, 40) }}</v-card-text>
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-
-
-          <v-flex d-flex>
-            <v-layout >
-              <v-flex sm12 d-flex>
-
-                <v-card   dark>
-                  <Grid
-                      v-bind:current-inner-fault-id.sync="currentInnerFaultId"
-                      v-bind:current-fault-id="currentFaultId"
-                      v-bind:current-inner-faults="currentInnerFaults"
-                      />
-                </v-card>
-              </v-flex>
-            </v-layout>
-          </v-flex>
-
-
         </v-layout>
       </v-flex>
-
     </v-layout>
   </v-container>
 </template>
 <script>
-    import Grid           from "../Controls/Grid";
-    import GridCard       from "../Controls/GridCard";
-    import GridCard2      from "../Controls/GridCard2";
-    import PossibleCauses from "./PossibleCauses";
+
+  import axios                    from "axios";
+    import Grid           from    "../Controls/Grid";
+    import GridCard       from    "../Controls/GridCard";
+    import PossibleCauses from    "./PossibleCauses";
+    import FaultDetails   from    "../Controls/FaultDetails";
 
 
     export default {
       name: "CurrentFaults",
-      components: {PossibleCauses, GridCard, Grid, GridCard2, },
+      components: {PossibleCauses, Grid, GridCard, FaultDetails},
       props: {
         currentFaults: Array,
       },
       data: function() {
         return {
-          currentFaultId: 0,
-          currentInnerFaultId: 0,
-          lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
+          currentFaultId:      this.currentFaults[0].Id,
+          currentInnerFaultId: this.currentFaults[0].events[0].Id,
+          lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad`,
+          selInnFault : this.currentFaults[0].events[0],
+          selAggrFault : this.currentFaults[0],
+          engMap : {}
         }
       },
       computed:  {
@@ -107,13 +91,37 @@
       },
       methods: {
         selectedTab: function( i ) {
-          this.currentFaultId = i;
+          console.log("selTab");
+          this.currentFaultId = this.currentFaults[i].Id;
+          console.log(this.currentFaultId);
+          console.log(i);
           this.currentInnerFaults.length = 0;
           this.currentInnerFaults.push(...this.currentFaults[i].events);
-        }
+          console.log(this.currentFaults[i].events)
+        },
       },
       mounted() {
+        axios.get("http://localhost:8092/EDSMapping").then(resp => {
+          this.engMap = resp.data;
+        });
+      },
+      watch:
+      {
+        currentInnerFaultId: function(innFaultId)
+        {
+          var selected = this.currentFaults.filter(function(item){
+            return item.Id == this.currentFaultId;
+          }, this);
 
+          this.selAggrFault = selected[0];
+
+          var selInnFault = selected[0].events.filter(function(item){
+            return item.Id ==innFaultId;
+          }, this);
+
+          this.selInnFault = selInnFault[0];
+
+        }
       }
 
     }

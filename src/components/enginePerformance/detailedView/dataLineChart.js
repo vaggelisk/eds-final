@@ -11,6 +11,15 @@ const sourcesInfo2 = [
   { value: 'ref',  name: 'Reference' },
 ];
 
+const sourcesInfoLoadDiagram = [
+  { value: 'measured',     name:   'Measured'},
+  { value: 'calculated',   name:   'Calculated'},
+  { value: 'shopTests',    name:   'Shop Tests'},
+  { value: 'seaTrials',    name:   'Sea Trials'},
+  { value: 'engineLimit',  name:   'Engine Limit'},
+];
+
+
 const dataChart_sources = [
   { "x": "-180", "cyl1": 4.1567, "cyl2": 4.1572, "ref": 2.245000953814695  },
   { "x": "-178", "cyl1": 6.1562, "cyl2": 4.1567, "ref": 2.2445674306894032 },
@@ -40,17 +49,18 @@ const dataChart_sources_2 = {
 const dataChart_sourcesInfo =  [ { "value": "cyl1", "name": "Cylinder 1" }, { "value": "cyl2", "name": "Cylinder 2" }, { "value": "ref", "name": "Reference" } ];
 
 
+
 const sourcesInfo = [
   { value: 'cylinder1', name: 'Cylinder 1' },
   { value: 'oil', name: 'Oil' },
   { value: 'gas', name: 'Natural gas' },
   { value: 'coal', name: 'Coal' },
-  { value: 'nuclear', name: 'Nuclear' }
+  { value: 'nuclear', name: 'Nuclear' },
 ];
 
 
 const sources = [{
-  country: "-180.5",
+  country: "USA",
   cylinder1: 59.8,
   oil: 937.6,
   gas: 582,
@@ -96,6 +106,9 @@ const sources = [{
 export default {
   getSourcesInfo() {
     return sourcesInfo;
+  },
+  getSourcesInfoLoadDiagram() {
+    return sourcesInfoLoadDiagram;
   },
   getSourcesInfo2() {
     return sourcesInfo2;

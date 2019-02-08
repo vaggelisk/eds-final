@@ -46,13 +46,13 @@
         return {
           troubleshootingData: {},
           lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
-          counter: 14,
+          counter: 3,
         }
       },
       methods: {
         startInterval: function () {
           this.interval = setInterval(() => {
-            if (this.counter < 17) {
+            if (this.counter < 60) {
               this.getTroubleshootingData( this.counter );
               this.counter = this.counter + 1;
             } else {
@@ -68,7 +68,7 @@
         }
       },
       mounted() {
-        this.getTroubleshootingData( 13 );
+        this.getTroubleshootingData(3);
         this.startInterval();
       },
     }

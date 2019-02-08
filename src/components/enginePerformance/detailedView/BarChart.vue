@@ -1,62 +1,57 @@
 <template>
-  <v-responsive contain>
-    <v-card-title primary class="title"><h5> {{ dataChart.arrangements.name }}  </h5></v-card-title>
-    <v-flex d-flex>
-      <p><em>[{{ dataChart.arrangements.yaxis}}]</em> </p>
+  <v-card flat style="width : 100%; background-color: rgb(42,42,42); height:250px;">
+    <v-card-title style="height:20%;" primary class="title">{{ dataChart.arrangements.name }} </v-card-title>
+    <v-card-actions fill-height :style="'width : 100%; height: 80%;'">      
+      <v-responsive contain>
+        <v-flex d-flex>
+          <p><em>{{ dataChart.arrangements.yaxis}}</em> </p>
+          <dx-chart
+            id="chart"
+            :data-source="dataChart.values"
+            :customize-point="customizePoint"
+          >
+            <dx-animation :enabled="false"/>
+            <dx-series
+              argument-field="arg"
+              value-field="value"
+              type="bar"
+            >
+            </dx-series>
+            <dx-value-axis
+              :showZero="false"        
+            >
+              <dx-tick :visible="false"/>
+              <dx-minor-tick :visible="false"/>              
+              <dx-grid color="rgb(67,67,67)"/>
+            </dx-value-axis>
 
-      <dx-chart
-        id="chart"
-        :data-source="dataChart.values"
-        :customize-point="customizePoint"
-      >
-        <dx-series
-          argument-field="cylinder"
-          value-field="value"
-          name="My value"
-          type="bar"
-          color="#e7d19a"
-        >
+            <dx-crosshair
+              :horizontal-line="false"
+              :enabled="true"
+              color="#949494"
+              :width="1"
+              dashStyle="solid">
 
-        </dx-series>
-        <dx-value-axis
-          :showZero="false"
-          :visualRange="[60, 140]"
-        >
-          <dx-tick :visible="true"></dx-tick>
-          <dx-minor-tick :visible="true"></dx-minor-tick>
-        </dx-value-axis>
+            </dx-crosshair>
 
-        <dx-crosshair
-          :horizontal-line="false"
-          :enabled="true"
-          color="#949494"
-          :width="1"
-          dashStyle="solid">
+            <dx-tooltip
+              :enabled="true">
+            </dx-tooltip>
 
-        </dx-crosshair>
-
-        <dx-tooltip
-          :enabled="true"
-          :customizeTooltip="customizeTooltip">
-        </dx-tooltip>
-
-        <dx-legend
-            :visible="false"
-        ></dx-legend>
-
-      </dx-chart>
-
-    </v-flex>
-    <div style="margin-right: 20px; text-align: right"><em> Cylinders </em></div>
-
-  </v-responsive>
+            <dx-legend :visible="false"/>
+          </dx-chart>
+        </v-flex>
+        <div style="margin-right: 20px; text-align: right"><em> {{ dataChart.arrangements.xaxis}} </em></div>
+      </v-responsive>
+    </v-card-actions>          
+  </v-card>
 </template>
 
 <script>
   import {
     DxChart, DxSeries, DxLabel, DxValueAxis,
     DxGrid, DxTitle, DxLegend, DxTooltip,
-    DxCrosshair, DxCrosshairLabel, DxTick, DxMinorTick
+    DxCrosshair, DxCrosshairLabel, DxTick, DxMinorTick, DxAnimation
   } from 'devextreme-vue/chart';
 
   export default {
@@ -64,7 +59,7 @@
     components: {
       DxChart, DxSeries, DxLabel, DxCrosshair,
       DxCrosshairLabel, DxValueAxis, DxGrid, DxTitle,
-      DxLegend, DxTooltip, DxTick, DxMinorTick,
+      DxLegend, DxTooltip, DxTick, DxMinorTick, DxAnimation
     },
     props: {
       dataChart: Object,
@@ -73,15 +68,15 @@
     methods: {
       customizePoint(arg) {
         if (arg.tag === 0) {
-          return { color: '#05802a', hoverStyle: { color: '#05802a' } };
+          return { color:'rgb(60, 171, 48)', hoverStyle: { color: 'rgb(60, 171, 48)' } };
         }
         else if (arg.tag === 1) {
-          return { color: '#ff212b', hoverStyle: { color: '#ff212b' } };
+          return { color: 'rgb(205, 57, 64)', hoverStyle: { color: 'rgb(205, 57, 64)'} };
         }
       },
 
       customizeTooltip (arg) {
-        return { html:  '<span style="height:8px; width:8px;background-color:green;" >'  + '</span>' +  ' Cylinder ' + arg.argumentText + ' : ' + arg.valueText  +  ' '} ;
+        return { html:  '<span style="height:8px; width:8px;background-color:green;" >'  + '</span>' +  ' Cylinder ' + arg.argumentText + ' : ' + arg.valueText.toFixed(2)  +  ' '} ;
       }
     },
     created() {

@@ -12,7 +12,7 @@
                 d-flex
                 xs12 md8
               >
-                <v-card  dark>
+                <v-card style="background-color: rgb(42,42,42);" dark>
                   <v-responsive contain>
                     <LineChart
                       v-if="detailedViewData.pressureTrace.sourcesInfo"
@@ -27,7 +27,7 @@
                 d-flex
                 xs12 md4
               >
-                <v-card dark>
+                <v-card style="background-color: rgb(42,42,42);" dark>
                   <v-card-text>{{ lorem + lorem + lorem + lorem + lorem + lorem }}</v-card-text>
                 </v-card>
               </v-flex>
@@ -52,7 +52,7 @@
                 d-flex
                 xs12 md2
               >
-                <v-card dark >
+                <v-card dark style="background-color: rgb(42,42,42);">
 
                   <v-card-text>{{ lorem  }}</v-card-text>
 
@@ -60,7 +60,7 @@
               </v-flex>
               <v-flex xs12 md4>
 
-                <v-card dark >
+                <v-card dark style="background-color: rgb(42,42,42);">
                   <v-responsive contain>
                     <BarChartTrial />
                   </v-responsive>

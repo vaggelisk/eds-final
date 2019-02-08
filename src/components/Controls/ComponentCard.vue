@@ -1,5 +1,28 @@
 <template>
-    <v-card flat style="width : 100%; background-color: rgb(42,42,42); height:250px;">
+    <v-card flat style="width : 100%; background-color: rgb(42,42,42);">
+        <v-card-title style="height:20%;" primary class="title">{{cardData.Title}}</v-card-title>
+        <v-card-actions  style="height:80%;">
+            <v-container fluid grid-list-md style="width:100%; height:100%; margin: 0px; padding:5px;">
+                <v-layout column>
+                    <v-flex d-flex md1>
+                        <div v-if="cardData.Color===20" :style="'border-top:5px solid rgb(205, 57, 64); height:20px;width :'+cardData.Value+'%;' "/>                         
+                        <div v-if="cardData.Color===0" :style="'border-top:5px solid rgb(60, 171, 48); height:20px;width :'+cardData.Value+'%;' "/> 
+                    </v-flex>
+                    <v-flex d-flex md11>
+                        <v-layout row>                   
+                            <v-flex d-flex md6>
+                                <v-card style="background-color: yellow;"/>
+                            </v-flex>
+                            <v-flex d-flex md6>
+                                <v-card style="background-color: yellow;"/>
+                            </v-flex>
+                        </v-layout>
+                    </v-flex>
+                </v-layout>          
+            </v-container>
+        </v-card-actions>
+    </v-card>
+    <!-- <v-card flat style="width : 100%; background-color: rgb(42,42,42); height:250px;">
         <v-card-title style="height:20%;" primary class="title">{{ cardData.Title }} </v-card-title>
 
         <v-card-title v-show="isShowing" style="height:40%;">
@@ -18,7 +41,6 @@
 
         <v-card-actions fill-height :style="'width : 100%; height:'+height+';'">            
             <v-container fluid grid-list-xs style="width:100%; height:100%; margin: 5px; padding:10px;"  >
-            <!-- <v-container fluid style="margin-left: -21px; padding-right:0px;"  > -->
                 <v-layout row wrap  style="width:100%; height:100%;" >
                     <v-flex v-show="isShowing" xs4>
                         <div class="headline" >{{cardData.Ref.toFixed(cardData.Format)}}</div>
@@ -37,7 +59,6 @@
                             </dx-value-axis>
                             <dx-argument-axis> 
                                 <dx-tick-interval miliseconds="60000"/> 
-                                <!-- <dx-visual-range :start-value="minValue" :end-value="maxValue"/>     -->
                             </dx-argument-axis>
                             <dx-series
                                     color="rgb(92, 92, 92)"
@@ -63,7 +84,7 @@
                 </v-layout>
             </v-container>
         </v-card-actions>
-    </v-card>
+    </v-card> -->
 </template>
 
 <script>
@@ -83,7 +104,7 @@
     } from 'devextreme-vue/chart';
 
     export default {
-        name: "Card",
+        name: "ComponentCard",
         components: {
             DxChart,
             DxArgumentAxis,
@@ -100,9 +121,9 @@
             DxWholeRange
         },
         props: {
-            dataLoaded: Boolean,
+            // dataLoaded: Boolean,
             cardData: Object,
-            counter: Number,
+            // counter: Number,
         },
         data: function () {
             return {

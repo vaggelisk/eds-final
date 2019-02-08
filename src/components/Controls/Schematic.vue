@@ -13,7 +13,7 @@
             <v-btn class="dialog-btn" v-for="ev in currEvents" :key="ev" flat href="/troubleshooting">{{ev.subComponent}} {{ev.index}}<br>{{ev.fault}}</v-btn>
           </v-card-text>
           <v-card-actions>
-            <v-btn class="close-btn"flat v-on:click="hideDialog">Close</v-btn>
+            <v-btn class="close-btn" flat v-on:click="hideDialog">Close</v-btn>
           </v-card-actions>
       </v-card>
     </v-dialog>

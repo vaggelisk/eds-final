@@ -1,9 +1,9 @@
 <template>
   <v-responsive style="width:100%;height:100%;padding:5px;" contain>
-    <div style="width:100%;height:100%;">                   
-      <dx-circular-gauge   style="width:100%;height:100%;" 
+    <div style="width:100%;height:100%;">
+      <dx-circular-gauge   style="width:100%;height:100%;"
                       :value.sync="value"
-                    :redraw-on-resize="true" >        
+                    :redraw-on-resize="true" >
         <dx-value-indicator
           spindleGapSize=0
           type="disable"
@@ -16,18 +16,18 @@
         <dx-scale
           :start-value="0"
           :end-value="100"
-          :tick-interval="100">                                
+          :tick-interval="100">
           <dx-label :visible="false" />
           <dx-tick :visible="false" />
         </dx-scale>
         <dx-range-container :width="10" background-color="rgb(67,67,67)">
           <dx-range :ref="range" :start-value="0"
-                    :end-value.sync="value" 
-                    :color="colorRGB"                 
+                    :end-value.sync="value"
+                    :color="colorRGB"
                     ></dx-range>
         </dx-range-container>
-      </dx-circular-gauge>    
-      <span class="gaugeTitle"> {{labelText}} </span>   
+      </dx-circular-gauge>
+      <span class="gaugeTitle"> {{labelText}} </span>
     </div>
   </v-responsive>
 </template>
@@ -64,18 +64,25 @@
         value: Number,
         color: Number
       },
-      data() {
-        return {
-          colorRGB: 'rgb(60, 171, 48)'         
-        }
-      }, 
+      // data() {
+      //   return {
+      //     colorRGB: 'rgb(60, 171, 48)'
+      //   }
+      // },
+      computed: {
+        colorRGB: function () {
+          if (this.color===0) return 'rgb(60, 171, 48)';
+          else if (this.color===10) return 'rgb(255, 184, 29)';
+          else return 'rgb(205, 57, 64)';
+        },
+      },
       watch:
       {
         color: function(newColor)
         {
           if (this.color==0) this.colorRGB = 'rgb(60, 171, 48)';
           else if (this.color==10) this.colorRGB = 'rgb(255, 184, 29)';
-          else this.colorRGB =  'rgb(205, 57, 64)';        
+          else this.colorRGB =  'rgb(205, 57, 64)';
         }
       }
     }
@@ -83,8 +90,8 @@
 
 <style scoped>
 
- .gaugeTitle 
- {  
+ .gaugeTitle
+ {
    font-size: 44px;
     margin: 0;
     position: absolute;

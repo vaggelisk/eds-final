@@ -1,22 +1,23 @@
 <template>
-    <v-card style="height: 250px%; width : 100%; background-color: rgb(42,42,42);">
+    <v-card style="height: 250px; width : 100%; background-color: rgb(42,42,42);">
     <!-- <div v-if="loading">Loading...</div> -->
     <!--
       <v-card-title primary class="title"> {{ compressionPressureDataC.Title }} </v-card-title>
     -->
-    <v-card-title primary class="title" style="margin-top: -20px">
-      <v-select v-model="select" :items="items" flat></v-select>
-    </v-card-title>
+    <!-- <v-card-title primary class="title" style="height:20%;"> -->
+      <v-select v-model="select" :items="items" flat  primary class="title" style="height:20%; padding:16px; margin:0px; "></v-select>
+    <!-- </v-card-title> -->
 
-    <v-card-title v-if="select === 'BSFC'" primary-title>
-      <v-divider class="mx-3" vertical></v-divider>
+    <v-card-title v-if="select === 'BSFC'" primary-title style="height:40%;">
+      <!-- <v-divider class="mx-3" vertical></v-divider> -->
+      <div style="border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;"></div>
       <div>
         <div class="headline"><h2>-</h2></div>
-        <span class="grey--text">Measured [gr/kWh ] </span>
+        <span class="grey--text">Measured [gr/kWh] </span>
       </div>
     </v-card-title>
 
-    <v-card-actions v-if="select === 'BSFC'">
+    <v-card-actions v-if="select === 'BSFC'" style="height:40%;">
       <v-container>
         <v-layout row wrap>
           <v-flex xs4>
@@ -29,17 +30,17 @@
       </v-container>
     </v-card-actions>
 
-    <v-card-title v-if="select === 'Indicated Power'" primary-title>
-      <v-divider class="mx-3" vertical></v-divider>
+    <v-card-title v-if="select === 'Indicated Power'" primary-title style="height:40%;">
+            <div style="border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;"></div>
       <div>
         <div class="headline">
           <h2>{{ indiPowerData.Value.toFixed(0) }}</h2>
         </div>
-        <span class="grey--text">Measured [kW ] </span>
+        <span class="grey--text">Measured [kW] </span>
       </div>
     </v-card-title>
 
-    <v-card-actions v-if="select === 'Indicated Power'">
+    <v-card-actions v-if="select === 'Indicated Power'" style="height:40%;">
       <v-container>
         <v-layout row wrap>
           <v-flex xs4>
@@ -52,18 +53,18 @@
 
     <v-card-title
       v-if="select === 'Indicated Main Effective Pressure'"
-      primary-title
+      primary-title style="height:40%;"
     >
-      <v-divider class="mx-3" vertical></v-divider>
+            <div style="border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;"></div>
       <div>
         <div class="headline">
           <h2>{{ imepData.Value.toFixed(2) }}</h2>
         </div>
-        <span class="grey--text">Measured [kW ] </span>
+        <span class="grey--text">Measured [kW] </span>
       </div>
     </v-card-title>
 
-    <v-card-actions v-if="select === 'Indicated Main Effective Pressure'">
+    <v-card-actions v-if="select === 'Indicated Main Effective Pressure'" style="height:40%;">
       <v-container>
         <v-layout row wrap>
           <v-flex xs4>
@@ -146,8 +147,4 @@ export default {
 </script>
 
 <style scoped>
-#myButton {
-  color: red;
-  background-color: blueviolet;
-}
 </style>

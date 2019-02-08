@@ -4,9 +4,9 @@
     <v-card-title style="height: 5%; width : 100%; " class="title"> Cylinders </v-card-title>
     <v-card-actions style="height: 85%; width : 100%;">
       <v-container fluid grid-list-md style="height: 100%; width : 100%; margin:0px;padding:0px;">
-        <v-layout column wrap style="height: 100%; width : 100%;" >
+        <v-layout column  style="height: 100%; width : 100%;" >
           <v-flex d-flex md8 fill-width>
-             <v-layout row wrap >
+             <v-layout row  >
               <v-flex v-for="n in 6" :key="n" d-flex md2>
                 <CircGauge v-bind:value="colorsEngineState[n-1][0]*100"
                           v-bind:labelText="n"
@@ -16,9 +16,9 @@
             </v-layout>
           </v-flex>
           <v-flex d-flex md4 fill-width>
-             <v-layout row wrap>
+             <v-layout row >
                 <v-flex md3>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Turbines </v-btn>
                     </v-flex>
@@ -29,7 +29,7 @@
                 </v-flex>
 
                 <v-flex md3>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Compressors </v-btn>
                     </v-flex>
@@ -40,7 +40,7 @@
                 </v-flex>
 
                 <v-flex md3>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Air Coolers </v-btn>
                     </v-flex>
@@ -51,7 +51,7 @@
                 </v-flex>
 
                 <v-flex md3>
-                  <v-layout column wrap style="height: 100%; width : 100%;">
+                  <v-layout column  style="height: 100%; width : 100%;">
                     <v-flex md10>
                       <v-btn flat class="subSysBtn" @mouseover="hoverButton" @mouseout="leaveButton"> Air Filters </v-btn>
                     </v-flex>

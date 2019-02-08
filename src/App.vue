@@ -5,7 +5,7 @@
 
     <v-toolbar app>
       <v-toolbar-title class="headline text-uppercase">
-        <span class="font-weight-light"> Platform </span>
+        <span class="font-weight-light"> Web Platform </span>
       </v-toolbar-title>
       <v-spacer></v-spacer>
 
@@ -18,11 +18,6 @@
     <v-content>
       <router-view/>
     </v-content>
-
-
-    <v-footer :fixed="fixed" app>
-      <span> &copy; 2018 Propulsion Analytics</span>
-    </v-footer>
   </v-app>
 </template>
 

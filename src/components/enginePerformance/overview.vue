@@ -4,16 +4,30 @@
       <v-flex d-flex md4>
         <v-layout column >
           <v-flex d-flex md6>
-            <v-card dark>
-                <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
-            </v-card>
+
+            <v-responsive contain>
+              <v-card style="background-color: rgb(42,42,42);width:100%;height:100%;">
+
+                  <LoadDiagram style="width:100%;height:100%;"
+                    v-if="overviewCardsData.loadDiagram"
+                      v-bind:loadDiagramData="overviewCardsData.loadDiagram" />
+
+              </v-card>
+            </v-responsive>
+
           </v-flex>
           <v-flex d-flex md6>
-            <v-card dark>
-                <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
-            </v-card>
+            <v-responsive contain>
+
+              <v-card style="background-color: rgb(42,42,42);width:100%;height:100%;">
+                <EnergyBalanceReference style="width:100%;height:100%;"
+                  v-if="overviewCardsData.energyBalance"
+                  v-bind:pieData="overviewCardsData.energyBalance" />
+              </v-card>
+
+            </v-responsive>
           </v-flex>
-        </v-layout>        
+        </v-layout>
       </v-flex>
       <v-flex d-flex md2>
         <v-layout column >
@@ -21,10 +35,10 @@
             <v-responsive contain>
                   <Card  v-if="overviewCardsData[name]"
                       v-bind:cardData="overviewCardsData[name]"
-                      v-bind:counter="counter" /> 
-            </v-responsive> 
+                      v-bind:counter="counter" />
+            </v-responsive>
           </v-flex>
-        </v-layout>        
+        </v-layout>
       </v-flex>
       <v-flex d-flex md2>
         <v-layout column >
@@ -32,19 +46,19 @@
             <v-responsive contain>
                   <Card  v-if="overviewCardsData[name]"
                       v-bind:cardData="overviewCardsData[name]"
-                      v-bind:counter="counter" /> 
-            </v-responsive> 
+                      v-bind:counter="counter" />
+            </v-responsive>
           </v-flex>
-        </v-layout>        
+        </v-layout>
       </v-flex>
       <v-flex d-flex md4>
         <v-layout column>
-          <v-flex d-flex v-for="name in chart" :key="name">            
-            <v-responsive contain>              
-                 <TimelineChart v-if="overviewCardsData[name]"
+          <v-flex v-for="name in chart" :key="name">
+            <v-responsive contain>
+                 <TimelineChart style="height:200px;" v-if="overviewCardsData[name]"
                     v-bind:tlData="overviewCardsData[name]"
-                    v-bind:counter="counter" />                     
-            </v-responsive>  
+                    v-bind:counter="counter" />
+            </v-responsive>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -54,14 +68,16 @@
 
 <script>
   import axios                    from "axios";
-  import Card                     from "../Controls/Card" 
+  import Card                     from "../Controls/Card"
   import LoadDiagram              from "./overview/LoadDiagram";
   import TimelineChart            from "../Controls/TimelineChart";
+  import EnergyBalanceReference from "./overview/EnergyBalanceReference";
 
 
   export default {
     name: "Overview",
     components: {
+      EnergyBalanceReference,
       LoadDiagram,
       Card,
       TimelineChart
@@ -84,7 +100,7 @@
           } else {
             clearInterval(this.interval);
           }
-        }, 3000)
+        }, 15000)
       },
       getAllCardsData( counter ) {
         axios.get("http://localhost:8092/EDSMapping").then(resp => {
@@ -171,21 +187,24 @@
           else this.$set(this.overviewCardsData[objs[i]],'datapoints', data);
         }
 
-        });     
-        
+        });
+
         url  = "http://localhost:8092/HyperCubeData/" + this.counter;
 
         axios.get(url).then(response => {
 
+          this.$set(this.overviewCardsData, 'energyBalance', response.data.power);
+          this.$set(this.overviewCardsData, 'loadDiagram',   response.data.loadSeries);
+
 
           this.$set(this.overviewCardsData.mechEff,'Value',response.data.pressureTrace["Mech Efficiency"][0]);
           this.$set(this.overviewCardsData.mechEff,'Ref',response.data.pressureTrace["Mech EfficiencyExp"][0]);
-          
+
           this.$set(this.overviewCardsData.mechEff,'Color', 'gray');
 
           let data = [];
           this.$set(this.overviewCardsData.mechEff,'datapoints', data);
-        }); 
+        });
       },
     },
     mounted() {

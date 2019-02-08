@@ -13,39 +13,24 @@
                 d-flex
                 xs12 md4
               >
-                <v-layout v-if="n===1"
-                          dark
-                >
+                <v-layout v-if="n===1">
                   <v-flex >
                     <v-layout row wrap>
                       <v-flex >
-                        <v-card>
-
-                          <v-responsive contain>
-                            <BarChart
-                              v-if="detailedViewData.firingPressure.values"
-                              v-bind:dataChart="detailedViewData.firingPressure"
-                              v-bind:counter="counter2" />
-                          </v-responsive>
-
-
-                        </v-card>
+                        <BarChart
+                          v-if="detailedViewData.firingPressure.values"
+                          v-bind:dataChart="detailedViewData.firingPressure"
+                          v-bind:counter="counter2" />
                       </v-flex>
                     </v-layout>
 
 
                     <v-layout row wrap>
                       <v-flex  >
-                        <v-card >
-
-                          <v-responsive contain>
-                            <BarChart
-                              v-if="detailedViewData.compressionPressure.values"
-                              v-bind:dataChart="detailedViewData.compressionPressure"
-                              v-bind:counter="counter2" />
-                          </v-responsive>
-
-                        </v-card>
+                        <BarChart
+                          v-if="detailedViewData.compressionPressure.values"
+                          v-bind:dataChart="detailedViewData.compressionPressure"
+                          v-bind:counter="counter2" />
                       </v-flex>
                     </v-layout>
                   </v-flex>
@@ -54,7 +39,7 @@
 
                 <v-layout v-if="n===2" row wrap  dark >
                   <v-flex>
-                    <v-card>
+                    <v-card style="background-color: rgb(42,42,42);">
 
                       <v-responsive contain>
                         <LineChart
@@ -76,7 +61,7 @@
                   <v-flex >
                     <v-layout row wrap>
                       <v-flex >
-                        <v-card>
+                        <v-card style="background-color: rgb(42,42,42);">
                           <v-card-text>{{ lorem  + lorem }} </v-card-text>
                         </v-card>
                       </v-flex>
@@ -89,7 +74,7 @@
 
                         <v-layout row wrap >
                           <v-flex d-flex >
-                            <v-card >
+                            <v-card style="background-color: rgb(42,42,42);">
                               <v-card-text>{{ lorem  }} </v-card-text>
                             </v-card>
                           </v-flex>
@@ -97,7 +82,7 @@
 
                         <v-layout row wrap >
                           <v-flex d-flex xs12 sm6 md12 >
-                            <v-card >
+                            <v-card style="background-color: rgb(42,42,42);">
                               <v-card-text>{{ lorem  }} </v-card-text>
                             </v-card>
                           </v-flex>
@@ -123,30 +108,17 @@
             <v-layout row wrap>
 
               <v-flex xs12 md4>
-
-                <v-card dark >
-                  <v-responsive contain>
-                    <BarChart
-                      v-if="detailedViewData.pressureRise.values"
-                      v-bind:data-chart="detailedViewData.pressureRise"
-                      v-bind:counter="counter2" />
-                  </v-responsive>
-                </v-card>
-
+                <BarChart
+                  v-if="detailedViewData.pressureRise.values"
+                  v-bind:data-chart="detailedViewData.pressureRise"
+                  v-bind:counter="counter2" />
               </v-flex>
 
               <v-flex xs12 md4>
-
-                <v-card dark >
-                  <v-responsive contain>
-                    <BarChart
-                      v-if="detailedViewData.indicatedPressure.values"
-                      v-bind:dataChart="detailedViewData.indicatedPressure"
-                      v-bind:counter="counter2" />
-                  </v-responsive>
-                </v-card>
-
-
+                <BarChart
+                  v-if="detailedViewData.indicatedPressure.values"
+                  v-bind:dataChart="detailedViewData.indicatedPressure"
+                  v-bind:counter="counter2" />
               </v-flex>
 
               <v-flex
@@ -155,9 +127,14 @@
                 d-flex
                 xs12 md2
               >
-                <v-card dark >
+                <v-card v-if="n===1" dark  style="background-color: rgb(42,42,42);">
 
-                  <v-card-text>{{ lorem  }}</v-card-text>
+                  <v-card-text> vag1  </v-card-text>
+
+                </v-card>
+                <v-card v-if="n===2" dark  style="background-color: rgb(42,42,42);">
+
+                  <v-card-text> vag2  </v-card-text>
 
                 </v-card>
               </v-flex>
@@ -178,20 +155,16 @@
                 d-flex
                 xs12 md4
               >
-                <v-card dark>
-                  <v-responsive contain>
-                    <BarChart
-                      v-if="detailedViewData.exhaustedTemp.values"
-                      v-bind:dataChart="detailedViewData.exhaustedTemp"
-                      v-bind:counter="counter2" />
-                  </v-responsive>
-                </v-card>
+                <BarChart
+                  v-if="detailedViewData.exhaustedTemp.values"
+                  v-bind:dataChart="detailedViewData.exhaustedTemp"
+                  v-bind:counter="counter2" />
               </v-flex>
               <v-flex
                 d-flex
                 xs12 md8
               >
-                <v-card
+                <v-card style="background-color: rgb(42,42,42);"
                   dark
                 >
                   <v-card-text>{{ lorem + lorem + lorem }}</v-card-text>

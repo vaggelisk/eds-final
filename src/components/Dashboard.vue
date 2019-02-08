@@ -1,6 +1,5 @@
 <template>
-  <v-container fluid grid-list-md>
-
+  <v-container fluid grid-list-md style="padding:10px;">
     <v-layout row >
       <v-flex d-flex xs12 sm6 md4>
           <v-responsive contain>
@@ -9,7 +8,7 @@
       </v-flex>
       <v-flex d-flex xs12 sm6 md4>
         <v-layout row  >
-          <v-flex d-flex>              
+          <v-flex d-flex>
               <v-responsive contain>
                 <PerformanceBar v-bind:performanceParamData="performanceParamData"/>
               </v-responsive>
@@ -17,7 +16,7 @@
         </v-layout>
       </v-flex>
       <v-flex d-flex xs12 sm6 md2>
-          <v-responsive contain> 
+          <v-responsive contain>
             <v-card style="width:100%;height:100%; background-color: rgb(42,42,42); height:250px;">
               <v-card-title primary class="title" style="width:100%;height:10%;"> Engine KPI </v-card-title>
               <v-card-actions  style="width:100%;height:90%;" >
@@ -87,9 +86,7 @@
               </v-responsive>
           </v-flex>
         </v-layout>
-          
       </v-flex>
-
     </v-layout>
 
     <v-layout row >
@@ -120,8 +117,8 @@
 
       <v-flex d-flex xs12 sm6 md2>
         <v-responsive  contain >
-            <Card  v-if="scavengeReceiverPressureData" 
-                  v-bind:cardData="scavengeReceiverPressureData" 
+            <Card  v-if="scavengeReceiverPressureData"
+                  v-bind:cardData="scavengeReceiverPressureData"
                   v-bind:counter="counter" />
           </v-responsive>
       </v-flex>
@@ -130,7 +127,7 @@
         <v-responsive contain>
            <LinerWallTemperature
                   v-bind:linerWallTemperatureData="linerWallTemperatureData"
-          /> 
+          />
         </v-responsive>
       </v-flex>
 
@@ -141,7 +138,7 @@
                   v-bind:indiPowerData="indiPowerData"
                   v-bind:imepData="imepData"
 
-          /> 
+          />
         </v-responsive>
       </v-flex>
     </v-layout>
@@ -290,9 +287,8 @@
         let objs = [ 'firingPressureData','tcSpeedData','linerWallTemperatureData', 'scavengeReceiverPressureData','fuelRailPressureData',
           'turbineInletTempData','servoOilRailPressureData','compressionPressureData'];
 
-        let loaded =  ['childFiringPressureDataLoaded','childTcSpeedDataLoaded',  'childLinerWallTemperatureDataLoaded', 'childScavengeReceiverPressureDataLoaded','childFuelRailPressureDataLoaded',
-          'childTurbineInletTempDataLoaded','childServoOilRailPressureDataLoaded','childCompressionDataLoaded'];
-        
+        let loaded =  ['childFiringPressureDataLoaded','childTcSpeedDataLoaded',  'childLinerWallTemperatureDataLoaded', 'childScavengeReceiverPressureDataLoaded','childFuelRailPressureDataLoaded',    'childTurbineInletTempDataLoaded','childServoOilRailPressureDataLoaded','childCompressionDataLoaded'];
+
         for (let i=0; i<params.length;i++)
         {
           let array = helperMatrix[params[i]];
@@ -341,7 +337,7 @@
             point.color = clr;
 
             data.push(point);
-            
+
           }
 
           this.$set(this[objs[i]],'datapoints', data);
@@ -454,7 +450,7 @@
         this.childEngineStateDataLoaded = true;
         this.childSubsystemDataLoaded = true;
 
-        var aggrEvents = helperMatrix2.aggrEvents;       
+        var aggrEvents = helperMatrix2.aggrEvents;
 
         if (aggrEvents.length == 0)
         {
@@ -462,8 +458,8 @@
         }
         else
         {
-          let mx = Math.max.apply(Math, aggrEvents.map(function(item){return item.color;}));          
-          
+          let mx = Math.max.apply(Math, aggrEvents.map(function(item){return item.color;}));
+
           this.status =mx;
         }
 

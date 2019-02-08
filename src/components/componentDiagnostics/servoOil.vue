@@ -12,16 +12,16 @@
                 v-bind:initHeight="initHeight"
                 v-bind:idName="idName"/>
             </v-responsive> 
-          </v-flex d-flex>
+          </v-flex>
           <v-flex d-flex md4>            
             <v-responsive contain style="height:100%;width:100%;" :v-show="dataLoaded">              
                 <TimelineChart 
                     v-bind:tlData="data['soPresDispl']"
                     v-bind:counter="counter" />                     
             </v-responsive>  
-          </v-flex d-flex>
+          </v-flex>
         </v-layout>
-      </v-flex d-flex>
+      </v-flex>
       <v-flex d-flex md4>    
         <v-layout column style="height:100%;">
           <v-flex d-flex v-for="name in chart" :key="name" md3>            
@@ -30,7 +30,7 @@
                     v-bind:tlData="data[name]"
                     v-bind:counter="counter" />                     
             </v-responsive>  
-          </v-flex d-flex>            
+          </v-flex>            
           <v-flex d-flex md3> 
             <v-layout row style="height:100%;">
                <v-flex d-flex  md6> 
@@ -39,18 +39,18 @@
                       <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
                   </v-card>                
                  </v-responsive> 
-               </v-flex d-flex>
+               </v-flex>
                <v-flex d-flex md6>
                  <v-responsive contain style="height:100%;width:100%;" :v-show="dataLoaded">      
                   <v-card style="width : 100%; background-color: rgb(42,42,42); height:250px;">
                       <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
                   </v-card>              
                  </v-responsive> 
-               </v-flex d-flex>
+               </v-flex>
             </v-layout>           
-          </v-flex d-flex>
+          </v-flex>
         </v-layout>
-      </v-flex d-flex>
+      </v-flex>
     </v-layout>
   </v-container>
 </template>

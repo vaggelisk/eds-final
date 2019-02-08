@@ -1,38 +1,35 @@
 <template>
   <v-container fluid grid-list-md>
     <v-flex>
-
-
     <v-data-table
       :headers="headers"
-      :items="currentInnerFaults"
+      :items="currentInnerFaultsNat"
       class="elevation-1"
       item-key="name"
       :rows-per-page-items=[6]
+    >
 
-  >
-    <template slot="items" slot-scope="props"
-            >
+    <template slot="items" slot-scope="props"      >
       <tr @click="selectedInnerFaultId(props.item.Id)">
-        <td>
-          <v-icon  small  class="mr-2 red">radio_button_unchecked</v-icon>
+        <td bgcolor="#2A2A2A">
+          <v-icon small  class="mr-2" :style='"color: "+colorFormatter(props.item.color)+";"'>information </v-icon>
         </td>
-        <td><a>{{ props.item.fault }}</a></td>
-        <td class="text-xs-right"><a>{{ props.item.element }}</a></td>
-        <td class="text-xs-right"><a>{{ props.item.index }}</a></td>
-        <td class="text-xs-right"><a>{{ props.item.component }}</a></td>
-        <td class="text-xs-right"><a>{{ props.item.subComponent }}</a></td>
-        <td class="text-xs-right"><a>{{ props.item.Date | dateFormatter }}</a></td>
+        <td bgcolor="#2A2A2A"><a>{{ props.item.fault }}</a></td>
+        <td bgcolor="#2A2A2A" class="text-xs-right"><a>{{ props.item.element }}</a></td>
+        <td bgcolor="#2A2A2A" class="text-xs-right"><a>{{ props.item.index }}</a></td>
+        <td bgcolor="#2A2A2A" class="text-xs-right"><a>{{ props.item.color }}</a></td>
+        <td bgcolor="#2A2A2A" class="text-xs-right"><a>{{ props.item.subComponent }}</a></td>
+        <td bgcolor="#2A2A2A" class="text-xs-right"><a>{{ props.item.Date | dateFormatter }}</a></td>
       </tr>
 
     </template>
-    <template slot="pageText" slot-scope="props">
+    <template slot="pageText" slot-scope="props" style="background-color: #2A2A2A">
        Faults {{ props.pageStart }} - {{ props.pageStop }} of {{ props.itemsLength }}
     </template>
     </v-data-table>
-      {{currentFaultId}}
+      <!--{{currentFaultId}}-->
 
-      {{currentInnerFaults}}
+      <!-- {{currentInnerFaultsNat}} -->
     </v-flex>
   </v-container>
 </template>
@@ -50,7 +47,7 @@
     },
     data: function() {
       return {
-        // currentInnerFaultsNat: this.currentInnerFaults,
+        currentInnerFaultsNat: this.currentInnerFaults,
         selected: [],
         headers: [
           { text: 'Status', value: 'name', sortable: false },
@@ -68,39 +65,39 @@
         ],
       }
     },
-    computed:  {
-      currentInnerFaultsNat: function () {
-        let x=[];
-        x.push(...this.currentInnerFaults);
-        return x;
-      }
-    },
     watch: {
       currentFaultId() {
         this.currentInnerFaultsNat.length=0;
         this.currentInnerFaultsNat.push(...this.currentInnerFaults);
-        // this.currentInnerFaults.length=0;
-        // this.currentInnerFaults.push(...this.currentInnerFaults);
       },
+      currentInnerFaultsNat: {
+        handler: function (val, oldVal) {
+          console.log('a currentInnerFaultNat changed')
+        },
+        deep: true,
+      }
     },
     filters: {
       dateFormatter: function (value) {
         if (!value) return '';
         let d = new Date(value);
         return d.toLocaleString();
-      }
+      },
+
     },
     methods: {
       selectedInnerFaultId: function( i ) {
         console.log("hiiii "+ i );
         this.$emit('update:currentInnerFaultId', i)
-      }
+      },
+      colorFormatter: function (value) {
+        if (value===0) return 'rgb(60, 171, 48)';
+        else if (value===10) return 'rgb(255, 184, 29)';
+        else return 'rgb(205, 57, 64)';
+      },
     },
     mounted() {
-      this.$watch('currentInnerFaultsNat.length', function(n, o) {
-        this.currentInnerFaultsNat.length=0;
-        this.currentInnerFaultsNat.push(...this.currentInnerFaults);
-      });
+
 
     }
   }

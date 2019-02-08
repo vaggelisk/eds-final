@@ -1,16 +1,16 @@
 <template>  
     <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);">
-      <v-card-title primary class="title">Notification</v-card-title>
-      <v-card-actions>
+      <v-card-title primary class="title" style="height: 20%;">Notification</v-card-title>
+      <v-card-actions style="height: 80%;">
         <v-container fluid grid-list-md>
           <v-layout row wrap>
             <v-flex d-flex md1>
-              <v-avatar flat v-on:click="buttonClick" id="okButton" >
+              <v-avatar flat v-on:click="buttonClick" id="okButton">
                 <img alt=""> 
               </v-avatar>
             </v-flex>
             <v-flex d-flex md3>
-              <div>ALL SYSTEMS NOMINAL</div>
+              <div class="notifTitle" style="height: 100%; width : 100%;">ALL SYSTEMS NOMINAL</div>
             </v-flex>  
             <v-flex d-flex md1>
               <v-avatar flat v-on:click="buttonClick" id="warnButton" >
@@ -18,7 +18,7 @@
               </v-avatar>
             </v-flex>          
             <v-flex d-flex md3>
-              <div>WARNINGS</div>
+              <div class="notifTitle" style="height: 100%; width : 100%;">WARNINGS</div>
             </v-flex>
             <v-flex d-flex md1>
               <v-avatar flat v-on:click="buttonClick" id="alButton" >
@@ -26,7 +26,7 @@
               </v-avatar>
             </v-flex>
             <v-flex d-flex md3>
-              <div>ALERTS</div>
+              <div class="notifTitle" style="height: 100%; width : 100%;">ALERTS</div>
             </v-flex>
           </v-layout>
         </v-container>
@@ -89,5 +89,15 @@
 
 </script>
 
-<style scoped></style>
+<style scoped>
+
+.notifTitle
+ {
+  font-size: 18px;
+  padding: 0px 0px 0px 20px;
+
+  color: white;
+}
+
+</style>
 
