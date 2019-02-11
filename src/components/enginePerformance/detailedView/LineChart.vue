@@ -249,7 +249,7 @@
 
     <div v-if="select === 'Pressure Trace'"
          style="margin-right: 20px; text-align: right">
-      <em>Crank Angle[deg] {{currentItem}} </em>
+      <em>Crank Angle[deg] </em>
     </div>
 
 

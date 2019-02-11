@@ -4,68 +4,69 @@
       <v-flex d-flex md8>
         <v-layout column>
           <v-flex d-flex md8>
-            <v-responsive contain :v-show="dataLoaded">              
+            <v-responsive contain :v-show="dataLoaded">
               <Schematic
                 v-bind:schematicSource="schematicSource"
                 v-bind:points="points"
                 v-bind:initWidth="initWidth"
                 v-bind:initHeight="initHeight"
                 v-bind:idName="idName"/>
-            </v-responsive> 
+            </v-responsive>
           </v-flex>
           <v-flex d-flex md4>
-            <v-responsive contain :v-show="dataLoaded">              
+            <v-responsive contain :v-show="dataLoaded">
               <TimelineChart
                 v-bind:tlData="data['fRailPres']"
-                v-bind:counter="counter" />                      
-            </v-responsive>  
+                v-bind:counter="counter" />
+            </v-responsive>
           </v-flex>
         </v-layout>
       </v-flex>
-      <v-flex d-flex md4>    
-        <v-layout column>  
-           <v-flex d-flex v-for="name in chart" :key="name" md2>            
-            <v-responsive contain :v-show="dataLoaded">             
+      <v-flex d-flex md4>
+        <v-layout column>
+           <v-flex d-flex v-for="name in chart" :key="name" md2>
+            <v-responsive contain :v-show="dataLoaded">
               <TimelineChart
                 v-bind:tlData="data[name]"
-                v-bind:counter="counter" />                      
-            </v-responsive>  
-          </v-flex>    
-          <v-flex d-flex md3> 
+
+                v-bind:counter="counter" />
+            </v-responsive>
+          </v-flex>
+          <v-flex d-flex md3>
             <v-layout row>
-               <v-flex d-flex md6> 
-                  <v-responsive contain :v-show="dataLoaded">  
+               <v-flex d-flex md6>
+                  <v-responsive contain :v-show="dataLoaded">
                     <Card
                         v-bind:cardData="data['fRailPres']"
-                        v-bind:counter="counter" /> 
-                  </v-responsive> 
+                        v-bind:counter="counter" />
+                  </v-responsive>
                </v-flex>
-               <v-flex d-flex md6> 
-                  <v-responsive contain :v-show="dataLoaded">  
+               <v-flex d-flex md6>
+                  <v-responsive contain :v-show="dataLoaded">
                     <Card
                         v-bind:cardData="data['tExhC']"
-                        v-bind:counter="counter" /> 
-                  </v-responsive> 
+                        v-bind:counter="counter" />
+                  </v-responsive>
                </v-flex>
-            </v-layout>           
+            </v-layout>
           </v-flex>
-          <v-flex d-flex md3> 
+          <v-flex d-flex md3>
             <v-layout row>
-               <v-flex d-flex md6> 
-                  <v-responsive contain :v-show="dataLoaded">  
+               <v-flex d-flex md6>
+                  <v-responsive contain :v-show="dataLoaded">
                     <v-card style="width : 100%; background-color: rgb(42,42,42); height:250px;">
                         <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
-                    </v-card> 
-                  </v-responsive> 
+                    </v-card>
+                  </v-responsive>
                </v-flex>
-               <v-flex d-flex md6> 
-                  <v-responsive contain :v-show="dataLoaded">  
+               <v-flex d-flex md6>
+                  <v-responsive contain :v-show="dataLoaded">
                     <v-card style="width : 100%; background-color: rgb(42,42,42); height:250px;">
                         <v-card-text>Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos</v-card-text>
-                    </v-card> 
-                  </v-responsive> 
+                    </v-card>
+                  </v-responsive>
                </v-flex>
-            </v-layout>           
+            </v-layout>
           </v-flex>
         </v-layout>
       </v-flex>
@@ -92,7 +93,7 @@
           points: {
             "Fuel Rail": {x:36, y:565, color:0, selected:false, events:[]},
             "Injectors": {x:1285,y:741, color:0, selected:false, events:[]},
-            "Fuel Pumps": {x:1539,y:312, color:0, selected:false, events:[]}},        
+            "Fuel Pumps": {x:1539,y:312, color:0, selected:false, events:[]}},
           initWidth: 1820,
           initHeight: 1134,
           idName: "FuelInjection",
@@ -105,11 +106,11 @@
       mounted() {
         for (let i=0; i<this.chart.length;i++)
           this.$set( this.data, this.chart[i], {});
-          
+
         this.$set( this.data, 'fRailPres', {});
         this.$set( this.data, 'tExhC', {});
 
-        this.fetchEventsList();        
+        this.fetchEventsList();
         this.startInterval();
       },
 
@@ -154,7 +155,7 @@
 
             for (let i=0; i<params.length;i++)
             {
-              let array = helperMatrix[params[i]]; 
+              let array = helperMatrix[params[i]];
 
               let average = (array) => array.reduce((a, b) => a + b) / array.length;
 
@@ -211,11 +212,11 @@
               else this.$set(this.data[objs[i]],'datapoints', data);
             }
 
-            });  
+            });
 
             this.dataLoaded = true;
-            
-          
+
+
           }
         },
       }
