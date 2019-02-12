@@ -1,4 +1,5 @@
-{ "stringDateTime": "2017-05-01T10:00:00",
+{
+  "stringDateTime": "2017-05-01T10:00:00",
   "timeStamp": "2017-05-01T10:00:00",
   "Calculated": {
     "out1": [96.416840850042263],

@@ -1,5 +1,2 @@
-{
-  "stringDateTime": "2017-05-01T10:00:00",
-  "timeStamp": "2017-05-01T10:00:00",
-  "load": 67.928697232323231
-}
+{"index":{"_index":"patient", "_type":"outpatient", "_id": "3"}}
+{"stringDateTime": "2017-05-01T10:00:00", "timeStamp": "2017-05-01T10:00:00", "load": 67.928697232323231, "load_id": 3}
