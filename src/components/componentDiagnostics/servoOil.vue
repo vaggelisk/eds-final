@@ -14,7 +14,7 @@
             </v-responsive> 
           </v-flex>
           <v-flex d-flex md4>            
-            <v-responsive contain style="height:100%;width:100%;" :v-show="dataLoaded">              
+            <v-responsive contain style="height:250px;width:100%;" :v-show="dataLoaded">              
                 <TimelineChart 
                     v-bind:tlData="data['soPresDispl']"
                     v-bind:counter="counter" />                     
@@ -25,7 +25,7 @@
       <v-flex d-flex md4>    
         <v-layout column style="height:100%;">
           <v-flex d-flex v-for="name in chart" :key="name" md3>            
-            <v-responsive contain style="height:100%;width:100%;" :v-show="dataLoaded">      
+            <v-responsive contain style="height:250px;width:100%;" :v-show="dataLoaded">      
                 <TimelineChart       
                     v-bind:tlData="data[name]"
                     v-bind:counter="counter" />                     
@@ -78,7 +78,7 @@
           initHeight: 1134,
           idName:"ServoOil",
           data: {},
-          counter: 1,
+          counter: 31,
           chart: ['CAngleEVO', 'CAngleEVC', 'valveLift'],
           dataLoaded : false
         };

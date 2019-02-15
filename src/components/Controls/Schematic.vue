@@ -1,5 +1,5 @@
 <template>
-  <div id="schemDiv" style="width:100%,height:100%;"> 
+  <div id="schemDiv" style="width:100%,height:100%;" :v-show="dataLoaded"> 
     <div class="image-box">
       <img class="schem" alt=""> 
       <v-avatar v-for="point in points" :key="point.Key" class="schem-btn" flat v-on:click="buttonClick" >
@@ -44,10 +44,14 @@
         green:require('../../assets/diagGreen_dark.png'),
         greenSel:require('../../assets/diagGreenSel_dark.png'),
         showDialog:false,
+        dataLoaded :false,
         currEvents:[]
       };
     },
-    mounted() {
+    mounted() {      
+      this.getEvents();
+      this.startInterval();
+
       window.addEventListener('resize', this.onResize);
       
       document.getElementById("schemDiv").id = this.idName;
@@ -69,11 +73,9 @@
         elList[i].style.left = ((this.points[key].x*width)/this.initWidth)+"px";
         elList[i].id = key;
 
-        elList[i].childNodes[0].src = this.green;
+        //elList[i].childNodes[0].src = this.green;
       }
 
-      this.getEvents();
-      this.startInterval();
     }, 
     
     methods: {
@@ -131,27 +133,35 @@
 
       });
 
+      this.dataLoaded =true;
+
     },
     updateButtons: function()
     {
-       for(var key in this.points)
+      var height = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientHeight;
+      var width = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientWidth;
+
+      for(var key in this.points)
+      {
+        let btn = document.getElementById(key);
+        
+        if (this.points[key].selected)
         {
-          let btn = document.getElementById(key);
-          
-          if (this.points[key].selected)
-          {
-            if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
-            else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
-            else btn.childNodes[0].src = this.redSel;
-          }
-          else
-          {
-            if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
-            else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
-            else btn.childNodes[0].src = this.red;
-          }
-          
+          if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
+          else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
+          else btn.childNodes[0].src = this.redSel;
         }
+        else
+        {
+          if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
+          else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
+          else btn.childNodes[0].src = this.red;
+        }
+
+        btn.style.top = ((this.points[key].y*height)/this.initHeight)+"px";
+        btn.style.left = ((this.points[key].x*width)/this.initWidth)+"px";
+        
+      }
     },
     buttonClick(event)
     {

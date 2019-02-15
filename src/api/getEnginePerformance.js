@@ -101,7 +101,7 @@ export class getEnginePerformance {
     function validateAndColor(val, ref, max, typeRef) {
       if (typeRef === "%diff"){
         max =  max/100
-      }
+      }      
       return  ( Math.abs( (val -  ref)/val ) < max  ) ? 0 : 1;
     }
     function getBarChartData( param, param2, hMatrix ) {

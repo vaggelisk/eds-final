@@ -15,6 +15,7 @@
               argument-field="arg"
               value-field="value"
               type="bar"
+              color="rgb(51, 82, 128)"
             >
             </dx-series>
             <dx-value-axis

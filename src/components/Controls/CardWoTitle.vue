@@ -1,8 +1,6 @@
 <template>
-    <v-card flat style="width : 100%; background-color: rgb(42,42,42); height:250px;">
-        <v-card-title style="height:20%;" primary class="title">{{ cardData.Title }} </v-card-title>
-
-        <v-card-title v-show="isShowing" style="height:40%;">
+    <v-card flat style="width : 100%; height:230px; background-color: rgb(42,42,42);">
+        <v-card-title v-show="isShowing" style="height:40%; padding:16px 0px 16px 16px;">
             <div v-if="cardData.Color==='red'" :style="'border-left:5px solid rgb(205, 57, 64) ;height:50px; margin-right:10px;' "></div>            
             <div v-if="cardData.Color==='green'" :style="'border-left:5px solid rgb(60, 171, 48);height:50px; margin-right:10px;' "></div>            
             <div v-if="cardData.Color==='gray'" :style="'border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;' "></div>
@@ -12,7 +10,7 @@
                     <h2 v-else-if="cardData.Color==='red'" style="color: rgb(205, 57, 64);">{{ cardData.Value.toFixed(cardData.Format)}} </h2>
                     <h2 v-else>{{ cardData.Value.toFixed(cardData.Format)}} </h2>
                 </div>
-                <span class="grey--text">Measured [{{ cardData.Unit}}] </span>
+                <span class="grey--text">{{ cardData.Title}} [{{ cardData.Unit}}] </span>
             </div>
         </v-card-title>
 
@@ -25,9 +23,9 @@
                         <span class="grey--text"> Reference  </span>
                     </v-flex>
 
-                    <v-flex v-show="hasChart" :xs8 ="isShowing" :xs12="!isShowing"  style="height:100%;"
+                    <v-flex :xs8 ="isShowing" :xs12="!isShowing"  style="height:100%;"
                             @click="updateChart()">
-                        <dx-chart :ref="chartRefName" 
+                        <dx-chart :ref="chartRefName"
                                 :dataSource="cardData.datapoints"
                                 :series="series" style="width: 100%; height: 100%">
                             <dx-animation :enabled="false"/>
@@ -83,7 +81,7 @@
     } from 'devextreme-vue/chart';
 
     export default {
-        name: "Card",
+        name: "CardWoTitle",
         components: {
             DxChart,
             DxArgumentAxis,
@@ -106,20 +104,19 @@
         },
         data: function () {
             return {
-                height:'40%',
+                height:'60%',
                 isShowing: true,
                 loading: true,
                 minValue: new Date(2018,5,1,10,0,0,0),
                 maxValue: new Date(2018,5,1,10,0,0,0),
-                chartRefName: "chart",
-                hasChart:true
+                chartRefName: "chart"
             }
         },
         methods: {
             updateChart() {
                 this.isShowing = !this.isShowing;
-                if (this.isShowing) this.height='40%';
-                else this.height='80%';
+                if (this.isShowing) this.height='60%';
+                else this.height='100%';
                 setTimeout(() => {
                     this.$refs[this.chartRefName].instance.render();
                 });
@@ -134,13 +131,9 @@
         {
             counter : function(c)
             {
-                if (this.cardData.datapoints.length == 0)
-                {
-                    this.hasChart = false;
-                }
-                // var orderedByDate = this.cardData.datapoints.sort(function (a, b) {
-                //     return  a.date > b.date ? 1 : 0;
-                // })
+                var orderedByDate = this.cardData.datapoints.sort(function (a, b) {
+                    return  a.date > b.date ? 1 : 0;
+                })
 
                 // if (this.cardData.datapoints.length<30)
                 // {

@@ -1,5 +1,5 @@
 <template>  
-  <v-card style="height: 100%; width : 100%; background-color: rgb(42,42,42);">
+  <v-card style="height: 500px; width : 100%; background-color: rgb(42,42,42);">
     <v-card-title style="height: 10%; width : 100%;" primary class="title"> Engine State </v-card-title>
     <v-card-title style="height: 5%; width : 100%; " class="title"> Cylinders </v-card-title>
     <v-card-actions style="height: 85%; width : 100%;">

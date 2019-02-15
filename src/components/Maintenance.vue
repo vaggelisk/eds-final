@@ -1,15 +1,25 @@
 <template>
-  <div style="position: relative; top: 30%; left: 20%;">
-    <h1>
-    Welcome to Maintenance
-    </h1>
-  </div>
+  <v-container fluid grid-list-md>
+    <v-layout row >
+      <v-flex>
+        <PlannedMaintenanceTasks />
+      </v-flex>
+    </v-layout>
+
+
+  </v-container>
 </template>
 
 <script>
-    export default {
-        name: "Maintenance"
-    }
+
+import axios                   from   "axios";
+import PlannedMaintenanceTasks from "./maintenance/PlannedMaintenanceTasks";
+
+
+export default {
+  name: "Maintenance",
+  components: {  PlannedMaintenanceTasks},
+}
 </script>
 
 <style scoped>

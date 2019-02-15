@@ -5,22 +5,27 @@
         <v-layout column>
           <v-flex  v-for="name in firstColumn" :key="name" md4>        
             <ComponentCard
-              v-bind:cardData="data[name]"/>
+              v-bind:cardData="data[name]"
+              v-bind:counter="counter" />          
           </v-flex>
         </v-layout>
       </v-flex>
       <v-flex d-flex md4>
         <v-layout column>
           <v-flex  v-for="name in secColumn" :key="name" md4>        
-            <ComponentCard
-              v-bind:cardData="data[name]"/>
+            <ComponentCard v-if="name!='AutomationControl'"
+              v-bind:cardData="data[name]"
+               v-bind:counter="counter" />    
+            <AutomationCard  v-if="name=='AutomationControl'"
+              v-bind:cardData="data[name]"
+               v-bind:counter="counter" />       
           </v-flex>
         </v-layout>
       </v-flex>
       <v-flex d-flex md4>
         <v-layout column style="height:100%;">
           <v-flex d-flex v-for="name in chart" :key="name" md3>            
-            <v-responsive contain :v-show="dataLoaded">      
+            <v-responsive contain :v-show="dataLoaded">                    
                 <TimelineChart style="height:250px;"    
                     v-bind:tlData="data[name]"
                     v-bind:counter="counter" />                     
@@ -36,39 +41,48 @@
 
   import axios                    from "axios"; 
   import TimelineChart  from "../Controls/TimelineChart";
-  import ComponentCard  from "../Controls/ComponentCard";
+  import ComponentCard  from "../Controls/ComponentCard";  
+  import AutomationCard  from "../Controls/AutomationCard";
   
   export default {
     name: "ComponentOverview",
     components: {
       TimelineChart,
-      ComponentCard
+      ComponentCard,
+      AutomationCard
     },
     data: function() {
       return {
         data: {},
-        counter: 1,
+        counter: 31,
         chart: ['soPresDispl', 'fRailPres', 'pscav', 'tTurbIn'],
-        firstColumn: ['ServoOil', 'ScavengeAir','PistonRunning', ] ,
+        firstColumn: ['ServoOil', 'ScavengeAir','PistonRunning'] ,
         secColumn: ['FuelInjection', 'ExhaustGas','AutomationControl'],
         dataLoaded : false
       };
     },
     mounted() {
 
-      let params = ['soPresDispl', 'CAngleEVC', 'fRailPres', 'pmax', 'pscav', 'tscav','tcspeed', 'tTurbIn', 'pmaxPcomp','tlinerfore'];
+      let params = ['soPresDispl', 'CAngleEVC', 'fRailPres', 'pmax', 'pscav', 'tscav','tTurbIn', 'tcspeed', 'pmaxPcomp','tlinerfore'];
 
       for (let i=0; i<params.length;i++)
          this.$set( this.data, params[i], {});
 
-      let subSystems = ['ServoOil', 'FuelInjection', 'ScavengeAir','ExhaustGas', 'GasAdmission', 'PistonRunning', 'AutomationControl'];
+      let subSystems = ['ServoOil', 'FuelInjection', 'ScavengeAir','ExhaustGas', 'PistonRunning', 'AutomationControl'];
       
-      let names = ['Servo Oil','Fuel Injection','Scavenge Air','Exhaust Gas','Gas Admission','Piston Running','Automation & Control'];
+      let names = ['Servo Oil','Fuel Injection','Scavenge Air','Exhaust Gas','Piston Running','Automation & Control'];
 
       for (let i=0; i<subSystems.length;i++)
       {
         this.$set( this.data, subSystems[i], {});
-        this.$set(this.data[subSystems[i]], 'Title', names[i]);        
+        this.$set(this.data[subSystems[i]], 'Title', names[i]);
+        if (i<subSystems.length-1)
+        {
+          this.$set(this.data[subSystems[i]], 'Tag1', params[2*i+0]);    
+          this.$set(this.data[subSystems[i]], 'Tag2',params[2*i+1]);
+          this.$set(this.data[subSystems[i]], 'Card1',{});    
+          this.$set(this.data[subSystems[i]], 'Card2',{}); 
+        }     
       }
                
       this.getData();
@@ -89,7 +103,7 @@
 
         axios.get("http://localhost:8092/EDSMapping").then(resp => {
 
-          let objs = ['soPresDispl', 'CAngleEVC', 'fRailPres', 'pmax', 'pscav', 'tscav','tcspeed', 'tTurbIn', 'pmaxPcomp','tlinerfore'];
+          let objs = ['soPresDispl', 'CAngleEVC', 'fRailPres', 'pmax', 'pscav', 'tscav','tTurbIn', 'tcspeed',  'pmaxPcomp','tlinerfore'];
 
           let formats =  [1,1,1,1,2,1,1,0,1,1];
 
@@ -128,6 +142,12 @@
             let min = array[2];
             let max = array[3];
 
+            if (params[i] == 'PressureRise')
+            {
+                min = min * 100;
+                max = max * 100;
+            }
+
             let temp = ( (avg -  ref)/avg) * 100;
 
             let clr =  ((temp > min) && (temp < max))? "green" : "red";
@@ -147,6 +167,12 @@
 
               min = array[2];
               max = array[3];
+
+              if (params[i] == 'PressureRise')
+              {
+                min = min * 100;
+                max = max * 100;
+              }
 
               let valMin = ref/(1 - min/100);
               let valMax = ref/(1 - max/100);
@@ -181,13 +207,18 @@
           let len2 = Object.keys(response.data).length;
           let helperMatrix2 = response.data;
 
-          let subSystems = ['ServoOil', 'FuelInjection', 'ScavengeAir','ExhaustGas', 'GasAdmission', 'PistonRunning', 'AutomationControl'];
-          let tags = ['Servo Oil','Fuel Injection','Scavenge Air','Exhaust Gas','Gas Admission','Piston Running','Automation & Control'];
+          let subSystems = ['ServoOil', 'FuelInjection', 'ScavengeAir','ExhaustGas',  'PistonRunning', 'AutomationControl'];
+          let tags = ['Servo Oil','Fuel Injection','Scavenge Air','Exhaust Gas','Piston Running','Automation & Control'];
 
           for (let i=0; i<subSystems.length;i++)
           {
-            this.$set(this.data[subSystems[i]], 'Value',  helperMatrix2.kpi[tags[i]][0]);            
-            this.$set(this.data[subSystems[i]], 'Color',  (helperMatrix2.kpi[tags[i]][1]*100).toFixed(0));
+            this.$set(this.data[subSystems[i]], 'Value',  helperMatrix2.kpi[tags[i]][0]*100);            
+            this.$set(this.data[subSystems[i]], 'Color',  helperMatrix2.kpi[tags[i]][1]);
+            if (i<subSystems.length-1)
+            {
+              this.$set(this.data[subSystems[i]], 'Card1', this.data[this.data[subSystems[i]]['Tag1']]);    
+              this.$set(this.data[subSystems[i]], 'Card2', this.data[this.data[subSystems[i]]['Tag2']]);  
+            }
           }       
 
         });

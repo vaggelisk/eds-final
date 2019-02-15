@@ -21,7 +21,7 @@
               <v-card-title primary class="title" style="width:100%;height:10%;"> Engine KPI </v-card-title>
               <v-card-actions  style="width:100%;height:90%;" >
                 <CircGauge v-bind:value="colorsObj.Engine[0]*100"
-                          v-bind:labelText="(colorsObj.Engine[0]*100).toFixed(1)+' %'"
+                          v-bind:labelText="colorsObj.Engine[2]"
                           v-bind:color="colorsObj.Engine[1]"
                            />
               </v-card-actions>
@@ -224,7 +224,7 @@
       colorsObj: {},
 
       lorem: `There is no Notification at the moment`,
-      counter: 1,
+      counter: 31,
       timer: '',
       myText: 0,
       avg: null,
@@ -434,6 +434,8 @@
         //kai edw ginetai mia mlkia sta data kai iparxei
         //askopos nested array px [[1,0]]
         this.$set( this.colorsObj,  'Engine',            helperMatrix2.kpi.Engine);
+        if ( helperMatrix2.kpi.Engine[0]>=1) this.colorsObj['Engine'].push((helperMatrix2.kpi.Engine[0]*100).toFixed(0)+' %');
+        else this.colorsObj['Engine'].push((helperMatrix2.kpi.Engine[0]*100).toFixed(1)+' %');
         this.$set( this.colorsObj,  'Cylinder',          helperMatrix2.kpi.Cylinder);
         this.$set( this.colorsObj,  'Turbine',           helperMatrix2.kpi.Turbine[0]);
         this.$set( this.colorsObj,  'Compressor',        helperMatrix2.kpi['Compressor'][0]);

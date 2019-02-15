@@ -59,72 +59,72 @@
 </template>
 <script>
 
-  import axios                    from "axios";
-    import Grid           from    "../Controls/Grid";
-    import GridCard       from    "../Controls/GridCard";
-    import PossibleCauses from    "./PossibleCauses";
-    import FaultDetails   from    "../Controls/FaultDetails";
+import axios          from    "axios";
+import Grid           from    "../Controls/Grid";
+import GridCard       from    "../Controls/GridCard";
+import PossibleCauses from    "./PossibleCauses";
+import FaultDetails   from    "../Controls/FaultDetails";
 
 
-    export default {
-      name: "CurrentFaults",
-      components: {PossibleCauses, Grid, GridCard, FaultDetails},
-      props: {
-        currentFaults: Array,
-      },
-      data: function() {
-        return {
-          currentFaultId:      this.currentFaults[0].Id,
-          currentInnerFaultId: this.currentFaults[0].events[0].Id,
-          lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad`,
-          selInnFault : this.currentFaults[0].events[0],
-          selAggrFault : this.currentFaults[0],
-          engMap : {}
-        }
-      },
-      computed:  {
-        currentInnerFaults: function () {
-          let x=[];
-          x.push(...this.currentFaults[0].events);
-          return x;
-        }
-      },
-      methods: {
-        selectedTab: function( i ) {
-          console.log("selTab");
-          this.currentFaultId = this.currentFaults[i].Id;
-          console.log(this.currentFaultId);
-          console.log(i);
-          this.currentInnerFaults.length = 0;
-          this.currentInnerFaults.push(...this.currentFaults[i].events);
-          console.log(this.currentFaults[i].events)
-        },
-      },
-      mounted() {
-        axios.get("http://localhost:8092/EDSMapping").then(resp => {
-          this.engMap = resp.data;
-        });
-      },
-      watch:
-      {
-        currentInnerFaultId: function(innFaultId)
-        {
-          var selected = this.currentFaults.filter(function(item){
-            return item.Id == this.currentFaultId;
-          }, this);
+export default {
+  name: "CurrentFaults",
+  components: {PossibleCauses, Grid, GridCard, FaultDetails},
+  props: {
+    currentFaults: Array,
+  },
+  data: function() {
+    return {
+      currentFaultId:      this.currentFaults[0].Id,
+      currentInnerFaultId: this.currentFaults[0].events[0].Id,
+      lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad`,
+      selInnFault : this.currentFaults[0].events[0],
+      selAggrFault : this.currentFaults[0],
+      engMap : {}
+    }
+  },
+  computed:  {
+    currentInnerFaults: function () {
+      let x=[];
+      x.push(...this.currentFaults[0].events);
+      return x;
+    }
+  },
+  methods: {
+    selectedTab: function( i ) {
+      console.log("selTab");
+      this.currentFaultId = this.currentFaults[i].Id;
+      console.log(this.currentFaultId);
+      console.log(i);
+      this.currentInnerFaults.length = 0;
+      this.currentInnerFaults.push(...this.currentFaults[i].events);
+      console.log(this.currentFaults[i].events)
+    },
+  },
+  mounted() {
+    axios.get("http://localhost:8092/EDSMapping").then(resp => {
+      this.engMap = resp.data;
+    });
+  },
+  watch:
+  {
+    currentInnerFaultId: function(innFaultId)
+    {
+      var selected = this.currentFaults.filter(function(item){
+        return item.Id == this.currentFaultId;
+      }, this);
 
-          this.selAggrFault = selected[0];
+      this.selAggrFault = selected[0];
 
-          var selInnFault = selected[0].events.filter(function(item){
-            return item.Id ==innFaultId;
-          }, this);
+      var selInnFault = selected[0].events.filter(function(item){
+        return item.Id ==innFaultId;
+      }, this);
 
-          this.selInnFault = selInnFault[0];
-
-        }
-      }
+      this.selInnFault = selInnFault[0];
 
     }
+  }
+
+}
 </script>
 
 <style scoped>
