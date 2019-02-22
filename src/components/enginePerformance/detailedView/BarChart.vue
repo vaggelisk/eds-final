@@ -2,11 +2,13 @@
   <v-card flat style="width : 100%; background-color: rgb(42,42,42); height:250px;">
     <v-card-title style="height:20%;" primary class="title">{{ dataChart.arrangements.name }} </v-card-title>
     <v-card-actions fill-height :style="'width : 100%; height: 80%;'">      
-      <v-responsive contain>
-        <v-flex d-flex>
+      <!-- <v-responsive style="width : 100%;" > -->
+        <v-flex d-flex style="width : 100%;height:100%;">
           <p><em>{{ dataChart.arrangements.yaxis}}</em> </p>
           <dx-chart
             id="chart"
+            ref='chart'
+            style="width : 100%;height:100%;"
             :data-source="dataChart.values"
             :customize-point="customizePoint"
           >
@@ -15,11 +17,10 @@
               argument-field="arg"
               value-field="value"
               type="bar"
-              color="rgb(51, 82, 128)"
             >
             </dx-series>
             <dx-value-axis
-              :showZero="false"        
+              :showZero="true"        
             >
               <dx-tick :visible="false"/>
               <dx-minor-tick :visible="false"/>              
@@ -41,9 +42,10 @@
 
             <dx-legend :visible="false"/>
           </dx-chart>
+        <!-- <div style="margin-right: 20px; text-align: right"><em> {{ dataChart.arrangements.xaxis}} </em></div> -->
+        
         </v-flex>
-        <div style="margin-right: 20px; text-align: right"><em> {{ dataChart.arrangements.xaxis}} </em></div>
-      </v-responsive>
+      <!-- </v-responsive> -->
     </v-card-actions>          
   </v-card>
 </template>
@@ -74,11 +76,40 @@
         else if (arg.tag === 1) {
           return { color: 'rgb(205, 57, 64)', hoverStyle: { color: 'rgb(205, 57, 64)'} };
         }
+        else if (arg.tag === 2) {
+          return { color: 'rgb(51, 82, 128)', hoverStyle: { color: 'rgb(51, 82, 128)'} };
+        }
+      }, 
+      onResize(event)
+      {
+          setTimeout(() => {
+              this.$refs['chart'].instance.render();
+          });
       },
 
       customizeTooltip (arg) {
         return { html:  '<span style="height:8px; width:8px;background-color:green;" >'  + '</span>' +  ' Cylinder ' + arg.argumentText + ' : ' + arg.valueText.toFixed(2)  +  ' '} ;
       }
+    },
+    mounted() {
+        window.addEventListener('resize', this.onResize);
+       
+        
+        //this.$refs['chart'].instance.render();
+        setTimeout(() => {
+            this.$refs['chart'].instance.render();
+        });   
+
+    },  
+    watch:
+    {
+        counter : function(c)
+        {
+            //this.$refs[this.chartRefName].instance.render();
+              setTimeout(() => {
+                this.$refs['chart'].instance.render();
+            });  
+        }
     },
     created() {
       // console.log(this.dataFiringPressureC)

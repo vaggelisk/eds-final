@@ -111,20 +111,20 @@
             this.isShowing = true;
             //document.getElementById('chart').setAttribute('id',this._self._uid);         
             
-            this.$refs[this.chartRefName].instance.render();
-            // setTimeout(() => {
-            //     this.$refs[this.chartRefName].instance.render();
-            // });   
+           // this.$refs[this.chartRefName].instance.render();
+            setTimeout(() => {
+                this.$refs[this.chartRefName].instance.render();
+            });   
 
         }, 
         watch:
         {
             counter : function(c)
             {
-                this.$refs[this.chartRefName].instance.render();
-                //  setTimeout(() => {
-                //     this.$refs[this.chartRefName].instance.render();
-                // });  
+                //this.$refs[this.chartRefName].instance.render();
+                 setTimeout(() => {
+                    this.$refs[this.chartRefName].instance.render();
+                });  
             }
         }
     }

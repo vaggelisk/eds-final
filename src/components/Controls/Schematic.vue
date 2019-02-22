@@ -21,8 +21,6 @@
 </template>
 <script>
 
-  import axios from "axios";
-
   export default {
     name: "Schematic",
     components: {
@@ -33,10 +31,10 @@
         initWidth: Number,
         initHeight: Number,
         idName: String,
+        counter: Number
     }, 
     data: function() {
-      return {        
-        counter:1,
+      return {    
         red:require('../../assets/diagRed_dark.png'),
         redSel:require('../../assets/diagRedSel_dark.png'),
         orange:require('../../assets/diagOrange_dark.png'),
@@ -48,11 +46,8 @@
         currEvents:[]
       };
     },
-    mounted() {      
-      this.getEvents();
-      this.startInterval();
-
-      window.addEventListener('resize', this.onResize);
+    mounted() {         
+      window.addEventListener('resize', this.onResize);           
       
       document.getElementById("schemDiv").id = this.idName;
       
@@ -75,143 +70,105 @@
 
         //elList[i].childNodes[0].src = this.green;
       }
-
+      
+      this.dataLoaded = true;
     }, 
-    
-    methods: {
-    startInterval: function () {
-      this.interval = setInterval(() => {
-        if (this.counter < 60) {
-          this.getEvents();
-          this.updateButtons();
-          this.counter = this.counter + 1;
-        } else {
-          this.counter =1;
-        }
-      }, 5000)
-    },
-    onResize(event)
-    {     
-      var height = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientHeight;
-      var width = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientWidth;
-
-      for(var key in this.points)
-      {
-        let btn = document.getElementById(key);
-        btn.style.top = ((this.points[key].y*height)/this.initHeight)+"px";
-        btn.style.left = ((this.points[key].x*width)/this.initWidth)+"px";
-      }
-    }, 
-    getEvents: function()
+    watch:
     {
-     let url  = "http://localhost:8092/EDSEvents/" + this.counter;
-
-      axios.get(url).then(response => {
-
-        let helperMatrix = response.data;
-
-        var aggrEvents = helperMatrix.aggrEvents;       
+      counter : function()
+      {
+        this.updateButtons();
+      }
+    },    
+    methods: {
+      onResize(event)
+      {     
+        var height = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientHeight;
+        var width = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientWidth;
 
         for(var key in this.points)
-        { 
-          let compEvents = aggrEvents.filter(function (item) {
-              return item.subComponent == key;
-          });
+        {
+          let btn = document.getElementById(key);
+          btn.style.top = ((this.points[key].y*height)/this.initHeight)+"px";
+          btn.style.left = ((this.points[key].x*width)/this.initWidth)+"px";
+        }
+      },
+      updateButtons: function()
+      {
+        var height = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientHeight;
+        var width = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientWidth;
 
-          if (compEvents.length == 0)
+        for(var key in this.points)
+        {
+          let btn = document.getElementById(key);
+          
+          if (this.points[key].selected)
           {
-            this.$set(this.points[key],'color',0);
-            this.$set(this.points[key], 'events', []);
+            if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
+            else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
+            else btn.childNodes[0].src = this.redSel;
           }
           else
           {
-            let mx = Math.max.apply(Math, compEvents.map(function(item){return item.color;}));
-            this.$set(this.points[key],'color',mx);
-            this.$set(this.points[key], 'events', compEvents);
+            if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
+            else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
+            else btn.childNodes[0].src = this.red;
           }
+
+          btn.style.top = ((this.points[key].y*height)/this.initHeight)+"px";
+          btn.style.left = ((this.points[key].x*width)/this.initWidth)+"px";
+          
         }
-
-      });
-
-      this.dataLoaded =true;
-
-    },
-    updateButtons: function()
-    {
-      var height = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientHeight;
-      var width = document.getElementById(this.idName).getElementsByClassName("image-box")[0].clientWidth;
-
-      for(var key in this.points)
+      },
+      buttonClick(event)
       {
-        let btn = document.getElementById(key);
-        
-        if (this.points[key].selected)
-        {
-          if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
-          else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
-          else btn.childNodes[0].src = this.redSel;
-        }
-        else
-        {
-          if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
-          else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
-          else btn.childNodes[0].src = this.red;
-        }
+        let key = event.currentTarget.id;
 
-        btn.style.top = ((this.points[key].y*height)/this.initHeight)+"px";
-        btn.style.left = ((this.points[key].x*width)/this.initWidth)+"px";
+        this.updateDialog(key);
+        this.showDialog = true;
+
+        this.$set(this.points[key], 'selected',true);
+
+        for (var other in this.points)
+          if (other!=key) this.unSelectBtn(other);
+
+        let btn = document.getElementById(key);
+            
+        if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
+        else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
+        else btn.childNodes[0].src = this.redSel;
+      },
+      unSelectBtn: function(key)
+      {
+        this.$set(this.points[key], 'selected',false);
+
+        let btn = document.getElementById(key);
+
+        if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
+        else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
+        else btn.childNodes[0].src = this.red;
+      },
+      updateDialog: function(key)
+      {
+        let popUp = document.getElementById(this.idName+"popUp");
+
+        this.currEvents = this.points[key].events;
+
+        if (this.points[key].color == 0) popUp.style.borderColor = "rgb(60, 171, 48)";
+        else if (this.points[key].color == 10) popUp.style.borderColor = "rgb(255, 184, 29)";
+        else popUp.style.borderColor = "rgb(205, 57, 64)";  
         
+        popUp.getElementsByClassName("v-card__title")[0].textContent = key;
+      },
+      hideDialog: function()
+      {
+        this.showDialog=false;
+
+        for (var key in this.points)
+          if (this.points[key].selected) this.unSelectBtn(key);
+
       }
     },
-    buttonClick(event)
-    {
-      let key = event.currentTarget.id;
-
-      this.updateDialog(key);
-      this.showDialog = true;
-
-      this.$set(this.points[key], 'selected',true);
-
-      for (var other in this.points)
-        if (other!=key) this.unSelectBtn(other);
-
-      let btn = document.getElementById(key);
-          
-      if (this.points[key].color == 0) btn.childNodes[0].src = this.greenSel;
-      else if (this.points[key].color == 10) btn.childNodes[0].src = this.orangeSel;
-      else btn.childNodes[0].src = this.redSel;
-    },
-    unSelectBtn: function(key)
-    {
-      this.$set(this.points[key], 'selected',false);
-
-      let btn = document.getElementById(key);
-
-      if (this.points[key].color == 0) btn.childNodes[0].src = this.green;
-      else if (this.points[key].color == 10) btn.childNodes[0].src =this.orange;
-      else btn.childNodes[0].src = this.red;
-    },
-    updateDialog: function(key)
-    {
-      let popUp = document.getElementById(this.idName+"popUp");
-
-      this.currEvents = this.points[key].events;
-
-      if (this.points[key].color == 0) popUp.style.borderColor = "rgb(60, 171, 48)";
-      else if (this.points[key].color == 10) popUp.style.borderColor = "rgb(255, 184, 29)";
-      else popUp.style.borderColor = "rgb(205, 57, 64)";  
-      
-      popUp.getElementsByClassName("v-card__title")[0].textContent = key;
-    },
-    hideDialog: function()
-    {
-      this.showDialog=false;
-
-      for (var key in this.points)
-        if (this.points[key].selected) this.unSelectBtn(key);
-
-    }
-  },
   };
 </script>
 <style>

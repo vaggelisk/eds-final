@@ -146,7 +146,6 @@
   </v-container>
 </template>
 <script>
-  import axios                    from "axios";
   import DoughnutChart            from "./dashboard/charts/DoughnutChart";
   import PerformanceBar           from "./dashboard/charts/PerformanceBar";
   import EngineDoughnut           from "./dashboard/charts/EngineDoughnut";
@@ -160,6 +159,7 @@
   import Notification             from "./dashboard/charts/Notification";
   import Card                     from "./Controls/Card";
   import CircGauge                from "./Controls/CircGauge";
+  import {globalStore}            from "../main.js"
 
 
   export default {
@@ -178,7 +178,7 @@
       SubsystemsState,
       LineChart,
       CircGauge
-    },
+    },  
     data: function() {
     return {
       childNotificationDataLoaded: true,
@@ -223,255 +223,221 @@
 
       colorsObj: {},
 
-      lorem: `There is no Notification at the moment`,
-      counter: 31,
-      timer: '',
-      myText: 0,
-      avg: null,
       interval: null,
+      status:0,
 
-      status:0
     };
   },
   computed: {
     opts: function() {
       return {responsive: true, maintainAspectRatio: false}
     },
+    counter: function () { return globalStore.counter; }
   },
-  mounted() {
-    this.fetchEventsList();
-    this.startInterval();
-  },
-
   methods: {
-    startInterval: function () {
-      this.interval = setInterval(() => {
-        if (this.counter < 60) {
-          this.fetchEventsList();
-          this.counter = this.counter + 1;
-        } else {
-          this.counter =1;
-          //clearInterval(this.interval);
-        }
-      }, 5000)
-    },
-    fetchEventsList: function() {
+    setData: function() {
+      console.log("dashboard "+globalStore.counter);
 
-      axios.get("http://localhost:8092/EDSMapping").then(resp => {
+      let params = ['pmax', 'pcomp', 'soPresDispl', 'fRailPres', 'tTurbIn', 'pscav','tlinerfore', 'tcspeed'];
 
-          let params = ['pmax', 'pcomp', 'soPresDispl', 'fRailPres', 'tTurbIn', 'pscav','tlinerfore', 'tcspeed'];
-
-          let objs = [ 'firingPressureData','compressionPressureData','servoOilRailPressureData','fuelRailPressureData','turbineInletTempData','scavengeReceiverPressureData',
+      let objs = [ 'firingPressureData','compressionPressureData','servoOilRailPressureData','fuelRailPressureData','turbineInletTempData','scavengeReceiverPressureData',
             'linerWallTemperatureData','tcSpeedData'];
 
-        let formats = [1,1,1,1,1,2,1,0];
+      let formats = [1,1,1,1,1,2,1,0];
 
-          for( let i = 0; i < params.length; i++ )
-          {
-            this.$set(this[objs[i]], 'Title',resp.data.EDS_Parameter_Names[params[i]].longName);
-            this.$set(this[objs[i]], 'Unit',resp.data.EDS_Parameter_Names[params[i]].unit);
-            this.$set(this[objs[i]],'Format',formats[i]);
-          }
+      for( let i = 0; i < params.length; i++ )
+      {
+        this.$set(this[objs[i]], 'Title',globalStore.engMap.EDS_Parameter_Names[params[i]].longName);
+        this.$set(this[objs[i]], 'Unit', globalStore.engMap.EDS_Parameter_Names[params[i]].unit);
+        this.$set(this[objs[i]],'Format',formats[i]);
+      }
 
-        });
+      let len = Object.keys(globalStore.timelineData).length;
+      let helperMatrix = globalStore.timelineData[Object.keys(globalStore.timelineData)[len - 1]];
 
-      let url  = "http://localhost:8092/EDSTimelineData/" + this.counter;
+      params = ['Pmax', 'TCspeed' ,'Tliner', 'pscav','FuelPress', 'Tturbin',  'ServoPress', 'Pcomp'];
 
-      axios.get(url).then(response => {
-        let len = Object.keys(response.data).length;
-        // console.log(len);
-        let helperMatrix = response.data[Object.keys(response.data)[len - 1]];
-        // console.log(response.data[Object.keys(response.data)[len - 1]]);
-        let params = ['Pmax', 'TCspeed' ,'Tliner', 'pscav','FuelPress', 'Tturbin',  'ServoPress', 'Pcomp'];
+      objs = [ 'firingPressureData','tcSpeedData','linerWallTemperatureData', 'scavengeReceiverPressureData','fuelRailPressureData',
+        'turbineInletTempData','servoOilRailPressureData','compressionPressureData'];
 
-        let objs = [ 'firingPressureData','tcSpeedData','linerWallTemperatureData', 'scavengeReceiverPressureData','fuelRailPressureData',
-          'turbineInletTempData','servoOilRailPressureData','compressionPressureData'];
+      let loaded =  ['childFiringPressureDataLoaded','childTcSpeedDataLoaded',  'childLinerWallTemperatureDataLoaded', 'childScavengeReceiverPressureDataLoaded','childFuelRailPressureDataLoaded',    'childTurbineInletTempDataLoaded','childServoOilRailPressureDataLoaded','childCompressionDataLoaded'];
 
-        let loaded =  ['childFiringPressureDataLoaded','childTcSpeedDataLoaded',  'childLinerWallTemperatureDataLoaded', 'childScavengeReceiverPressureDataLoaded','childFuelRailPressureDataLoaded',    'childTurbineInletTempDataLoaded','childServoOilRailPressureDataLoaded','childCompressionDataLoaded'];
+      for (let i=0; i<params.length;i++)
+      {
+        let array = helperMatrix[params[i]];
 
-        for (let i=0; i<params.length;i++)
-        {
-          let array = helperMatrix[params[i]];
+        let average = (array) => array.reduce((a, b) => a + b) / array.length;
 
-          let average = (array) => array.reduce((a, b) => a + b) / array.length;
+        let avg = average(array[0]);
+        let ref = average(array[1]);
 
-          let avg = average(array[0]);//(array[0][0]) ? array[0][0] : 0 ;
-          let ref = average(array[1]);//(array[1][0]) ? array[1][0] : 0 ;
+        this.$set(this[objs[i]],'Value',avg);
+        this.$set(this[objs[i]],'Ref',ref);
 
-          this.$set(this[objs[i]],'Value',avg);
-          this.$set(this[objs[i]],'Ref',ref);
+        let min = array[2];
+        let max = array[3];
 
-          let min = array[2];
-          let max = array[3];
+        let temp = ( (avg -  ref)/avg) * 100;
 
-          let temp = ( (avg -  ref)/avg) * 100;
+        let clr =  ((temp > min) && (temp < max))? "green" : "red";
 
-          let clr =  ((temp > min) && (temp < max))? "green" : "red";
-
-          this.$set(this[objs[i]], 'Color', clr);
-
-          let data = [];//{"val": [], "valMin": [], "valMax": [], "labels": [], "colors":[]};
-          for (let j = 0; j < len; j++){
-
-            let helper = response.data[Object.keys(response.data)[j]];
-
-            array = helper[params[i]];
-
-            avg = average(array[0]);
-            ref = average(array[1]);
-
-            min = array[2];
-            max = array[3];
-
-            let valMin = ref/(1 - min/100);
-            let valMax = ref/(1 - max/100);
-
-            clr =  ((avg > valMin) && (avg < valMax))? "green" : "red";
-
-            let point = {};
-
-            point.date = new Date(Object.keys(response.data)[j]);
-            point.val = avg;
-            point.valMin = valMin;
-            point.valMax = valMax;
-            point.color = clr;
-
-            data.push(point);
-
-          }
-
-          this.$set(this[objs[i]],'datapoints', data);
-          this[loaded[i]] = true;
-        }
-
-        // bsfc and more getData
-        let bsfcArray = helperMatrix.bsfc;
-        // avg = (bsfcArray[0][0]) ? bsfcArray[0][0] : 0 ;
-        let avg =  0 ;
-        let ref = (bsfcArray[1][0]) ? bsfcArray[1][0] : 0 ;
-        let min = bsfcArray[2];
-        let max = bsfcArray[3];
-        this.$set(this.bsfcData, 'Value', avg);
-        this.$set(this.bsfcData, 'Ref', ref);
-
-
-        let indipArray = helperMatrix.indiP;
-        avg = (indipArray[0][0]) ? indipArray[0][0]*6 : 0 ;
-        ref = (indipArray[1][0]) ? indipArray[1][0] : 0 ;
-        min = indipArray[2];
-        max = indipArray[3];
-        this.$set(this.indiPowerData, 'Value', avg);
-        this.$set(this.indiPowerData, 'Ref', ref);
-
-        let imepArray = helperMatrix.imep;
-        let imepValuesArray = imepArray[0];
-        let imepReferencesArray = imepArray[1];
-        let sum = 0;
-        for( let i = 0; i < imepValuesArray.length; i++ ){
-          sum +=  imepValuesArray[i];
-        }
-        avg = (imepValuesArray.length > 0) ?  sum/imepValuesArray.length : 0;
-
-        let sumRef = 0;
-        for( let i = 0; i < imepReferencesArray.length; i++ ){
-          sumRef +=  imepReferencesArray[i];
-        }
-        ref = (imepReferencesArray.length > 0) ?  sumRef/imepReferencesArray.length : 0;
-
-        min = imepArray[2];
-        max = imepArray[3];
-        this.$set(this.imepData, 'Value', avg);
-        this.$set(this.imepData, 'Ref', ref);
-
-        this.childBsfcDataLoaded = true;
-
-        params = ['Pcomp', 'Pmax', 'TCspeed' , 'indiP', 'Tturbin'];
-        let labels = ['Pcomp','Pmax','T/C Speed','Ind. Power','T turb In'];
+        this.$set(this[objs[i]], 'Color', clr);
 
         let data = [];
+        for (let j = 0; j < len; j++){
 
-        for (let i=0; i<params.length;i++)
-        {
+          let helper = globalStore.timelineData[Object.keys(globalStore.timelineData)[j]];
+
+          array = helper[params[i]];
+
+          avg = average(array[0]);
+          ref = average(array[1]);
+
+          min = array[2];
+          max = array[3];
+
+          let valMin = ref/(1 - min/100);
+          let valMax = ref/(1 - max/100);
+
+          clr =  ((avg > valMin) && (avg < valMax))? "green" : "red";
+
           let point = {};
 
-          let array = helperMatrix[params[i]];
-
-          let average = (array) => array.reduce((a, b) => a + b) / array.length;
-
-          let avg = average(array[0]);
-          let ref = average(array[1]);
-
-          if (params[i]=="indiP") avg = avg*6;
-
-          let min = array[2];
-          let max = array[3];
-
-          let temp = ( (avg -  ref)/avg) * 100;
-
-          let clr =  ((temp > min) && (temp < max))? "green" : "red";
-
-          point.label = labels[i];
-          point.val = temp;
+          point.date = new Date(Object.keys(globalStore.timelineData)[j]);
+          point.val = avg;
+          point.valMin = valMin;
+          point.valMax = valMax;
           point.color = clr;
 
           data.push(point);
-        }
-        this.performanceParamData = data;
-      });
 
-      url  = "http://localhost:8092/EDSEvents/" + this.counter;
-
-      axios.get(url).then(response => {
-
-        let len2 = Object.keys(response.data).length;
-        // console.log(len);
-        let helperMatrix2 = response.data;
-        this.$set( this.colorsObj, helperMatrix2.kpi );
-
-        // console.log( helperMatrix2.kpi.Turbine[0]);
-
-
-        //kai edw ginetai mia mlkia sta data kai iparxei
-        //askopos nested array px [[1,0]]
-        this.$set( this.colorsObj,  'Engine',            helperMatrix2.kpi.Engine);
-        if ( helperMatrix2.kpi.Engine[0]>=1) this.colorsObj['Engine'].push((helperMatrix2.kpi.Engine[0]*100).toFixed(0)+' %');
-        else this.colorsObj['Engine'].push((helperMatrix2.kpi.Engine[0]*100).toFixed(1)+' %');
-        this.$set( this.colorsObj,  'Cylinder',          helperMatrix2.kpi.Cylinder);
-        this.$set( this.colorsObj,  'Turbine',           helperMatrix2.kpi.Turbine[0]);
-        this.$set( this.colorsObj,  'Compressor',        helperMatrix2.kpi['Compressor'][0]);
-        this.$set( this.colorsObj,  'AirCooler',         helperMatrix2.kpi['AirCooler'][0]);
-        this.$set( this.colorsObj,  'AirFilter',         helperMatrix2.kpi['AirFilter'][0]);
-        this.$set( this.colorsObj,  'ServoOil',          helperMatrix2.kpi['Servo Oil']);
-        this.$set( this.colorsObj,  'FuelInjection',     helperMatrix2.kpi['Fuel Injection']);
-        this.$set( this.colorsObj,  'ScavengeAir',       helperMatrix2.kpi['Scavenge Air']);
-        this.$set( this.colorsObj,  'ExhaustGas',        helperMatrix2.kpi['Exhaust Gas']);
-        this.$set( this.colorsObj,  'GasAdmission',      helperMatrix2.kpi['Gas Admission']);
-        this.$set( this.colorsObj,  'PistonRunning',     helperMatrix2.kpi['Piston Running']);
-        this.$set( this.colorsObj,  'AutomationControl', helperMatrix2.kpi['Automation & Control']);
-
-        this.childEngineStateDataLoaded = true;
-        this.childSubsystemDataLoaded = true;
-
-        var aggrEvents = helperMatrix2.aggrEvents;
-
-        if (aggrEvents.length == 0)
-        {
-            this.status = 0;
-        }
-        else
-        {
-          let mx = Math.max.apply(Math, aggrEvents.map(function(item){return item.color;}));
-
-          this.status =mx;
         }
 
-      });
+        this.$set(this[objs[i]],'datapoints', data);
+        this[loaded[i]] = true;
+      }
+
+      // bsfc and more getData
+      let bsfcArray = helperMatrix.bsfc;
+      // avg = (bsfcArray[0][0]) ? bsfcArray[0][0] : 0 ;
+      let avg =  0 ;
+      let ref = (bsfcArray[1][0]) ? bsfcArray[1][0] : 0 ;
+      let min = bsfcArray[2];
+      let max = bsfcArray[3];
+      this.$set(this.bsfcData, 'Value', avg);
+      this.$set(this.bsfcData, 'Ref', ref);
+
+
+      let indipArray = helperMatrix.indiP;
+      avg = (indipArray[0][0]) ? indipArray[0][0]*6 : 0 ;
+      ref = (indipArray[1][0]) ? indipArray[1][0] : 0 ;
+      min = indipArray[2];
+      max = indipArray[3];
+      this.$set(this.indiPowerData, 'Value', avg);
+      this.$set(this.indiPowerData, 'Ref', ref);
+
+      let imepArray = helperMatrix.imep;
+      let imepValuesArray = imepArray[0];
+      let imepReferencesArray = imepArray[1];
+      let sum = 0;
+      for( let i = 0; i < imepValuesArray.length; i++ ){
+        sum +=  imepValuesArray[i];
+      }
+      avg = (imepValuesArray.length > 0) ?  sum/imepValuesArray.length : 0;
+
+      let sumRef = 0;
+      for( let i = 0; i < imepReferencesArray.length; i++ ){
+        sumRef +=  imepReferencesArray[i];
+      }
+      ref = (imepReferencesArray.length > 0) ?  sumRef/imepReferencesArray.length : 0;
+
+      min = imepArray[2];
+      max = imepArray[3];
+      this.$set(this.imepData, 'Value', avg);
+      this.$set(this.imepData, 'Ref', ref);
+
+      this.childBsfcDataLoaded = true;
+
+      params = ['Pcomp', 'Pmax', 'TCspeed' , 'indiP', 'Tturbin'];
+      let labels = ['Pcomp','Pmax','T/C Speed','Ind. Power','T turb In'];
+
+      let data = [];
+
+      for (let i=0; i<params.length;i++)
+      {
+        let point = {};
+
+        let array = helperMatrix[params[i]];
+
+        let average = (array) => array.reduce((a, b) => a + b) / array.length;
+
+        let avg = average(array[0]);
+        let ref = average(array[1]);
+
+        if (params[i]=="indiP") avg = avg*6;
+
+        let min = array[2];
+        let max = array[3];
+
+        let temp = ( (avg -  ref)/avg) * 100;
+
+        let clr =  ((temp > min) && (temp < max))? "green" : "red";
+
+        point.label = labels[i];
+        point.val = temp;
+        point.color = clr;
+
+        data.push(point);
+      }
+      this.performanceParamData = data;
+
+      this.$set( this.colorsObj, globalStore.events.kpi );
+
+      this.$set( this.colorsObj,  'Engine',            globalStore.events.kpi.Engine);
+      if ( globalStore.events.kpi.Engine[0]>=1) this.colorsObj['Engine'].push((globalStore.events.kpi.Engine[0]*100).toFixed(0)+' %');
+      else this.colorsObj['Engine'].push((globalStore.events.kpi.Engine[0]*100).toFixed(1)+' %');
+
+      this.$set( this.colorsObj,  'Cylinder',          globalStore.events.kpi.Cylinder);
+      this.$set( this.colorsObj,  'Turbine',           globalStore.events.kpi.Turbine[0]);
+      this.$set( this.colorsObj,  'Compressor',        globalStore.events.kpi['Compressor'][0]);
+      this.$set( this.colorsObj,  'AirCooler',         globalStore.events.kpi['AirCooler'][0]);
+      this.$set( this.colorsObj,  'AirFilter',         globalStore.events.kpi['AirFilter'][0]);
+      this.$set( this.colorsObj,  'ServoOil',          globalStore.events.kpi['Servo Oil']);
+      this.$set( this.colorsObj,  'FuelInjection',     globalStore.events.kpi['Fuel Injection']);
+      this.$set( this.colorsObj,  'ScavengeAir',       globalStore.events.kpi['Scavenge Air']);
+      this.$set( this.colorsObj,  'ExhaustGas',        globalStore.events.kpi['Exhaust Gas']);
+      this.$set( this.colorsObj,  'GasAdmission',      globalStore.events.kpi['Gas Admission']);
+      this.$set( this.colorsObj,  'PistonRunning',     globalStore.events.kpi['Piston Running']);
+      this.$set( this.colorsObj,  'AutomationControl', globalStore.events.kpi['Automation & Control']);
+
+      this.childEngineStateDataLoaded = true;
+      this.childSubsystemDataLoaded = true;
+
+      var aggrEvents = globalStore.events.aggrEvents;
+
+      if (aggrEvents.length == 0)
+      {
+          this.status = 0;
+      }
+      else
+      {
+        let mx = Math.max.apply(Math, aggrEvents.map(function(item){return item.color;}));
+
+        this.status =mx;
+      }    
 
     }
   },
-    beforeDestroy() {
-      clearInterval(this.interval)
-    },
+  mounted(){
+    this.setData();
+  },
+  watch:
+  {
+    counter : function(newCounter)
+    {
+      this.setData();
+    }
+  }
 };
 </script>
 

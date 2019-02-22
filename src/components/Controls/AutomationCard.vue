@@ -3,7 +3,7 @@
         <v-card-title style="height:20%;" primary class="title">{{cardData.Title}}</v-card-title>
         <v-card-actions  style="height:80%;">
             <v-container fluid grid-list-md style="width:100%; height:100%; margin: 0px; padding:5px;">
-                <v-layout column>
+                <v-layout column fill-height>
                     <v-flex d-flex md1>
                         <div v-if="cardData.Color===20" :style="'border-top:5px solid rgb(205, 57, 64); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>          
                         <div v-if="cardData.Color===10" :style="'border-top:5px solid rgb(255, 184, 29); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>           
@@ -11,16 +11,16 @@
                     </v-flex>
                     <v-flex d-flex md11>
                         <v-layout row>                   
-                            <v-flex d-flex md6>
-                                <v-responsive contain>  
-                                    <v-avatar flat id="okImg" >
+                            <v-flex d-flex md6 >
+                                <v-responsive contain >  
+                                    <v-avatar class="avatar" flat id="okImg" >
                                         <img alt=""> 
                                     </v-avatar>
                                 </v-responsive>
                             </v-flex>
-                            <v-flex d-flex md6>
-                                 <v-responsive contain>  
-                                    <v-avatar flat id="warnImg" >
+                            <v-flex d-flex md6 >
+                                 <v-responsive contain >  
+                                    <v-avatar class="avatar"  flat id="warnImg" >
                                         <img alt=""> 
                                     </v-avatar>
                                 </v-responsive>
@@ -83,6 +83,16 @@
 </script>
 
 <style scoped>
+
+.avatar
+ {
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
 </style>
 
 

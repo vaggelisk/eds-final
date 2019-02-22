@@ -1,34 +1,35 @@
+
 <template>
     <v-card flat style="width : 100%; background-color: rgb(42,42,42);">
         <v-card-title style="height:20%;" primary class="title">{{cardData.Title}}</v-card-title>
         <v-card-actions  style="height:80%;">
             <v-container fluid grid-list-md style="width:100%; height:100%; margin: 0px; padding:5px;">
-                <v-layout column>
+                <v-layout column fill-height>
                     <v-flex d-flex md1>
-                        <div v-if="cardData.Color===20" :style="'border-top:5px solid rgb(205, 57, 64); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>
-                        <div v-if="cardData.Color===10" :style="'border-top:5px solid rgb(255, 184, 29); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>
-                        <div v-if="cardData.Color===0" :style="'border-top:5px solid rgb(60, 171, 48); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>
+                        <div v-if="cardData.Color===20" :style="'border-top:5px solid rgb(205, 57, 64); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>          
+                        <div v-if="cardData.Color===10" :style="'border-top:5px solid rgb(255, 184, 29); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>           
+                        <div v-if="cardData.Color===0" :style="'border-top:5px solid rgb(60, 171, 48); height:20px;margin-right :'+(100-cardData.Value).toFixed(0)+'%;' "/>  
                     </v-flex>
                     <v-flex d-flex md11>
-                        <v-layout row>
+                        <v-layout row>                   
                             <v-flex d-flex md6>
-                                <v-responsive contain>
+                                <v-responsive contain>  
                                     <CardWoTitle
                                         v-bind:cardData="cardData.Card1"
-                                        v-bind:counter="counter" />
+                                        v-bind:counter="counter" /> 
                                 </v-responsive>
                             </v-flex>
                             <v-flex d-flex md6>
-                                 <v-responsive contain>
+                                 <v-responsive contain>  
                                     <CardWoTitle
                                         v-bind:cardData="cardData.Card2"
-                                        v-bind:counter="counter" />
+                                        v-bind:counter="counter" /> 
                                 </v-responsive>
                             </v-flex>
                         </v-layout>
                     </v-flex>
-
-                </v-layout>
+                    
+                </v-layout>          
             </v-container>
         </v-card-actions>
     </v-card>
@@ -42,7 +43,7 @@
         DxValueAxis,
         DxAnimation,
         DxLegend,
-        DxCommonAxisSettings,
+        DxCommonAxisSettings, 
         DxGrid,
         DxBorder,
         DxVisualRange,
@@ -61,7 +62,7 @@
             DxValueAxis,
             DxAnimation,
             DxLegend,
-            DxCommonAxisSettings,
+            DxCommonAxisSettings, 
             DxGrid,
             DxBorder,
             DxVisualRange,
@@ -94,13 +95,12 @@
         },
         mounted() {
             this.loading = false;
-            this.isShowing = true;
+            this.isShowing = true;        
 
-        },
+        },        
     }
 </script>
 
 <style scoped>
 </style>
-
 

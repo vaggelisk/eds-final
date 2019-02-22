@@ -51,9 +51,7 @@
           <Overview />
         </div>
         <div v-if="n===2" flat>
-          <DetailedView  v-if="detailedViewData.exhaustedTemp.values"
-                         v-bind:detailedViewData="detailedViewData"
-                         v-bind:counter2="counter" />
+          <DetailedView />
         </div>
 
         <div v-if="n===3" flat>
@@ -116,42 +114,12 @@
         more: [
           'Cylinder 1', 'Cylinder 2', 'Cylinder 3', 'Cylinder 4', 'Cylinder 5', 'Cylinder 6',
         ],
-        counter: 32,
-        text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.'
       }
     },
     methods: {
       addItem (item) {
         this.$nextTick(() => { this.currentItem =  item })
-      },
-      startInterval: function () {
-        this.interval = setInterval(() => {
-          if (this.counter < 37) {
-            this.getDetailedViewData( this.counter );
-            this.counter = this.counter + 1;
-          } else {
-            clearInterval(this.interval);
-          }
-        }, 3000)
-      },
-      getDetailedViewData( counter ) {
-        const apiService = new getEnginePerformance( counter );
-        apiService.getDataFromHybercube().then((data) => {
-          this.$set( this.detailedViewData, 'pressureTrace', data.data.pressureTrace);
-        });
-
-        // apiService = new getEnginePerformance( counter );
-        apiService.getDataFromTimeline().then((data) => {
-          this.$set( this.detailedViewData, 'firingPressure', data.data.Pmax );
-          this.$set( this.detailedViewData, 'compressionPressure', data.data.Pcomp );
-          this.$set( this.detailedViewData, 'indicatedPressure', data.data.imep );
-          this.$set( this.detailedViewData, 'exhaustedTemp', data.data.Texh );
-          this.$set( this.detailedViewData, 'pressureRise', data.data.PressureRise );
-        });
       }
-    },
-    mounted() {
-      this.startInterval();
     }
   }
 

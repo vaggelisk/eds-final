@@ -10,7 +10,8 @@
                 v-bind:points="points"
                 v-bind:initWidth="initWidth"
                 v-bind:initHeight="initHeight"
-                v-bind:idName="idName"/>
+                v-bind:idName="idName"
+                v-bind:counter="counter"/>
             </v-responsive> 
           </v-flex>
           <v-flex d-flex md4>            
@@ -56,82 +57,70 @@
 </template>
 
 <script>
-  import axios                    from "axios";
   import Schematic  from "../Controls/Schematic";   
   import TimelineChart  from "../Controls/TimelineChart";
+  import {globalStore}    from "../../main.js"
 
-    export default {
-      name: "ServoOil",
-      components: {
-       Schematic,
-       TimelineChart
-      },
-      data: function() {
-        return {
-          schematicSource: require('../../assets/servo-oil-schematic-dark.png'),
-          points: {
-            "Servo Oil Rail": {x:56, y:540, color:0, selected:false, events:[]},
-            "VCU": {x:1001, y:252, color:0, selected:false, events:[]},
-            "Exhaust Valve": {x:1624, y:295, color:0, selected:false, events:[]},
-            "Servo oil pumps": {x:1293, y:900, color:0, selected:false, events:[]}},    
-          initWidth: 1820,
-          initHeight: 1134,
-          idName:"ServoOil",
-          data: {},
-          counter: 31,
-          chart: ['CAngleEVO', 'CAngleEVC', 'valveLift'],
-          dataLoaded : false
-        };
-      },
+  export default {
+    name: "ServoOil",
+    components: {
+      Schematic,
+      TimelineChart
+    },
+    data: function() {
+      return {
+        schematicSource: require('../../assets/servo-oil-schematic-dark.png'),
+        points: {
+          "Servo Oil Rail": {x:56, y:540, color:0, selected:false, events:[]},
+          "VCU": {x:1001, y:252, color:0, selected:false, events:[]},
+          "Exhaust Valve": {x:1624, y:295, color:0, selected:false, events:[]},
+          "Servo oil pumps": {x:1293, y:900, color:0, selected:false, events:[]}},    
+        initWidth: 1820,
+        initHeight: 1134,
+        idName:"ServoOil",
+        data: {},
+        chart: ['CAngleEVO', 'CAngleEVC', 'valveLift'],
+        dataLoaded : false
+      };
+    },
+    computed: {
+      counter: function () { return globalStore.counter; }
+    },
     mounted() {      
       for (let i=0; i<this.chart.length;i++)
          this.$set( this.data, this.chart[i], {});
          
-      this.$set( this.data, 'soPresDispl', {});
+      this.$set( this.data, 'soPresDispl', {});          
       
-      this.fetchEventsList();
-      this.startInterval();
+      this.setData();     
     },
-
+    watch:
+    {
+      counter : function(newCounter)
+      {
+        this.setData();
+      }
+    },
     methods: {
-      startInterval: function () {
-        this.interval = setInterval(() => {
-          if (this.counter < 60) {
-            this.fetchEventsList();
-            this.counter = this.counter + 1;
-          } else {
-            this.counter =1;
-            //clearInterval(this.interval);
-          }
-        }, 5000)
-      },
-      fetchEventsList: function() {
-
-        axios.get("http://localhost:8092/EDSMapping").then(resp => {
-
-            let objs = ['CAngleEVO', 'CAngleEVC', 'valveLift','soPresDispl'];
-
-            let formats =  [1,1,1,1];
-
-             for( let i = 0; i < objs.length; i++ )
-              {
-                this.$set(this.data[objs[i]], 'Title',resp.data.EDS_Parameter_Names[objs[i]].longName);
-                this.$set(this.data[objs[i]], 'Unit',resp.data.EDS_Parameter_Names[objs[i]].unit);
-                this.$set(this.data[objs[i]], 'Format',formats[i]);
-              }
-
-          });
-
-         let url  = "http://localhost:8092/EDSTimelineData/" + this.counter;
-
-      axios.get(url).then(response => {
-        let len = Object.keys(response.data).length;
-        // console.log(len);
-        let helperMatrix = response.data[Object.keys(response.data)[len - 1]];
-
-        let params = [ 'EVOpercyl', 'EVCpercyl', 'Stroke', 'ServoPress'];
+      setData: function() {
+        
+        console.log("servo Oil "+globalStore.counter);
 
         let objs = ['CAngleEVO', 'CAngleEVC', 'valveLift','soPresDispl'];
+
+        let formats =  [1,1,1,1];
+
+        for( let i = 0; i < objs.length; i++ )
+        {
+          this.$set(this.data[objs[i]], 'Title',globalStore.engMap.EDS_Parameter_Names[objs[i]].longName);
+          this.$set(this.data[objs[i]], 'Unit',globalStore.engMap.EDS_Parameter_Names[objs[i]].unit);
+          this.$set(this.data[objs[i]], 'Format',formats[i]);
+        }
+
+        let len = Object.keys(globalStore.timelineData).length;
+        let helperMatrix = globalStore.timelineData[Object.keys(globalStore.timelineData)[len - 1]];
+
+        let params = [ 'EVOpercyl', 'EVCpercyl', 'Stroke', 'ServoPress'];
 
         for (let i=0; i<params.length;i++)
         {
@@ -158,7 +147,7 @@
           let data = [];
           for (let j = 0; j < len; j++){
 
-            let helper = response.data[Object.keys(response.data)[j]];
+            let helper = globalStore.timelineData[Object.keys(globalStore.timelineData)[j]];
 
             array = helper[params[i]];
 
@@ -175,7 +164,7 @@
 
             let point = {};
 
-            point.date = new Date(Object.keys(response.data)[j]);
+            point.date = new Date(Object.keys(globalStore.timelineData)[j]);
             point.val = avg;
             point.valMin = valMin;
             point.valMax = valMax;
@@ -192,7 +181,26 @@
           else this.$set(this.data[objs[i]],'datapoints', data);
         }
 
-        });  
+        var aggrEvents = globalStore.events.aggrEvents;       
+
+        for(var key in this.points)
+        { 
+          let compEvents = aggrEvents.filter(function (item) {
+              return item.subComponent == key;
+          });
+
+          if (compEvents.length == 0)
+          {
+            this.$set(this.points[key],'color',0);
+            this.$set(this.points[key], 'events', []);
+          }
+          else
+          {
+            let mx = Math.max.apply(Math, compEvents.map(function(item){return item.color;}));
+            this.$set(this.points[key],'color',mx);
+            this.$set(this.points[key], 'events', compEvents);
+          }
+        }
 
         this.dataLoaded = true;
         

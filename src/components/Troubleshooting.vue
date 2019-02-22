@@ -2,7 +2,7 @@
   <div>
     <v-tabs
       dark
-      slider-color="yellow"
+      slider-color="cyan"
     >
 
       <v-tab
@@ -20,10 +20,17 @@
       >
 
         <span v-if="n===1" >
+
           <span  v-if="troubleshootingData.currentFaults">
+
+            <div v-if="troubleshootingData.currentFaults.length===0" class="display-2 mt-5 ml-5">
+               There is no current fault for the moment
+            </div>
+            <div v-else>
             <CurrentFaults
                 v-bind:current-faults="troubleshootingData.currentFaults" />
-            </span>
+          </div>
+          </span>
         </span>
         <span v-if="n===2" flat>
 
@@ -36,42 +43,40 @@
 </template>
 
 <script>
-    import CurrentFaults        from "./troubleshooting/CurrentFaults";
-    import {getTroubleshooting} from "../api/getTroubleshooting";
+  import CurrentFaults        from "./troubleshooting/CurrentFaults";
+  import {globalStore}    from "../main.js"
 
-    export default {
-      name: "Troubleshooting",
-      components: {CurrentFaults},
-      data() {
-        return {
-          troubleshootingData: {},
-          lorem: `Lorem ipsum dolor sit amet, mel at clita quando. Te sit oratio vituperatoribus, nam ad ipsum posidonium mediocritatem, explicari dissentiunt cu mea. Repudiare disputationi vim in, mollis iriure nec cu, alienum argumentum ius ad. Pri eu justo aeque torquatos.`,
-          counter: 3,
-        }
-      },
-      methods: {
-        startInterval: function () {
-          this.interval = setInterval(() => {
-            if (this.counter < 60) {
-              this.getTroubleshootingData( this.counter );
-              this.counter = this.counter + 1;
-            } else {
-              clearInterval(this.interval);
-            }
-          }, 3000)
-        },
-        getTroubleshootingData( counter ) {
-          const apiService = new getTroubleshooting( counter );
-          apiService.getDataFromEvents().then((data) => {
-            this.$set( this.troubleshootingData, 'currentFaults',  data.data.currentFaults);
-          });
-        }
-      },
-      mounted() {
-        this.getTroubleshootingData(3);
-        this.startInterval();
-      },
-    }
+  export default {
+    name: "Troubleshooting",
+    components: {CurrentFaults},
+    data() {
+      return {
+        troubleshootingData: {},
+      }
+    },
+    computed: {
+      counter: function () { return globalStore.counter; }
+    },
+    mounted() {
+      this.setData();
+    },
+    watch:
+    {
+      counter : function(newCounter)
+      {
+        this.setData();
+      }
+    },
+    methods: {
+      setData: function() {
+        console.log("troubleshooting  "+globalStore.counter);
+
+        this.$set(this.troubleshootingData,'currentFaults', globalStore.events.aggrEvents);
+
+      }
+
+    },
+  }
 </script>
 
 <style scoped>

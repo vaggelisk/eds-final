@@ -1,10 +1,3 @@
-<template>
-
-  <div class="container">
-    <canvas ref="canvas" width="600" height="800"></canvas>
-  </div>
-
-</template>
 
 <script>
     export default {
@@ -13,7 +6,7 @@
 
       render(h) {
         const {canvasAttrs: attrs} = this;
-        return h('canvas', {attrs});
+        return h('canvas', {attrs, ref: 'canvas'});
       },
 
       created() {

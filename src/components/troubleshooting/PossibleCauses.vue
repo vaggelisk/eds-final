@@ -8,11 +8,10 @@
                   :rows-per-page-items=[3]
                   :items="currentInnerFaultCauses"
                   item-key="name"
-                  class="elevation-1"
                   color="rgb(42,42,42)"
     >
       <template slot="items" slot-scope="props" >
-        <td class="text-truncate text-lg-left" bgcolor="#2A2A2A"> {{props.item.name}}</td>
+        <td class="text-lg-left" bgcolor="#2A2A2A"> {{props.item.name}}</td>
         <td class="text-truncate text-lg-right" bgcolor="#2A2A2A">
           <v-dialog v-model="pdfDialog" max-width="1000px">
             <v-btn slot="activator" flat icon     >
@@ -29,13 +28,12 @@
                   :page="index">
                 >
               </pdf>
-              <!--</div>-->
             </template>
           </v-dialog>
 
 
           <v-dialog v-model="maintenanceDialog" max-width="800px">
-            <v-btn  slot="activator" flat icon   >
+            <v-btn  slot="activator" flat icon >
               <v-icon
                 @click="openMaintenanceDialog( props.item.maintenance )"
               >
@@ -236,40 +234,6 @@
       maintenanceDialog: false,
       d: '',
 
-
-      x: [{
-        "id": "1",
-        "name": "Insufficient air spring pressure",
-        "pdf": {"filename": "OM-X62_2017-10.pdf", "page": 195},
-        "maintenance": {}
-        },
-        {
-          "id": "2",
-          "name": "Restricted VCU return",
-          "pdf": {"filename": "OM-X62_2017-10.pdf", "page": 119},
-          "maintenance": {
-            "id": 5,
-            "description": "Exhaust valve control unit removal",
-            "component": 4,
-            "tools": "-",
-            "documentation": "351"
-          }
-        },
-        {
-          "id": "3",
-          "name": "Exhaust valve stem sticking",
-          "pdf": {"filename": "OM-X62_2017-10.pdf", "page": 119},
-          "maintenance": {
-            "id": 1,
-            "description": "Exhaust valve - removal and installation",
-            "component": 4,
-            "tools": "2 Sling 94049A",
-            "documentation": "177"
-          }
-        }
-      ],
-
-
     }),
 
     watch: {
@@ -281,7 +245,6 @@
 
     methods: {
       openPdfDialog( ) {
-
         this.pdfDialog = true
       },
 

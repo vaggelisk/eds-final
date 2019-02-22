@@ -8,7 +8,8 @@
           id="chart1"
           :data-source="dataSource2"
           palette="Green"
-        >
+        >        
+          <dx-animation :enabled="false"/>
           <dx-common-series-settings
             :type="type"
             argument-field="x"
@@ -81,6 +82,7 @@
     DxSubtitle,
     DxTooltip,
     DxConstantLine,
+    DxAnimation
   } from 'devextreme-vue/chart';
 
   export default {
@@ -99,7 +101,8 @@
       DxTitle,
       DxSubtitle,
       DxTooltip,
-      DxConstantLine
+      DxConstantLine,
+      DxAnimation
     },
     props: {
       loadDiagramData: Object,

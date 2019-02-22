@@ -3,11 +3,11 @@
         <v-card-title style="height:20%;" primary class="title">{{ cardData.Title }} </v-card-title>
 
         <v-card-title v-show="isShowing" style="height:40%;">
-            <div v-if="cardData.Color==='red'" :style="'border-left:5px solid rgb(205, 57, 64) ;height:50px; margin-right:10px;' "></div>            
-            <div v-if="cardData.Color==='green'" :style="'border-left:5px solid rgb(60, 171, 48);height:50px; margin-right:10px;' "></div>            
-            <div v-if="cardData.Color==='gray'" :style="'border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;' "></div>
+            <div v-if="cardData.Color==='red'" :style="'border-left:5px solid rgb(205, 57, 64) ;height:50px; margin-right:10px;' "></div>
+          <div v-if="cardData.Color==='green'" :style="'border-left:5px solid rgb(60, 171, 48);height:50px; margin-right:10px;' "></div>
+          <div v-if="cardData.Color==='gray'" :style="'border-left:5px solid rgb(92, 92, 92);height:50px; margin-right:10px;' "></div>
             <div>
-                <div class="headline">                    
+                <div class="headline">
                     <h2 v-if="cardData.Value===-1000">-</h2>
                     <h2 v-else-if="cardData.Color==='red'" style="color: rgb(205, 57, 64);">{{ cardData.Value.toFixed(cardData.Format)}} </h2>
                     <h2 v-else>{{ cardData.Value.toFixed(cardData.Format)}} </h2>
@@ -16,7 +16,7 @@
             </div>
         </v-card-title>
 
-        <v-card-actions fill-height :style="'width : 100%; height:'+height+';'">            
+        <v-card-actions fill-height :style="'width : 100%; height:'+height+';'">
             <v-container fluid grid-list-xs style="width:100%; height:100%; margin: 5px; padding:10px;"  >
             <!-- <v-container fluid style="margin-left: -21px; padding-right:0px;"  > -->
                 <v-layout row wrap  style="width:100%; height:100%;" >
@@ -27,7 +27,7 @@
 
                     <v-flex v-show="hasChart" :xs8 ="isShowing" :xs12="!isShowing"  style="height:100%;"
                             @click="updateChart()">
-                        <dx-chart :ref="chartRefName" 
+                        <dx-chart :ref="chartRefName"
                                 :dataSource="cardData.datapoints"
                                 :series="series" style="width: 100%; height: 100%">
                             <dx-animation :enabled="false"/>
@@ -35,8 +35,8 @@
                             <dx-value-axis>
                                 <dx-grid color="rgb(67,67,67)"/>
                             </dx-value-axis>
-                            <dx-argument-axis> 
-                                <dx-tick-interval miliseconds="60000"/> 
+                            <dx-argument-axis>
+                                <dx-tick-interval miliseconds="60000"/>
                                 <!-- <dx-visual-range :start-value="minValue" :end-value="maxValue"/>     -->
                             </dx-argument-axis>
                             <dx-series
@@ -74,7 +74,7 @@
         DxValueAxis,
         DxAnimation,
         DxLegend,
-        DxCommonAxisSettings, 
+        DxCommonAxisSettings,
         DxGrid,
         DxBorder,
         DxVisualRange,
@@ -92,7 +92,7 @@
             DxValueAxis,
             DxAnimation,
             DxLegend,
-            DxCommonAxisSettings, 
+            DxCommonAxisSettings,
             DxGrid,
             DxBorder,
             DxVisualRange,
@@ -127,9 +127,9 @@
         },
         mounted() {
             this.loading = false;
-            this.isShowing = true;        
+            this.isShowing = true;
 
-        }, 
+        },
         watch:
         {
             counter : function(c)
@@ -145,7 +145,7 @@
                 // if (this.cardData.datapoints.length<30)
                 // {
                 //     this.minValue = orderedByDate.pop().date;
-                //     this.maxValue = new Date(this.minValue.getTime() + 30*60000);                 
+                //     this.maxValue = new Date(this.minValue.getTime() + 30*60000);
 
                 // }
                 // else

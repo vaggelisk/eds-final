@@ -229,7 +229,9 @@ import BarChart from "../enginePerformance/detailedView/BarChart"
         {}
     },
     mounted() {
-
+        if (this.faultData.tag == "Comp") this.setPanel();
+        else if (this.faultData.tag ==  "R") this.setRPanel();
+        else this.setEHCPanel();
 
     }
   }

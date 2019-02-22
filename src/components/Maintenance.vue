@@ -12,13 +12,12 @@
 
 <script>
 
-import axios                   from   "axios";
 import PlannedMaintenanceTasks from "./maintenance/PlannedMaintenanceTasks";
 
 
 export default {
   name: "Maintenance",
-  components: {  PlannedMaintenanceTasks},
+  components: {  PlannedMaintenanceTasks },
 }
 </script>
 

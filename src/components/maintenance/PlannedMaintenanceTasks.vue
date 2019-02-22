@@ -1,7 +1,7 @@
 <template>
   <v-card>
-    <v-card-title>
-      Nutrition
+    <v-card-title class="display-1">
+      Planned Maintenance Tasks
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -11,18 +11,27 @@
         hide-details
       ></v-text-field>
     </v-card-title>
-    <v-data-table
+    <v-data-table class="mt-5"
       :headers="headers"
-      :items="desserts"
+      :items="tasks"
       :search="search"
     >
       <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td class="text-xs-right">{{ props.item.calories }}</td>
-        <td class="text-xs-right">{{ props.item.fat }}</td>
-        <td class="text-xs-right">{{ props.item.carbs }}</td>
-        <td class="text-xs-right">{{ props.item.protein }}</td>
-        <td class="text-xs-right">{{ props.item.iron }}</td>
+        <td>{{ props.item.dueDate }}</td>
+        <td class="text-xs-center">{{ props.item.task}}</td>
+        <td class="text-xs-center">{{ props.item.type}}</td>
+        <td class="text-xs-center">{{ props.item.status}}</td>
+        <td class="text-xs-center">{{ props.item.element}}</td>
+        <td class="text-xs-center">{{ props.item.subsystem}}</td>
+        <td class="text-xs-center">{{ props.item.lastOverhault}}</td>
+        <td class="text-xs-center">{{ props.item.runningHours}}</td>
+        <td class="text-xs-center">{{ props.item.interval}}</td>
+        <td class="text-xs-center">{{ props.item.remainingHours}}</td>
+        <td class="text-xs-center">{{ props.item.comment}}</td>
+        <td class="text-xs-center">{{ props.item.resourcesPersons}}</td>
+        <td class="text-xs-center">{{ props.item.tools}}</td>
+        <td class="text-xs-center">{{ props.item.manual}}</td>
+        <!--<td class="text-xs-center">{{ props.item.video}}</td>-->
       </template>
       <v-alert slot="no-results" :value="true" color="error" icon="warning">
         Your search for "{{ search }}" found no results.
@@ -39,98 +48,61 @@
           search: '',
           headers: [
             {
-              text: 'Dessert (100g serving)',
+              text: 'Due Date',
               align: 'left',
               sortable: false,
-              value: 'name'
+              dueDate: 'name'
             },
-            {text: 'Calories', value: 'calories'},
-            {text: 'Fat (g)', value: 'fat'},
-            {text: 'Carbs (g)', value: 'carbs'},
-            {text: 'Protein (g)', value: 'protein'},
-            {text: 'Iron (%)', value: 'iron'}
+            {text: 'Name',                value: 'task'},
+            {text: 'Type',                value: 'type'},
+            {text: 'Status',              value: 'status'},
+            {text: 'Element',             value: 'element'},
+            {text: 'Subsystem',           value: 'subsystem'},
+            {text: 'Last Overhaul',       value: 'lastOverhault'},
+            {text: 'Running Hours',       value: 'runningHours'},
+            {text: 'Interval',            value: 'interval'},
+            {text: 'Remaining Hours',     value: 'remainingHours'},
+            {text: 'Comment',             value: 'comment'},
+            {text: 'Resources (persons)', value: 'resourcesPersons'},
+            {text: 'Tools',               value: 'tools'},
+            {text: 'Manual',              value: 'manual'},
+            // {text: 'Video',               value: 'video'},
           ],
-          desserts: [
+          tasks: [
             {
-              name: 'Frozen Yogurt',
-              calories: 159,
-              fat: 6.0,
-              carbs: 24,
-              protein: 4.0,
-              iron: '1%'
+              dueDate:  '2019/02/14',
+              task: 'Exhaust Valve − Removal and Installation',
+              status: 'Pending',
+              type: 'Overhaul',
+              element: 'Cylinder 4',
+              subsystem: 24,
+              lastOverhault: 4.0,
+              runningHours: 2,
+              interval: '-',
+              remainingHours: '-',
+              comment: 'fdfdfd vbnvb',
+              resourcesPersons: '-',
+              tools: 65,
+              manual: 3,
+              // video: '-'
+              },
+            {
+              dueDate:  '2019/02/12',
+              task: 'Exhaust Valve Control ',
+              status: 'Completed',
+              type:'Overhaul',
+              element: 'Cylinder 4',
+              subsystem: 24,
+              lastOverhault: 4.0,
+              runningHours: 23,
+              interval: '-',
+              remainingHours: '-',
+              comment: '-',
+              resourcesPersons: '-',
+              tools: 65,
+              manual: 7,
+              // video: '-'
             },
-            {
-              name: 'Ice cream sandwich',
-              calories: 237,
-              fat: 9.0,
-              carbs: 37,
-              protein: 4.3,
-              iron: '1%'
-            },
-            {
-              name: 'Eclair',
-              calories: 262,
-              fat: 16.0,
-              carbs: 23,
-              protein: 6.0,
-              iron: '7%'
-            },
-            {
-              name: 'Cupcake',
-              calories: 305,
-              fat: 3.7,
-              carbs: 67,
-              protein: 4.3,
-              iron: '8%'
-            },
-            {
-              name: 'Gingerbread',
-              calories: 356,
-              fat: 16.0,
-              carbs: 49,
-              protein: 3.9,
-              iron: '16%'
-            },
-            {
-              name: 'Jelly bean',
-              calories: 375,
-              fat: 0.0,
-              carbs: 94,
-              protein: 0.0,
-              iron: '0%'
-            },
-            {
-              name: 'Lollipop',
-              calories: 392,
-              fat: 0.2,
-              carbs: 98,
-              protein: 0,
-              iron: '2%'
-            },
-            {
-              name: 'Honeycomb',
-              calories: 408,
-              fat: 3.2,
-              carbs: 87,
-              protein: 6.5,
-              iron: '45%'
-            },
-            {
-              name: 'Donut',
-              calories: 452,
-              fat: 25.0,
-              carbs: 51,
-              protein: 4.9,
-              iron: '22%'
-            },
-            {
-              name: 'KitKat',
-              calories: 518,
-              fat: 26.0,
-              carbs: 65,
-              protein: 7,
-              iron: '6%'
-            }
           ]
         }
       }

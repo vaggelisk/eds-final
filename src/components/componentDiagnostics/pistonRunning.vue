@@ -10,7 +10,8 @@
                 v-bind:points="points"
                 v-bind:initWidth="initWidth"
                 v-bind:initHeight="initHeight"
-                v-bind:idName="idName"/>
+                v-bind:idName="idName"
+                v-bind:counter="counter"/>
             </v-responsive>
           </v-flex>
           <v-flex d-flex md2>
@@ -71,145 +72,153 @@
 </template>
 
 <script>
-  import axios                    from "axios";
   import Schematic  from "../Controls/Schematic";
   import TimelineChart  from "../Controls/TimelineChart";
   import Card  from "../Controls/Card";
+  import {globalStore}    from "../../main.js"
 
-    export default {
-      name: "PistonRunning",
-      components: {
-       Schematic,
-       TimelineChart,
-       Card
-      },
-      data: function() {
-        return {
-          schematicSource: require('../../assets/piston-schematic-dark.png'),
-          points: {
-            "Piston Rings": {x:1053, y:528, color:0, selected:false, events:[]},
-            "Cylinder Liner": {x:693, y:298, color:0, selected:false, events:[]}},        
-          initWidth: 1820,
-          initHeight: 1134,
-          idName: "PistonRunning",
-          data: {},
-          counter: 1,
-          dataLoaded : false
-        };
-      },
-    mounted() { 
-      
+  export default {
+    name: "PistonRunning",
+    components: {
+      Schematic,
+      TimelineChart,
+      Card
+    },
+    data: function() {
+      return {
+        schematicSource: require('../../assets/piston-schematic-dark.png'),
+        points: {
+          "Piston Rings": {x:1053, y:528, color:0, selected:false, events:[]},
+          "Cylinder Liner": {x:693, y:298, color:0, selected:false, events:[]}},        
+        initWidth: 1820,
+        initHeight: 1134,
+        idName: "PistonRunning",
+        data: {},
+        dataLoaded : false
+      };
+    },
+    computed: {
+      counter: function () { return globalStore.counter; }
+    },
+    mounted() {       
       let objs = ['pUndersideTemp', 'tscav', 'pmaxPcomp','pcomp','pmax'];
 
       for (let i=0; i<objs.length;i++)
          this.$set( this.data, objs[i], {});
-      
-      this.fetchEventsList();
-      this.startInterval();
+
+      this.setData();
     },
-
+    watch:
+    {
+      counter : function(newCounter)
+      {
+        this.setData();
+      }
+    },
     methods: {
-      startInterval: function () {
-        this.interval = setInterval(() => {
-          if (this.counter < 60) {
-            this.fetchEventsList();
-            this.counter = this.counter + 1;
-          } else {
-            this.counter =1;
-            //clearInterval(this.interval);
+      setData: function() {
+        
+        console.log("piston Run "+globalStore.counter);
+
+        let objs = ['pUndersideTemp', 'tscav', 'pmaxPcomp','pcomp','pmax'];
+
+        let formats =  [1,1,1,1,1];
+
+        for( let i = 0; i < objs.length; i++ )
+        {
+          this.$set(this.data[objs[i]], 'Title',globalStore.engMap.EDS_Parameter_Names[objs[i]].longName);
+          this.$set(this.data[objs[i]], 'Unit',globalStore.engMap.EDS_Parameter_Names[objs[i]].unit);
+          this.$set(this.data[objs[i]], 'Format',formats[i]);
+        }
+
+        let len = Object.keys(globalStore.timelineData).length;
+        
+        let helperMatrix = globalStore.timelineData[Object.keys(globalStore.timelineData)[len - 1]];
+
+        let params = [ 'PistonUnderSideTemp', 'Tscav', 'PressureRise', 'Pcomp','Pmax'];
+
+        for (let i=0; i<params.length;i++)
+        {
+          let array = helperMatrix[params[i]]; 
+
+          let average = (array) => array.reduce((a, b) => a + b) / array.length;
+
+          let avg = average(array[0]);
+          let ref = average(array[1]);
+
+          this.$set(this.data[objs[i]],'Value',avg);
+          this.$set(this.data[objs[i]],'Ref',ref);
+
+          let min = array[2];
+          let max = array[3];
+
+          let temp = ( (avg -  ref)/avg) * 100;
+
+          let clr =  ((temp > min) && (temp < max))? "green" : "red";
+
+          if ((avg==-1000)||(ref==-1000)) this.$set(this.data[objs[i]], 'Color', 'gray');
+          else this.$set(this.data[objs[i]], 'Color', clr);
+
+          let data = [];
+          for (let j = 0; j < len; j++){
+
+            let helper = globalStore.timelineData[Object.keys(globalStore.timelineData)[j]];
+
+            array = helper[params[i]];
+
+            avg = average(array[0]);
+            ref = average(array[1]);
+
+            min = array[2];
+            max = array[3];
+
+            let valMin = ref/(1 - min/100);
+            let valMax = ref/(1 - max/100);
+
+            clr =  ((avg > valMin) && (avg < valMax))? "green" : "red";
+
+            let point = {};
+
+            point.date = new Date(Object.keys(globalStore.timelineData)[j]);
+            point.val = avg;
+            point.valMin = valMin;
+            point.valMax = valMax;
+            point.color = clr;
+
+            data.push(point);
           }
-        }, 5000)
-      },
-      fetchEventsList: function() {
 
-        axios.get("http://localhost:8092/EDSMapping").then(resp => {
+          var anyMinus1000 = data.some(function (item) {
+          return  item.val == -1000;
+          });
 
-          let objs = ['pUndersideTemp', 'tscav', 'pmaxPcomp','pcomp','pmax'];
+          if (anyMinus1000) this.$set(this.data[objs[i]],'datapoints',[]);
+          else this.$set(this.data[objs[i]],'datapoints', data);
+        }
 
-          let formats =  [1,1,1,1,1];
+        var aggrEvents = globalStore.events.aggrEvents;       
 
-            for( let i = 0; i < objs.length; i++ )
-            {
-              this.$set(this.data[objs[i]], 'Title',resp.data.EDS_Parameter_Names[objs[i]].longName);
-              this.$set(this.data[objs[i]], 'Unit',resp.data.EDS_Parameter_Names[objs[i]].unit);
-              this.$set(this.data[objs[i]], 'Format',formats[i]);
-            }
+        for(var key in this.points)
+        { 
+          let compEvents = aggrEvents.filter(function (item) {
+              return item.subComponent == key;
+          });
 
-        });
-
-        let url  = "http://localhost:8092/EDSTimelineData/" + this.counter;
-
-        axios.get(url).then(response => {
-          let len = Object.keys(response.data).length;
-          // console.log(len);
-          let helperMatrix = response.data[Object.keys(response.data)[len - 1]];
-
-          let params = [ 'PistonUnderSideTemp', 'Tscav', 'PressureRise', 'Pcomp','Pmax'];
-
-          let objs = ['pUndersideTemp', 'tscav', 'pmaxPcomp','pcomp','pmax'];
-
-          for (let i=0; i<params.length;i++)
+          if (compEvents.length == 0)
           {
-            let array = helperMatrix[params[i]]; 
-
-            let average = (array) => array.reduce((a, b) => a + b) / array.length;
-
-            let avg = average(array[0]);
-            let ref = average(array[1]);
-
-            this.$set(this.data[objs[i]],'Value',avg);
-            this.$set(this.data[objs[i]],'Ref',ref);
-
-            let min = array[2];
-            let max = array[3];
-
-            let temp = ( (avg -  ref)/avg) * 100;
-
-            let clr =  ((temp > min) && (temp < max))? "green" : "red";
-
-            if ((avg==-1000)||(ref==-1000)) this.$set(this.data[objs[i]], 'Color', 'gray');
-            else this.$set(this.data[objs[i]], 'Color', clr);
-
-            let data = [];
-            for (let j = 0; j < len; j++){
-
-              let helper = response.data[Object.keys(response.data)[j]];
-
-              array = helper[params[i]];
-
-              avg = average(array[0]);
-              ref = average(array[1]);
-
-              min = array[2];
-              max = array[3];
-
-              let valMin = ref/(1 - min/100);
-              let valMax = ref/(1 - max/100);
-
-              clr =  ((avg > valMin) && (avg < valMax))? "green" : "red";
-
-              let point = {};
-
-              point.date = new Date(Object.keys(response.data)[j]);
-              point.val = avg;
-              point.valMin = valMin;
-              point.valMax = valMax;
-              point.color = clr;
-
-              data.push(point);
-            }
-
-            var anyMinus1000 = data.some(function (item) {
-            return  item.val == -1000;
-            });
-
-            if (anyMinus1000) this.$set(this.data[objs[i]],'datapoints',[]);
-            else this.$set(this.data[objs[i]],'datapoints', data);
+            this.$set(this.points[key],'color',0);
+            this.$set(this.points[key], 'events', []);
           }
+          else
+          {
+            let mx = Math.max.apply(Math, compEvents.map(function(item){return item.color;}));
+            this.$set(this.points[key],'color',mx);
+            this.$set(this.points[key], 'events', compEvents);
+          }
+        }
 
-          });  
-
-          this.dataLoaded = true;
+       
+        this.dataLoaded = true;
         
        
       }

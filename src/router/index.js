@@ -7,10 +7,9 @@ import Troubleshooting from '@/components/Troubleshooting'
 import Maintenance from '@/components/Maintenance'
 import SpareParts from '@/components/SpareParts'
 
-
 Vue.use(Router)
 
-export default new Router({
+var router = new Router({
   mode: "history",
   routes: [
     {
@@ -50,4 +49,8 @@ export default new Router({
       component: SpareParts
     }
   ]
-})
+});
+
+
+export default router;
+
