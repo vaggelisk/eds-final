@@ -2,9 +2,9 @@
   <v-app dark style="background-color:rgb(26,26,26);">
 
     <Navigate
-      v-bind:selected="selectedN"
-      v-on:update:selected="selectedN = $event"
-      />
+      v-bind:selected="selected"
+      v-bind:items="items"
+    />
 
     <v-toolbar extended app>
 
@@ -88,13 +88,13 @@
           </v-layout>
         </v-container>
 
-      <v-toolbar-title slot="extension" class="cyan--text display-1 mt-3">Dashboard</v-toolbar-title>
+      <v-toolbar-title slot="extension" class="cyan--text display-1 mt-3">{{selected}}</v-toolbar-title>
 
 
     </v-toolbar>
 
     <v-content>
-      {{selected}}
+      {{$route.fullPath}}
       <router-view/>
     </v-content>
   </v-app>
@@ -105,25 +105,33 @@
 import Navigate    from './components/Navigate'
 
 export default {
+  name: 'App',
   components: {
     Navigate
   },
-  beforeCreate() {
-     this.selected = 'dashboard';
-  },
+
   data () {
     return {
       lorem: 'jfhgffhjghjjfh',
-      // selected: 'dashboard',
+      items: [
+        { title: 'Dashboard',               link: 'dashboard',              icon: 'home', },
+        { title: 'Engine Performance',      link: 'engine-performance',     icon: 'show_chart' },
+        { title: 'Components Diagnostics',  link: 'components-diagnostics', icon: 'multiline_chart' },
+        { title: 'Troubleshooting',         link: 'troubleshooting',        icon: 'build' },
+        { title: 'Maintenance',             link: 'maintenance',            icon: 'calendar_today' },
+        { title: 'Spare Parts',             link: 'spare-parts',            icon: 'settings' },
+      ],
     }
   },
   computed: {
-    // selected() {
-    //   return ;
-    // }
+    selected() {
+      let l = this.$route.path.substring(1);
+      let i = this.items.find(o => o.link === l);
+      return i.title;
+    }
   },
 
-  name: 'App'
+
 }
 </script>
 <style scoped>

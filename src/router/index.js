@@ -7,7 +7,7 @@ import Troubleshooting from '@/components/Troubleshooting'
 import Maintenance from '@/components/Maintenance'
 import SpareParts from '@/components/SpareParts'
 
-Vue.use(Router)
+Vue.use(Router);
 
 var router = new Router({
   mode: "history",
